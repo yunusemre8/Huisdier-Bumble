@@ -17,6 +17,6 @@ Functie: Wel met een arrow
 Commentaar: Geen oude code laten staan, Witte ruimte met nieuwe functie
 
 If & else: Omdat if & else callbacks de fouten kunnen veroorzaken, gebruiken we return, then en catch.
-<img src="./static/images/return-then.pngpng" alt="return-then">
+<img src="./static/images/return-then.png" alt="return-then">
 
 Viewport: Mobiel versie
