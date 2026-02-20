@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+
+<body>
+    <!-- header partials -->
+    <h1>Sign up</h1>
+    <form action="/register" method="POST">
+        <fieldset>
+            <legend>About your animal</legend>
+            <label for="petName">Pet Name</label>
+            <input type="text" name="petName">
+
+            <label for="petType">Choose your animal</label>
+            <select name="petType" id="petType">
+                <option value="cat">Cat</option>
+                <option value="dog">Dog</option>
+                <option value="rabbit">Rabbit</option>
+            </select>
+
+            <label for="isBreed">Choose the breed</label>
+            <!-- IMPORTANT: it should be arrays and depends on pet type, if else-->
+            <select name="isBreed" id="isBreed">
+                <option value="isBritishShorthair">British Shorthair</option>
+                <option value="isEuropeanShorthair">European Shorthair</option>
+                <option value="isRagdoll">Ragdoll</option>
+                <option value="isMaineCoon">Maine Coon</option>
+                <option value="isDomestic">Domestic Cat</option>
+                <option value="isPersian">Persian</option>
+                <option value="isMix">Mix Cat</option>
+                <option value="isOther">Other</option>
+            </select>
+
+            <label for="isAge">Age</label>
+            <input type="number" name="isAge" id="isAgeYear" placeholder="Year"> 
+            <!-- PS for us: Javascript calculates months and matches according to months -->
+            <input type="number" name="isAge" id="isAgeMonth" placeholder="Month">
+
+
+            <label for="isKilo">Weight</label>
+            <input type="number" name="isKilo">
+
+            <label for="isVaccinated">Is your pet vaccinated?</label>
+            <input type="radio" name="isVaccinatedYes"> <label for="isVaccinatedYes">Yes</label>
+            <input type="radio" name="isVaccinatedNo"> <label for="isVaccinatedNo">No</label>
+
+            <label for="isFertile">Your pet is...</label>
+            <input type="radio" name="isCastrated"> <label for="isCastrated">Castrated</label>
+            <input type="radio" name="isNotCastrated"> <label for="isNotCastrated">Not yet castrated</label>
+            
+        </fieldset>
+    </form>
+
+
+    <!-- footer partials -->
+</body>
+
+</html>
