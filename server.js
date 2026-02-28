@@ -1,5 +1,6 @@
 
 const express = require("express");
+const session = require('express-session')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,3 +24,9 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
 
+
+// app.use(session({
+//     resave = false,
+//     saveUninitialized: true,
+//     secret = process.env.SESSION_SECRET
+// }))

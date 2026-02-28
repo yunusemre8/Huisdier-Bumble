@@ -11,6 +11,9 @@
     <!-- header partials -->
     <h1>Sign up</h1>
     <form action="/register" method="POST">
+
+        <label for="userNickname">First of all, how can we call you? </label>
+        <input type="text" name="userNickname">
         <fieldset>
             <legend>About your animal</legend>
             <label for="petName">Pet Name</label>
@@ -25,7 +28,7 @@
 
             <label for="isBreed">Choose the breed</label>
             <!-- IMPORTANT: it should be arrays and depends on pet type, if else-->
-            <select name="isBreed" id="isBreed">
+            <select name="isBreed" id="isCatBreeds">
                 <option value="isBritishShorthair">British Shorthair</option>
                 <option value="isEuropeanShorthair">European Shorthair</option>
                 <option value="isRagdoll">Ragdoll</option>
@@ -36,11 +39,21 @@
                 <option value="isOther">Other</option>
             </select>
 
-            <label for="isAge">Age</label>
-            <input type="number" name="isAge" id="isAgeYear" placeholder="Year"> 
-            <!-- PS for us: Javascript calculates months and matches according to months -->
-            <input type="number" name="isAge" id="isAgeMonth" placeholder="Month">
+            <select name="isBreed" id="isDogBreeds">
+                <option value="isBritishShorthair">British Shorthair</option>
+                <option value="isEuropeanShorthair">European Shorthair</option>
+                <option value="isRagdoll">Ragdoll</option>
+                <option value="isMaineCoon">Maine Coon</option>
+                <option value="isDomestic">Domestic Cat</option>
+                <option value="isPersian">Persian</option>
+                <option value="isMix">Mix Cat</option>
+                <option value="isOther">Other</option>
+            </select>
 
+            <label for="petAge">Age</label>
+            <input type="number" name="petAge" id="isAgeYear" placeholder="Year"> 
+            <!-- PS for us: Javascript calculates months and matches according to months -->
+            <input type="number" name="petAge" id="isAgeMonth" placeholder="Month">
 
             <label for="isKilo">Weight</label>
             <input type="number" name="isKilo">
@@ -51,8 +64,46 @@
 
             <label for="isFertile">Your pet is...</label>
             <input type="radio" name="isCastrated"> <label for="isCastrated">Castrated</label>
-            <input type="radio" name="isNotCastrated"> <label for="isNotCastrated">Not yet castrated</label>
-            
+            <input type="radio" name="isNotCastrated"> <label for="isNotCastrated">Not yet castrated</label>            
+        </fieldset>
+
+        <fieldset>
+            <legend>About you</legend>
+            <p>It's not just about pets -your experience matters too!</p>
+
+            <label for="userName">Your Name</label>
+            <input type="text" name="userName">
+
+            <label for="userAge">Your Birthday</label>
+            <input type="date" name="userAge" id="">
+
+            <label for="preferPlace">Where do you prefer meeting? </label>
+            <p>We suggest first meet in a public space.</p>
+    
+            <select name="preferPlace" id="preferPlace">
+                <option value="isOutdoor">Outdoor</option>
+                <option value="isGarden">A closed garden</option>
+                <option value="isHome">At home</option>
+                <option value="isCafe">A pet friendly cafe</option>                
+            </select>
+
+            <label for="isActivity">What would you like to do during the playdate?</label>
+    
+            <select name="isActivity" id="isActivity">
+                <option value="havingChat">Chat with other pet parents (Make new friends/ Network casually)</option>
+                <option value="playGame">Play a small game (quiz, cards etc)</option>
+                <option value="drinkSomething">Enjoy a coffee or tea</option>
+                <option value="isSilence">I prefer a quiet atmosphere with minimal talking, books, headphones.</option>
+            </select>
+
+            <label for="isFrequency">How often would you like playdates?</label>
+    
+            <select name="isFrequency" id="isFrequency">
+                <option value="weekly">Weekly</option>
+                <option value="everyFewWeeks">Every few weeks</option>
+                <option value="occasionally">Occasionally</option>
+                <option value="flexibel">Flexibel</option>
+            </select>
         </fieldset>
     </form>
 
