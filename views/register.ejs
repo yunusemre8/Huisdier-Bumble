@@ -14,7 +14,9 @@
 
         <label for="userNickname">First of all, how can we call you? </label>
         <input type="text" name="userNickname">
-        <fieldset>
+        <button type="button">Next</button>
+
+        <fieldset class="firstQuestionsBox">
             <legend>About your animal</legend>
             <label for="petName">Pet Name</label>
             <input type="text" name="petName">
@@ -54,7 +56,10 @@
             <input type="number" name="petAge" id="isAgeYear" placeholder="Year">
             <!-- PS for us: Javascript calculates months and matches according to months -->
             <input type="number" name="petAge" id="isAgeMonth" placeholder="Month">
+            <button type="button">Next</button>
+        </fieldset>   
 
+        <fieldset class="secondQuestionsBox">
             <label for="isKilo">Weight</label>
             <input type="number" name="isKilo">
 
@@ -67,10 +72,10 @@
             <input type="radio" name="isCastrated" value="no"> not yet castrated
 
             <input name="cover" type="file" accept="image/*">
-        </fieldset>
+            <button type="button">Next</button>
+        </fieldset> 
 
-
-        <fieldset>
+        <fieldset class="thirdQuestionsBox">
             <legend>About you</legend>
             <p>It's not just about pets -your experience matters too!</p>
 
@@ -89,7 +94,10 @@
                 <option value="isHome">At home</option>
                 <option value="isCafe">A pet friendly cafe</option>
             </select>
+            <button type="button">Next</button>
+        </fieldset>
 
+        <fieldset class="fourthQuestionsBox">
             <label for="isActivity">What would you like to do during the playdate?</label>
 
             <select name="isActivity" id="isActivity">
@@ -108,12 +116,10 @@
                 <option value="flexibel">Flexibel</option>
             </select>
         </fieldset>
-
         <input type="submit" value="Sign up!">
     </form>
 
 
     <!-- footer partials -->
 </body>
-
 </html>
