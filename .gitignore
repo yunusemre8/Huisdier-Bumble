@@ -1,6 +1,4 @@
 .env
 .DS_Store
 node_modules
-
-SESSION_SECRET
-static/upload/
+static/upload
