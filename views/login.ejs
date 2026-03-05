@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">   
 </head>
 <body>
     <form action="/login" method="POST">
@@ -15,5 +17,41 @@
 
         <button type="submit">Login</button>
     </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="logo">Huisdier</div>
+        <div class="subtitle">Welcome back — please sign in</div>
+
+        <form action="/login" method="POST" enctype="multipart/form-data">
+            <div class="field">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="your username">
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="••••••••">
+            </div>
+            <input name="cover" type="file" accept="image/*">
+
+            <button type="submit">Sign In</button>
+        </form>
+
+        <div class="footer-text">
+            Don't have an account? <a href="/register">Register</a>
+        </div>
+    </div>
 </body>
 </html>

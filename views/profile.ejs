@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+        <%= data.username %>
+    </h1>
+    <% if (data.cover) { %>
+        <img alt src="/upload/<%= data.cover %>">
+
+    <% } %>
+    <p>
+        <%= data.password %>
+    </p>
+</body>
+</html>

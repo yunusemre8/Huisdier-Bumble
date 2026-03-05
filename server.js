@@ -1,8 +1,27 @@
-require('dotenv').config()
+
 
 const express = require("express")
+const multer = require("multer")
+require("dotenv").config()
+
 const app = express(); 
-app.use(express.urlencoded({extended: true}))
+
+const upload = multer({ dest: "static/upload/" })
+
+// express().post('/login', upload.single('cover'), add)
+
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(express.static("public"))
+app.use("/upload", express.static("static/upload"))
+
+app.set("view engine", "ejs")
+
+function add(req, res) {
+  console.log(req.file.filename)
+}  
+  
+
 const { MongoClient, ServerApiVersion } = require("mongodb")
 
 // MongoDB setup
@@ -42,16 +61,26 @@ async function loginPost(req, res) {
   }
 }
 
-// Middleware
-app.use(express.static('public'))
-app.use(express.json())
-
-app.set("view engine", "ejs")
 
 // Routes
 app.get('/', home)
 app.get('/login', login)
-app.post('/login', loginPost) 
+// app.post('/login', loginPost) 
+
+app.post("/login", upload.single("cover"), async (req, res) => {
+
+  const { username, password } = req.body
+
+  const newUser = {
+    username,
+    password,
+    cover: req.file ? req.file.filename : null
+  }
+
+  await db.collection("users").insertOne(newUser)
+
+  res.render("profile", { data: newUser })
+})
 
 // Route handlers
 function home(req, res) {
