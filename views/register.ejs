@@ -5,15 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
     <!-- header partials -->
-    <h1>Sign up</h1>
+    <h1>Welcome</h1>
     <form action="/register" method="POST" enctype="multipart/form-data">
 
-        <label for="userNickname">First of all, how can we call you? </label>
-        <input type="text" name="userNickname">
+        <p class="welcome-text">How lovely that you chose Pet-Playdates for your furry friend. Signing up takes less than
+            3 minutes.</p>
+
+        <label for="userNickname"></label>
+        <h2 class="step-question">First things first: what should we call you?</h2>
+
+        <div class="nickname-input">
+            <input type="text" name="userNickname" placeholder="Your nickname">
+            <span class="paw-icon">🐾</span>
+        </div>
+
         <button type="button">Next</button>
 
         <fieldset class="firstQuestionsBox">
@@ -57,7 +67,7 @@
             <!-- PS for us: Javascript calculates months and matches according to months -->
             <input type="number" name="petAge" id="isAgeMonth" placeholder="Month">
             <button type="button">Next</button>
-        </fieldset>   
+        </fieldset>
 
         <fieldset class="secondQuestionsBox">
             <label for="isKilo">Weight</label>
@@ -73,7 +83,7 @@
 
             <input name="cover" type="file" accept="image/*">
             <button type="button">Next</button>
-        </fieldset> 
+        </fieldset>
 
         <fieldset class="thirdQuestionsBox">
             <legend>About you</legend>
@@ -122,4 +132,5 @@
 
     <!-- footer partials -->
 </body>
+
 </html>
