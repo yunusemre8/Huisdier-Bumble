@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
-app.use(express.static("static")); //upgeloadde afbeeldingen
+app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), (req,res) => {
     const id = req.body.userNickname.toLowerCase();
