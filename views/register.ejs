@@ -11,21 +11,22 @@
 
 <body>
     <!-- header partials -->
-    <h1>Welcome</h1>
+    <h1>Sign up</h1>
     <form action="/register" method="POST" enctype="multipart/form-data">
 
-        <p class="welcome-text">How lovely that you chose Pet-Playdates for your furry friend. Signing up takes less than
-            3 minutes.</p>
+        <fieldset class="zeroQuestionsBox" >
+            <p class="welcome-text">How lovely that you chose Pet-Playdates for your furry friend.</p>
+            <p class="welcome-text"> Signing up takes less than 3 minutes.</p>
+            <label for="userNickname"></label>
 
-        <label for="userNickname"></label>
-        <h2 class="step-question">First things first: what should we call you?</h2>
+            <h2 class="step-question">First things first: what should we call you?</h2>
 
-        <div class="nickname-input">
-            <input type="text" name="userNickname" placeholder="Your nickname">
-            <span class="paw-icon">🐾</span>
-        </div>
-
-        <button type="button">Next</button>
+            <div class="nickname-input">
+                <input type="text" name="userNickname" placeholder="Your nickname">
+                <span class="paw-icon">🐾</span>
+            </div>
+            <button type="button" id="button1">Next</button>
+        </fieldset>
 
         <fieldset class="firstQuestionsBox">
             <legend>About your animal</legend>
@@ -67,7 +68,7 @@
             <input type="number" name="petAge" id="isAgeYear" placeholder="Year">
             <!-- PS for us: Javascript calculates months and matches according to months -->
             <input type="number" name="petAge" id="isAgeMonth" placeholder="Month">
-            <button type="button">Next</button>
+            <button type="button" id="button2">Next</button>
         </fieldset>
 
         <fieldset class="secondQuestionsBox">
@@ -83,7 +84,7 @@
             <input type="radio" name="isCastrated" value="no"> not yet castrated
 
             <input name="cover" type="file" accept="image/*">
-            <button type="button">Next</button>
+            <button type="button" id="button3">Next</button>
         </fieldset>
 
         <fieldset class="thirdQuestionsBox">
@@ -105,7 +106,7 @@
                 <option value="isHome">At home</option>
                 <option value="isCafe">A pet friendly cafe</option>
             </select>
-            <button type="button">Next</button>
+            <button type="button" id="button4">Next</button>
         </fieldset>
 
         <fieldset class="fourthQuestionsBox">
@@ -128,13 +129,13 @@
             </select>
 
             <label for="isPassword">Create your password</label>
-            <input type="password" id="isPassword">
-            <input type="password" id="checkPassword">
+            <input type="password" id="isPassword" name="password">
+            <input type="password" id="checkPassword" name="checkPassword">
         </fieldset>
         <input type="submit" value="Submit">
     </form>
 
-
+    <script defer src="/script.js"></script>
     <!-- footer partials -->
 </body>
 
