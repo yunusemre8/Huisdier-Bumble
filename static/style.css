@@ -92,6 +92,6 @@ h1 {
 .thirdQuestionsBox,
 .fourthQuestionsBox,
 input[type="submit"] {
-    display: none !important;
+    display: none;
 }
 

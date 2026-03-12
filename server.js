@@ -39,10 +39,10 @@ app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), async(req, res) => {
     try {
-        const id = req.body.userNickname.toLowerCase();
+        const id = req.body.userName.toLowerCase();
 
         const newUser = {
-            id, userNickname: req.body.userNickname,
+            id, userName: req.body.userName,
             petName: req.body.petName,
             cover: req.file ? req.file.filename : null,
             createdAt: new Date(),
