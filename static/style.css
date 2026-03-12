@@ -107,12 +107,9 @@ input[type="submit"
     display: none;
 }
 
-.firstQuestionsBox {
-    color: #A2263D;
-     ;
-}
 
 label {
+    color: #A2263D;
     font-size: 24px;
     display: block;
     margin-top: 10px;
@@ -141,4 +138,25 @@ input#isAgeYear, input#isAgeMonth {
 legend {
     font-size: 1.5rem;
     font-weight: 700;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+button {
+  color: #fff;
+  background-color: #A2263D;
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+select#isActivity {
+  width: 100%;
 }
