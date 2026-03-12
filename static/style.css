@@ -160,3 +160,18 @@ button {
 select#isActivity {
   width: 100%;
 }
+
+input#isPassword, input#checkPassword {
+    height: 30px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-radius: 0;
+    background-color: #fff;
+    border: 1px solid #000;
+}
+
+input.submit {
+    background-color: #A2263D;
+    width: 80%;
+    color: #fff;
+}
