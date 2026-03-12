@@ -5,10 +5,29 @@ const thirdQuestionsBox = document.querySelector(".thirdQuestionsBox");
 const fourthQuestionsBox = document.querySelector(".fourthQuestionsBox");
 const submitButton = document.querySelector('input[type="submit"]');
 
+const backButton1 = document.getElementById("button21");
+const backButton2 = document.getElementById("button31");
+const backButton3 = document.getElementById("button41");
+
 const button1 = document.getElementById("button1");
 const button2 = document.getElementById("button2");
 const button3 = document.getElementById("button3");
 const button4 = document.getElementById("button4");
+
+backButton1.addEventListener("click", function () {
+  firstQuestionsBox.style.display = "none";
+  zeroQuestionsBox.style.display = "block";
+});
+
+backButton2.addEventListener("click", function () {
+  secondQuestionsBox.style.display = "none";
+  firstQuestionsBox.style.display = "block";
+});
+
+backButton3.addEventListener("click", function () {
+  thirdQuestionsBox.style.display = "none";
+  secondQuestionsBox.style.display = "block";
+});
 
 button1.addEventListener("click", function () {
   zeroQuestionsBox.style.display = "none";
