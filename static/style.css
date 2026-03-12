@@ -56,14 +56,14 @@ h2.step-question {
     margin-bottom: 1em;
 }
 
-.nickname-input {
+.name-input {
     position: relative;
     width: 100%;
     max-width: 340px;
     margin-bottom: 48px;
 }
 
-.nickname-input input[type="text"] {
+.name-input input[type="text"] {
     width: 100%;
     padding: 20px 60px 20px 22px;
     border-radius: 18px;
@@ -77,12 +77,12 @@ h2.step-question {
     transition: box-shadow 0.2s ease;
 }
 
-.nickname-input input[type="text"]::placeholder {
+.name-input input[type="text"]::placeholder {
     color: #bba96e;
     font-weight: 600;
 }
 
-.nickname-input .paw-icon {
+.name-input .paw-icon {
     position: absolute;
     right: 18px;
     top: 50%;
@@ -116,6 +116,7 @@ label {
     font-size: 24px;
     display: block;
     margin-top: 10px;
+    font-weight: 600;
 }
 
 input {
@@ -137,4 +138,7 @@ input#isAgeYear, input#isAgeMonth {
     width: 50%;
 }
 
-
+legend {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
