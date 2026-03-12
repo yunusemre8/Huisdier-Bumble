@@ -65,9 +65,11 @@
             </select>
 
             <label for="petAge">Age</label>
+            <div class="button-row">
             <input type="number" name="petAge" id="isAgeYear" placeholder="Year">
             <!-- PS for us: Javascript calculates months and matches according to months -->
             <input type="number" name="petAge" id="isAgeMonth" placeholder="Month">
+            </div>
             <div class="button-row">
             <button type="button" id="button21">Back</button>
             <button type="button" id="button2">Next</button>
@@ -79,13 +81,19 @@
             <input type="number" name="isKilo">
 
             <label>Is your pet vaccinated?</label>
-            <input type="radio" name="isVaccinated" value="yes"> Yes
-            <input type="radio" name="isVaccinated" value="no"> No
+            
+            <div class="button-row">
+            Yes<input class="radiobutton" type="radio" name="isVaccinated" value="yes">
+            No<input class="radiobutton"type="radio" name="isVaccinated" value="no">
+            </div>
 
             <label>Your pet is...</label>
-            <input type="radio" name="isCastrated" value="yes"> castrated
-            <input type="radio" name="isCastrated" value="no"> not yet castrated
-
+            <div class=button-row>
+            Castrated<input class=radiobutton type="radio" name="isCastrated" value="yes">
+            Not castrated<input class=radiobutton type="radio" name="isCastrated" value="no">
+            </div>
+             
+            <label>Picture of your pet</label>
             <input name="cover" type="file" accept="image/*">
             <div class="button-row">
             <button type="button" id="button31">Back</button>
@@ -133,6 +141,21 @@
                 <option value="occasionally">Occasionally</option>
                 <option value="flexibel">Flexibel</option>
             </select>
+
+            <div class="button-row">
+            <button type="button" id="button51">Back</button>
+            <button type="button" id="button5">Next</button>
+            </div>
+        </fieldset>
+
+        <fieldset class="fifthQuestionsBox">
+            <legend>Create your account</legend>
+
+            <label for="isEmail">Enter your E-mail</label>
+            <input type="email" name="isEmail" id="isEmail">
+
+            <label for="isPhoneNumber">Enter your phone number</label>
+            <input type="tel" name="isPhoneNumber" id="isPhoneNumber">
 
             <label for="isPassword">Create your password</label>
             <input type="password" id="isPassword" name="password">

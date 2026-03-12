@@ -114,6 +114,7 @@ label {
     display: block;
     margin-top: 10px;
     font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
 input {
@@ -143,7 +144,6 @@ legend {
 .button-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
 }
 
 button {
@@ -155,13 +155,22 @@ button {
   border: none;
   cursor: pointer;
   font-weight: 600;
+  margin-top: 2rem;
+}
+
+button#button1 {
+    float: right;
+}
+
+.radiobutton {
+    width: 10%;
 }
 
 select#isActivity {
   width: 100%;
 }
 
-input#isPassword, input#checkPassword {
+input#isPassword, input#checkPassword, input#isEmail, input#isPhoneNumber {
     height: 30px;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -172,6 +181,5 @@ input#isPassword, input#checkPassword {
 
 input.submit {
     background-color: #A2263D;
-    width: 80%;
     color: #fff;
 }
