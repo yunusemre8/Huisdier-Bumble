@@ -1,9 +1,43 @@
-article{
-    height: 5em;
-    background-color: aqua;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root{
+    --font-body: 'Nunito', sans-serif;
+    /* --font-heading:; */
+
+    --color-background: hsl(42 97.7 65.9);
+    --color-text: hsl(241 0 5);
+    --color-background-button: hsl(349 62 39.2);
+    --color-text-button: hsl(360 0 98.9);
+    --color-background-card: hsl(349 62 70);
 }
 
+body{
+   background-color: var(--color-background);
+}
+
+article{
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: .3rem;
+}
+section{
+    background-color: var(--color-background-card);
+    border: .2rem solid var(--color-background-button);
+    border-radius: .3rem;
+}
 button{
-    background-color: bisque;
-    color: violet;
+    background-color: var(--color-background-button);
+    color: var(--color-text-button);
+}
+
+#profilPic{
+    max-height: 3rem;
+    max-width: fit-content;
+}
+
+#userProfile{
+    display: flex;
+
 }

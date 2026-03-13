@@ -14,6 +14,25 @@
     <button id="locationButton">Share my location</button>
     <p id="isLocation"></p>
 
+    <div id="userProfile">
+        <h2>Your profile</h2>
+
+     <% if (user.cover) { %>
+
+        <img id='profilPic' src="/upload/<%= user.cover %>" width="150">
+
+        <% } %>
+
+            <h2>User: <%= user.userName %>
+            </h2>
+
+            <p>Pet name: <%= user.petName %>
+            </p>
+
+            <a href="/register">Register again</a>
+
+    </div>
+
     <button>Filters</button>
 
     <article>
@@ -22,7 +41,7 @@
             <p>User Name</p>
             <p>Pet Type Pet name en pet Age</p>
         </section>
-                <section>
+        <section>
             <img src="" alt="">
             <p>User Name</p>
             <p>Pet Type Pet name en pet Age</p>
