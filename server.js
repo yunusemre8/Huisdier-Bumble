@@ -11,6 +11,7 @@ const port = process.env.PORT || 3000;
 
 const upload = multer({ dest: 'static/upload/' })
 
+let db;
 
 function add(req, res) {
     console.log(req.file.filename)
@@ -23,6 +24,8 @@ async function connectMongo() {
 
         db = client.db(process.env.DB_NAME);
 
+        await db.collection("users").createIndex({ location: "2dsphere" });
+
         console.log("Database is connected");
     } catch (error) {
         console.error("DB couldn't be connected", error.message);
@@ -31,13 +34,14 @@ async function connectMongo() {
 }
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 app.use(express.static("static")); //user's images
 
-app.post('/register', upload.single('cover'), async(req, res) => {
+app.post('/register', upload.single('cover'), async (req, res) => {
     try {
         const id = req.body.userName.toLowerCase();
 
@@ -46,9 +50,10 @@ app.post('/register', upload.single('cover'), async(req, res) => {
             petName: req.body.petName,
             cover: req.file ? req.file.filename : null,
             createdAt: new Date(),
+            location: null,
         };
         await db.collection('users').insertOne(newUser);
-        res.redirect(`/profile/${id}`)
+        res.redirect(`/matches/${id}`)
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred during registration")
@@ -61,6 +66,7 @@ app.post('/register', upload.single('cover'), async(req, res) => {
 app.get('/', home)
 app.get('/register', register)
 app.get('/profile/:id', profile)
+app.get('/matches/:id', matchesPage);
 
 
 function home(req, res) {
@@ -70,31 +76,91 @@ function register(req, res) {
     res.render('register')
 }
 
-async function startServer() {
-  await connectMongo();
 
-  app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-  });
-}
+app.post('/save-location', async (req, res) => {
+    try {
+        const { id, lat, lng } = req.body;
+        if (!id || lat == null || lng == null) {
+            return res.status(400).json({
+                success: false,
+                message: 'id, lat en lng zijn verplicht'
+            })
+        }
+        const result = await db.collection('users').updateOne(
+            { id: id.toLowerCase() },
+            {
+                $set: {
+                    location: {
+                        type: "Point",
+                        coordinates: [Number(lng), Number(lat)]
+                    }
+                }
+            }
+        );
 
-startServer();
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'user doesnt exist'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Location saved'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+});
+
 
 async function profile(req, res) {
-    try{
+    try {
         const user = await db.collection("users").findOne({
             id: req.params.id,
         });
-        if(!user) return res.redirect("/register");
-        res.render("profile", {user});
-    } catch(error){
+        if (!user) return res.redirect("/register");
+        res.render("profile", { user });
+    } catch (error) {
         console.error(error);
         res.status(500).send("Profile couldn't be loaded")
     }
-} 
+}
+
+async function matchesPage(req, res) {
+    try {
+        const user = await db.collection("users").findOne({
+            id: req.params.id.toLowerCase(),
+        });
+
+        if (!user) return res.redirect("/register");
+
+        res.render("matches", { user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Matches page couldn't be loaded");
+    }
+}
+
+async function startServer() {
+    await connectMongo();
+
+    app.listen(port, () => {
+        console.log(`Server running on http://localhost:${port}`);
+    });
+}
+
+startServer();
 
 // app.use(session({
 //     resave: false,
 //     saveUninitialized: true,
 //     secret: process.env.SESSION_SECRET
 // }))
+
+
