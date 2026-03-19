@@ -3,7 +3,7 @@ const express = require("express");
 const session = require('express-session')
 const dotenv = require("dotenv");
 const multer = require("multer");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 dotenv.config();
 
 const app = express();
@@ -69,7 +69,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             return res.send("Email already registered")
         }
 
-        const passwordHash = await createPasswordHash(req.body.isPassword, 10)
+        const passwordHash = await createPasswordHash(req.body.isPassword)
 
         const newUser = {
             userEmail: req.body.userEmail,
@@ -121,7 +121,7 @@ app.post('/save-location', async (req, res) => {
             })
         }
         const result = await db.collection('users').updateOne(
-            { id: id.toLowerCase() },
+            { _id: new ObjectId (req.params.id) },
             {
                 $set: {
                     location: {
@@ -156,7 +156,7 @@ app.post('/save-location', async (req, res) => {
 async function profile(req, res) {
     try {
         const user = await db.collection("users").findOne({
-            id: req.params.id,
+            _id: new ObjectId (req.params.id),
         });
         if (!user) return res.redirect("/register");
         res.render("profile", { user });
@@ -169,7 +169,7 @@ async function profile(req, res) {
 async function matchesPage(req, res) {
     try {
         const user = await db.collection("users").findOne({
-            id: req.params.id.toLowerCase(),
+            _id: new ObjectId (req.params.id),
         });
 
         if (!user) return res.redirect("/register");

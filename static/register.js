@@ -77,7 +77,7 @@ petTypeSelect.addEventListener("change", function() {
   breedSelect.innerHTML= ""
 
   if (isTypeSelected === "") {
-    breedSelect.innerHTML= "<option value=''>First choose a pet type </option>"
+    breedSelect.innerHTML= "<option value='cat'></option>"
     return
   }
 

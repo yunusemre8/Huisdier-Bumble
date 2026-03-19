@@ -22,13 +22,13 @@
             <h2 class="step-question">First things first: what is your name?</h2>
 
             <div class="name-input">
-                <input type="text" name="userName" placeholder="Your name">
+                <input type="text" name="userName" placeholder="Your name" required>
                 <span class="paw-icon">🐾</span>
             </div>
 
             <label for="userAge">Your Birthday</label>
             <p>Pet Playdates is for users aged 18+ only.</p>
-            <input type="date" name="userAge" id="userAge">
+            <input type="date" name="userAge" id="userAge" required>
 
             <button type="button" id="button1">Next</button>
         </fieldset>                         
@@ -44,7 +44,7 @@
                 <option value="dog">Dog</option>
             </select>
             <select name="isBreed" id="isBreed">
-                <option value="">First choose a pet type</option>
+                <option value=""></option>
             </select>
     
             <label for="petAge">Pet's Age</label>
@@ -64,7 +64,7 @@
             <legend>About your furry friend</legend>
 
             <label for="isKilo">Weight</label>
-            <input type="number" name="isKilo"><span>kilogram</span>
+            <input type="number" name="isKilo" step="0.1"><span>kilogram</span>
 
             <label>Is your pet vaccinated?</label>
             
