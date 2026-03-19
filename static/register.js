@@ -71,19 +71,22 @@ const breeds = {
 const petTypeSelect = document.getElementById("petType")
 const breedSelect = document.getElementById("isBreed")
 
-petTypeSelect.addEventListener("change", function() {
-  const isTypeSelected= petTypeSelect.value
+const updateBreeds = type => {
+  breedSelect.innerHTML = ""
 
-  breedSelect.innerHTML= ""
+  if(!type) return 
 
-  if (isTypeSelected === "") {
-    breedSelect.innerHTML= "<option value='cat'></option>"
-    return
-  }
-
-  breeds[isTypeSelected].forEach(function(breed){
-    const option =document.createElement("option")
+  breeds[type].forEach(breed =>{
+    const option = document.createElement("option")
+    option.value = breed
     option.textContent = breed
     breedSelect.appendChild(option)
   })
-})
+}
+
+// arrow boven function updateBreeds (type){
+//   breedSelect.innerHTML = ""
+//   if(!type) return breeds [type].forEach(function(breed) {
+  
+// })
+// }
