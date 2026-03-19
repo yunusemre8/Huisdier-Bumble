@@ -11,6 +11,8 @@ const port = process.env.PORT || 3000;
 
 const upload = multer({ dest: 'static/upload/' })
 
+const bcrypt = require("bcrypt")
+
 let db;
 
 function add(req, res) {
@@ -40,6 +42,16 @@ async function connectMongo() {
     }
 }
 
+async function createPasswordHash(password){
+    try{
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+        return hashedPassword
+    } catch (error){
+        console.log('Error hashingpassword', error)
+    }
+}
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
@@ -50,7 +62,6 @@ app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
-        const bcrypt = require("bcrypt")
         const existingUser = await db.collection('users').findOne({
             userEmail: req.body.userEmail
         })
@@ -58,7 +69,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             return res.send("Email already registered")
         }
 
-        const passwordHash = await bcrypt.hash(req.body.isPassword, 10)
+        const passwordHash = await createPasswordHash(req.body.isPassword, 10)
 
         const newUser = {
             userEmail: req.body.userEmail,
@@ -84,7 +95,6 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 
     }
 });
-
 
 
 app.get('/', home)
