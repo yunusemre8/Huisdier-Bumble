@@ -22,6 +22,8 @@ fourthQuestionsBox.style.display = "none";
 fifthQuestionsBox.style.display = "none";
 submitButton.style.display = "none";
 
+const form = document.querySelector("form")
+
 backButton1.addEventListener("click", function () {
   secondQuestionsBox.style.display = "none";
   firstQuestionsBox.style.display = "block";
@@ -36,7 +38,7 @@ backButton3.addEventListener("click", function () {
   thirdQuestionsBox.style.display = "block";
 });
 
-backButton4.addEventListener("click", function (){
+backButton4.addEventListener("click", function () {
   fifthQuestionsBox.style.display = "none";
   fourthQuestionsBox.style.display = "block";
 })
@@ -55,9 +57,9 @@ button3.addEventListener("click", function () {
   fourthQuestionsBox.style.display = "block";
 });
 
-button4.addEventListener("click", function(){
+button4.addEventListener("click", function () {
   fourthQuestionsBox.style.display = "none";
-  fifthQuestionsBox.style.display ="block";
+  fifthQuestionsBox.style.display = "block";
   submitButton.style.display = "block";
 })
 
@@ -74,9 +76,9 @@ const breedSelect = document.getElementById("isBreed")
 const updateBreeds = type => {
   breedSelect.innerHTML = ""
 
-  if(!type) return 
+  if (!type) return
 
-  breeds[type].forEach(breed =>{
+  breeds[type].forEach(breed => {
     const option = document.createElement("option")
     option.value = breed
     option.textContent = breed
@@ -87,7 +89,7 @@ const updateBreeds = type => {
 // arrow boven function updateBreeds (type){
 //   breedSelect.innerHTML = ""
 //   if(!type) return breeds [type].forEach(function(breed) {
-  
+
 // })
 // }
 
@@ -96,3 +98,40 @@ petTypeSelect.addEventListener("change", () => {
 })
 
 updateBreeds(petTypeSelect.value)
+
+//User age calculate
+const userBirthDate = document.getElementById("userAge")
+
+userBirthDate.addEventListener("input", function(){
+  const selectedAge = new Date(userBirthDate.value)
+  const age= calculateAge(selectedAge)
+})
+
+
+function calculateAge(userBirthDate) {
+  const isToday = new Date()
+  let age = isToday.getFullYear() - userBirthDate.getFullYear()
+
+  const calculateMonth = isToday.getMonth() - userBirthDate.getMonth()
+
+  if (calculateMonth < 0 ||
+    (calculateMonth === 0 && isToday.getDate() < userBirthDate.getDate())
+  ) {
+    age--;
+  }
+  return age
+}
+
+form.addEventListener("submit", function (event) {
+
+  const selectedDate = new Date(userBirthDate.value)
+  const age = calculateAge(selectedDate)
+
+  if(age<18){
+   event.preventDefault()
+   document.getElementById("ageError").textContent = "Pet Playdates is for users aged 18+ only."
+  }
+  console.log("Birth Date:", user.value)
+  console.log("Calculated age:", age)
+
+})
