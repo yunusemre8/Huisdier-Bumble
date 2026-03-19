@@ -8,7 +8,7 @@
 
 body {
     font-family: 'Nunito', sans-serif;
-    background-color: #FDCA53;
+    background-color: #251a79;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,7 +36,7 @@ body::after {
 h1 {
     font-size: 2rem;
     font-weight: 900;
-    color: #A2263D;
+    color: #dfe4f8;
     margin-bottom: 16px;
     letter-spacing: 0.5px;
 }
@@ -148,7 +148,7 @@ legend {
 
 button {
   color: #fff;
-  background-color: #A2263D;
+  background-color: #ff854c;
   padding: 12px 28px;
   font-size: 16px;
   border-radius: 25px;
@@ -182,4 +182,104 @@ input#isPassword, input#checkPassword, input#isEmail, input#isPhoneNumber {
 input.submit {
     background-color: #A2263D;
     color: #fff;
+}
+
+.titlematchpage {
+    max-width: 60%;
+    text-align: center;
+}
+
+.filterbtn, .locationbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    top: 1.5em;
+}
+
+.filterbtn img, .locationbtn img {
+    width: 30px;
+    height: 30px;
+}
+
+.locationbtn {
+    left: 2em;
+}
+
+.filterbtn {
+    right: 2em;
+}
+
+.cards {
+  position: relative;
+  width: 250px;
+  height: 400px;
+  margin: 1.5em auto 0;
+}
+
+.card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 400px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: grab;
+}
+
+.matchingimages {
+  width: 250px;
+  height: 400px;
+  object-fit: cover;
+  border: 5px solid #dfe4f8;
+  border-radius: 20px;
+  display: block;
+}
+
+.likebtn, .dislikebtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  bottom: 15px;
+  z-index: 2;
+}
+
+.likebtn img, .dislikebtn img {
+  width: 30px;
+  height: 30px;
+}
+
+.dislikebtn {
+  left: 15px;
+}
+
+.likebtn {
+  right: 15px;
+}
+
+.swipe-right {
+  transform: translateX(500px) rotate(20deg);
+  opacity: 0;
+}
+
+.swipe-left {
+  transform: translateX(-500px) rotate(-20deg);
+  opacity: 0;
+}
+
+.cards,
+.cards img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.matchingimages {
+  pointer-events: none;
 }

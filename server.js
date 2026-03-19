@@ -42,6 +42,7 @@ app.post('/register', upload.single('cover'), (req,res) => {
 app.get('/',home)
 app.get('/register', register)
 app.get('/profile/:id', profile)
+app.get('/matching', matchPage)
 
  
 function home(req, res){
@@ -49,6 +50,9 @@ function home(req, res){
 }
 function register(req, res){
     res.render('register')
+}
+function matchPage(req, res){
+    res.render('match-page')
 }
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
