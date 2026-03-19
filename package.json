@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Namen van functies en variabelen.  Taal: Engels",
   "main": "register.js",
- "scripts": {
-  "dev": "nodemon server.js",
-  "start": "node server.js"
-},
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yunusemre8/Huisdier-Bumble.git"
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/yunusemre8/Huisdier-Bumble#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "ejs": "^4.0.1",
     "express": "^5.2.1",

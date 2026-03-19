@@ -17,6 +17,13 @@ function add(req, res) {
     console.log(req.file.filename)
 }
 
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}))
+
+
 async function connectMongo() {
     try {
         const client = new MongoClient(process.env.MONGO_URI);
@@ -43,17 +50,34 @@ app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
-        const id = req.body.userName.toLowerCase();
+        const bcrypt = require("bcrypt")
+        const existingUser = await db.collection('users').findOne({
+            userEmail: req.body.userEmail
+        })
+        if(existingUser){
+            return res.send("Email already registered")
+        }
+
+        const passwordHash = await bcrypt.hash(req.body.isPassword, 10)
 
         const newUser = {
-            id, userName: req.body.userName,
+            userEmail: req.body.userEmail,
+            // passwordHash: '',
+            userName: req.body.userName,
+            userAge: req.body.userAge,
+            userCity: req.body.userCity,
             petName: req.body.petName,
             cover: req.file ? req.file.filename : null,
+            isFrequency: req.body.isFrequency,
+            preferPlace: req.body.preferPlace,
             createdAt: new Date(),
             location: null,
+
         };
-        await db.collection('users').insertOne(newUser);
-        res.redirect(`/matches/${id}`)
+        const result = await db.collection('users').insertOne(newUser)
+        const userId = result.insertedId.toString()
+        req.session.userId = userId
+        res.redirect(`/matches/${userId}`)
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred during registration")
@@ -156,11 +180,5 @@ async function startServer() {
 }
 
 startServer();
-
-// app.use(session({
-//     resave: false,
-//     saveUninitialized: true,
-//     secret: process.env.SESSION_SECRET
-// }))
 
 

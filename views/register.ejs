@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <meta name="description" content="Sign up page">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/register.css">
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <h1>Sign up</h1>
     <form action="/register" method="POST" enctype="multipart/form-data">
 
-        <fieldset class="zeroQuestionsBox" >
+        <fieldset class="firstQuestionsBox" >
             <p class="welcome-text">How lovely that you chose Pet-Playdates for your furry friend.</p>
             <p class="welcome-text"> Signing up takes less than 3 minutes.</p>
             <label for="userName"></label>
@@ -25,113 +25,75 @@
                 <input type="text" name="userName" placeholder="Your name">
                 <span class="paw-icon">🐾</span>
             </div>
+
+            <label for="userAge">Your Birthday</label>
+            <p>Pet Playdates is for users aged 18+ only.</p>
+            <input type="date" name="userAge" id="userAge">
+
             <button type="button" id="button1">Next</button>
         </fieldset>                         
 
-        <fieldset class="firstQuestionsBox">
-            <legend>About your animal</legend>
+        <fieldset class="secondQuestionsBox">
+            <legend>About your furry friend</legend>
             <label for="petName">Pet Name</label>
             <input type="text" name="petName">
 
-            <label for="petType">Choose your animal</label>
+            <label for="petType">Choose your animal and breed</label>
             <select name="petType" id="petType">
                 <option value="cat">Cat</option>
                 <option value="dog">Dog</option>
-                <option value="rabbit">Rabbit</option>
             </select>
-
-            <label for="isBreed">Choose the breed</label>
-            <!-- IMPORTANT: it should be arrays and depends on pet type, if else-->
-            <select name="isBreed" id="isCatBreeds">
-                <option value="isBritishShorthair">British Shorthair</option>
-                <option value="isEuropeanShorthair">European Shorthair</option>
-                <option value="isRagdoll">Ragdoll</option>
-                <option value="isMaineCoon">Maine Coon</option>
-                <option value="isDomestic">Domestic Cat</option>
-                <option value="isPersian">Persian</option>
-                <option value="isMix">Mix Cat</option>
-                <option value="isOther">Other</option>
+            <select name="isBreed" id="isBreed">
+                <option value="">First choose a pet type</option>
             </select>
-
-            <select name="isBreed" id="isDogBreeds">
-                <option value="isLabradorRetriever">Labrador Retriever</option>
-                <option value="isLabradoodle">Labradoodle</option>
-                <option value="isGoldenRetriever">Golden Retriever</option>
-                <option value="isChihuahua">Chihuahua</option>
-                <option value="isPomeranian">Pomeranian</option>
-                <option value="isFrenchBulldog">French Bulldog</option>
-                <option value="isMix">Mix Cat</option>
-                <option value="isOther">Other</option>
-            </select>
-
-            <label for="petAge">Age</label>
+    
+            <label for="petAge">Pet's Age</label>
             <div class="button-row">
-            <input type="number" name="petAge" id="isAgeYear" placeholder="Year">
+            <input type="number" name="petAge" id="isAgeYear" placeholder="Birth Year">
             <!-- PS for us: Javascript calculates months and matches according to months -->
-            <input type="number" name="petAge" id="isAgeMonth" placeholder="Month">
+            <input type="number" name="petAge" id="isAgeMonth" placeholder="Birth Month">
             </div>
+
             <div class="button-row">
             <button type="button" id="button21">Back</button>
             <button type="button" id="button2">Next</button>
             </div>
             </fieldset>
 
-        <fieldset class="secondQuestionsBox">
+        <fieldset class="thirdQuestionsBox">
+            <legend>About your furry friend</legend>
+
             <label for="isKilo">Weight</label>
-            <input type="number" name="isKilo">
+            <input type="number" name="isKilo"><span>kilogram</span>
 
             <label>Is your pet vaccinated?</label>
             
             <div class="button-row">
-            Yes<input class="radiobutton" type="radio" name="isVaccinated" value="yes">
-            No<input class="radiobutton"type="radio" name="isVaccinated" value="no">
+            <span>Yes</span><input class="radiobutton" type="radio" name="isVaccinated" value="yes">
+            <span>No</span><input class="radiobutton"type="radio" name="isVaccinated" value="no">
             </div>
 
             <label>Your pet is...</label>
             <div class=button-row>
-            Castrated<input class=radiobutton type="radio" name="isCastrated" value="yes">
-            Not castrated<input class=radiobutton type="radio" name="isCastrated" value="no">
+            <span>Castrated</span><input class=radiobutton type="radio" name="isCastrated" value="yes">
+            <span>Not yet castrated</span><input class=radiobutton type="radio" name="isCastrated" value="no">
             </div>
              
             <label>Picture of your pet</label>
             <input name="cover" type="file" accept="image/*">
+
             <div class="button-row">
             <button type="button" id="button31">Back</button>
             <button type="button" id="button3">Next</button>
             </div>
         </fieldset>
 
-        <fieldset class="thirdQuestionsBox">
+        <fieldset class="fourthQuestionsBox">
             <legend>About you</legend>
             <p>It's not just about pets -your experience matters too!</p>
 
-            <label for="userAge">Your Birthday</label>
-            <input type="date" name="userAge" id="">
-
-            <label for="preferPlace">Where do you prefer meeting? </label>
-            <p>We suggest first meet in a public space.</p>
-
-            <select name="preferPlace" id="preferPlace">
-                <option value="isOutdoor">Outdoor</option>
-                <option value="isGarden">A closed garden</option>
-                <option value="isHome">At home</option>
-                <option value="isCafe">A pet friendly cafe</option>
-            </select>
-            <div class="button-row">
-            <button type="button" id="button41">Back</button>
-            <button type="button" id="button4">Next</button>
-            </div>
-        </fieldset>
-
-        <fieldset class="fourthQuestionsBox">
-            <label for="isActivity">What would you like to do during the playdate?</label>
-
-            <select name="isActivity" id="isActivity">
-                <option value="havingChat">Chat with other pet parents (Make new friends/ Network casually)</option>
-                <option value="playGame">Play a small game (quiz, cards etc)</option>
-                <option value="drinkSomething">Enjoy a coffee or tea</option>
-                <option value="isSilence">I prefer a quiet atmosphere with minimal talking, books, headphones.</option>
-            </select>
+            <label for="userCity">Which city do you live in?</label>
+            <input type="text" name="userCity" id="userCity">
 
             <label for="isFrequency">How often would you like playdates?</label>
 
@@ -142,29 +104,40 @@
                 <option value="flexibel">Flexibel</option>
             </select>
 
+            <label for="preferPlace">Where do you prefer meeting? </label>
+            <p>We suggest first meet in a public space.</p>
+
+            <select name="preferPlace" id="preferPlace">
+                <option value="isOutdoor">Outdoor</option>
+                <option value="isGarden">A closed garden</option>
+                <option value="isHome">At home</option>
+                <option value="isCafe">A pet friendly cafe</option>
+            </select>
+
+
             <div class="button-row">
-            <button type="button" id="button51">Back</button>
-            <button type="button" id="button5">Next</button>
+             <button type="button" id="button41">Back</button>
+             <button type="button" id="button4">Next</button>
             </div>
         </fieldset>
 
         <fieldset class="fifthQuestionsBox">
-            <legend>Create your account</legend>
-
-            <label for="isEmail">Enter your E-mail</label>
-            <input type="email" name="isEmail" id="isEmail">
-
-            <label for="isPhoneNumber">Enter your phone number</label>
-            <input type="tel" name="isPhoneNumber" id="isPhoneNumber">
+            <label for="userEmail" id="userEmail">Your email address</label>
+            <input type="email" name="userEmail" id="userEmail">
 
             <label for="isPassword">Create your password</label>
-            <input type="password" id="isPassword" name="password">
+            <input type="password" id="isPassword" name="isPassword">
             <input type="password" id="checkPassword" name="checkPassword">
+
+            <div class="button-row">
+             <button type="button" id="button51">Back</button>
+             <input class="submit" type="submit" value="Submit">
+            </div>
         </fieldset>
-        <input class="submit" type="submit" value="Submit">
+
     </form>
 
-    <script defer src="/script.js"></script>
+    <script defer src="/register.js"></script>
     <!-- footer partials -->
 </body>
 
