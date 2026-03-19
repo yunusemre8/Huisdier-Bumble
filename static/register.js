@@ -90,3 +90,9 @@ const updateBreeds = type => {
   
 // })
 // }
+
+petTypeSelect.addEventListener("change", () => {
+  updateBreeds(petTypeSelect.value)
+})
+
+updateBreeds(petTypeSelect.value)
