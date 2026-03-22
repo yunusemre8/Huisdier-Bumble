@@ -1,62 +1,60 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <title>Contact delen</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Match scherm</title>
+  <link rel="stylesheet" href="/style.css" />
 </head>
-
 <body>
+  <main class="match-page">
+    <section class="match-screen">
+      <h1 class="match-title">You found your match!</h1>
 
-<div class="container">
+      <div class="match-profiles">
+        <article class="profile-card">
+          <img src="/images/profile-1.jpg" alt="Profiel van Lisa" />
+        </article>
 
-    <h1>Nieuwe Match! 🐾</h1>
-    <p>Jullie zijn gematcht! Deel je contactgegevens om een playdate te plannen.</p>
+        <div class="heart-circle">♥</div>
 
-    <div class="match-box">
+        <article class="profile-card">
+          <img src="/images/profile-2.jpg" alt="Profiel van Emma" />
+        </article>
+      </div>
 
-        <div class="profile">
-            <img src="/static/images/hond.jpg" alt="Hond">
-            <h3>Lisa & Max</h3>
+      <section class="contact-card">
+        <h2>Deel je contactgegevens</h2>
+        <p>
+          Jullie zijn gematcht! Deel eenvoudig je contactgegevens en praat verder
+          met Lisa over het plannen van een leuke playdate! Gebruik bijvoorbeeld:
+        </p>
+
+        <div class="contact-buttons">
+          <a class="contact-button whatsapp" href="#">
+            <span>Whatsapp</span>
+            <span>&gt;</span>
+          </a>
+
+          <a class="contact-button gmail" href="#">
+            <span>Gmail</span>
+            <span>&gt;</span>
+          </a>
         </div>
+      </section>
 
-        <div class="heart">❤️</div>
+      <a class="park-button" href="#">Find the perfect park 🐾</a>
 
-        <div class="profile">
-            <img src="/static/images/kat.jpg" alt="Kat">
-            <h3>Tom & Luna</h3>
-        </div>
+      <div class="paw paw-left">🐾</div>
+      <div class="paw paw-right">🐾</div>
+      <div class="paw paw-bottom">🐾</div>
 
-    </div>
-
-    <h2>Deel je contactgegevens</h2>
-
-    <div class="buttons">
-
-        <a class="btn whatsapp"
-           href="https://wa.me/31612345678"
-           target="_blank">
-            WhatsApp
-        </a>
-
-        <a class="btn instagram"
-           href="https://instagram.com"
-           target="_blank">
-            Instagram
-        </a>
-
-        <a class="btn email"
-           href="mailto:lisa@email.com">
-            Gmail
-        </a>
-
-    </div>
-
-    <p class="tip">
-        Tip: Deel alleen contactgegevens als jullie een playdate willen plannen!
-    </p>
-
-</div>
-
+      <nav class="bottom-nav">
+        <a href="/" aria-label="Home">☝</a>
+        <a href="/contact" aria-label="Chat">💬</a>
+        <a href="/profile" aria-label="Profiel">◯</a>
+      </nav>
+    </section>
+  </main>
 </body>
 </html>
