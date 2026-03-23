@@ -73,21 +73,31 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 
         const newUser = {
             userEmail: req.body.userEmail,
-            // passwordHash: '',
+            passwordHash: passwordHash,
             userName: req.body.userName,
             userAge: req.body.userAge,
             userCity: req.body.userCity,
-            petName: req.body.petName,
-            cover: req.file ? req.file.filename : null,
             isFrequency: req.body.isFrequency,
             preferPlace: req.body.preferPlace,
             createdAt: new Date(),
             location: null,
 
         };
-        const result = await db.collection('users').insertOne(newUser)
-        const userId = result.insertedId.toString()
-        req.session.userId = userId
+        const userResult = await db.collection('users').insertOne(newUser)
+        const userId = userResult.insertedId
+
+        const newAnimal = {
+            ownerId: userId,
+            petName: req.body.petName,
+            petBreed: req.body.petBreed,
+            petWeight: Number(req.body.isKilo),
+            cover: req.file ? req.file.fielname : null,
+            createdAt: new Date()
+        }
+
+        await db.collection("animals").insertOne(newAnimal)
+
+        req.session.userId = userId.toString()
         res.redirect(`/matches/${userId}`)
     } catch (error) {
         console.error(error);
@@ -95,6 +105,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 
     }
 });
+
 
 
 app.get('/', home)
@@ -192,3 +203,4 @@ async function startServer() {
 startServer();
 
 
+//https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/routes

@@ -1,5 +1,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{
+    --font-body: 'Nunito', sans-serif;
+    /* --font-heading:; */
+    --color-background: hsl(42 97.7 65.9);
+    --color-text: hsl(241 0 5);
+    --color-background-button: hsl(349 62 39.2);
+    --color-text-button: hsl(360 0 98.9);
+    --color-background-card: hsl(349 62 70);
+}
+
 
 * {
     box-sizing: border-box;
@@ -9,17 +19,17 @@
 
 body {
     font-family: 'Nunito', sans-serif;
-    background-color: #FDCA53;
+    background-color: var(--color-background);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 24px 60px;
+    padding: 1rem;
 }
 
 body::before,
 body::after {
     content: '🐾';
-    font-size: 48px;
+    font-size: 2em;
     opacity: 0.25;
     position: fixed;
     pointer-events: none;
@@ -29,25 +39,24 @@ body::before {
     left: 20px;
 }
 body::after {
-    top: 260px;
-    right: 10px;
-    font-size: 36px;
+    top: 18rem;
+    right: .8rem;
+    font-size: 2rem;
 }
 
 h1 {
     font-size: 2rem;
     font-weight: 900;
     color: #A2263D;
-    margin-bottom: 16px;
-    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
 }
 
 .welcome-text {
     font-size: 1.05rem;
     color: #2c2c2c;
     line-height: 1.6;
-    margin-bottom: 30px;
-    max-width: 340px;
+    margin-bottom: 2rem;
+    max-width: 21rem;
     text-align: left;
     width: 100%;
 }
@@ -60,8 +69,8 @@ h2.step-question {
 .name-input {
     position: relative;
     width: 100%;
-    max-width: 340px;
-    margin-bottom: 48px;
+    max-width: 21rem;
+    margin-bottom: 3rem;
 }
 
 .name-input input[type="text"] {
@@ -181,6 +190,9 @@ input#isPassword, input#checkPassword, input#isEmail, input#isPhoneNumber {
 }
 
 input.submit {
-    background-color: #A2263D;
-    color: #fff;
+    background-color: var(--color-background-button);
+    color: var(--color-text-button);
+    max-width: 6rem;
+    max-height: 3rem;
+    border-radius: .6rem;
 }
