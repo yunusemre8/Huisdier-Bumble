@@ -42,6 +42,7 @@ app.post('/register', upload.single('cover'), (req,res) => {
 app.get('/',home)
 app.get('/register', register)
 app.get('/profile/:id', profile)
+app.get('/contact', contact)
 
  
 function home(req, res){
@@ -50,6 +51,11 @@ function home(req, res){
 function register(req, res){
     res.render('register')
 }
+
+function contact(req, res){
+    res.render('contact')
+}
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
@@ -67,3 +73,4 @@ function profile(req, res){
 //     saveUninitialized: true,
 //     secret = process.env.SESSION_SECRET
 // }))
+
