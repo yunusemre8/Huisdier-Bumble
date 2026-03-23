@@ -1,0 +1,161 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: sans-serif;
+    background: #f5f5f3;
+  }
+  
+  /* --- Header --- */
+  header {
+    padding: 1.5rem 1.25rem 1rem;
+    border-bottom: 0.0625rem solid #e0e0e0;
+    background: white;
+  }
+  
+  header h1 {
+    font-size: 1.75rem;
+    color: #7a1f2e;
+    margin-bottom: 0.375rem;
+  }
+  
+  header p {
+    font-size: 0.875rem;
+    color: #888;
+  }
+  
+  /* --- Layout --- */
+  .page {
+    display: flex;
+    height: calc(100vh - 5.5rem);
+  }
+  
+  main {
+    flex: 1;
+    padding: 1.25rem;
+    overflow-y: auto;
+  }
+  
+  /* --- Sidebar --- */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 18.75rem;
+    background: white;
+    padding: 1.5rem 1.25rem;
+    border-right: 0.0625rem solid #e0e0e0;
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    z-index: 100;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar h2 {
+    font-size: 1.5rem;
+    color: #7a1f2e;
+  }
+  
+  #close-button {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: none;
+    border: 0.0625rem solid #ccc;
+    border-radius: 0.375rem;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #666;
+  }
+  
+  /* --- Sections --- */
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  
+  section label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7a1f2e;
+  }
+  
+  /* --- Chips --- */
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .chip {
+    padding: 0.5rem 1rem;
+    border-radius: 1.25rem;
+    border: 0.09375rem solid #7a1f2e;
+    background: white;
+    color: #7a1f2e;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  
+  .chip.active {
+    background: #7a1f2e;
+    color: white;
+  }
+  
+  /* --- Type buttons --- */
+  .type-btn {
+    padding: 0.625rem;
+    border-radius: 0.5rem;
+    border: 0.09375rem solid #7a1f2e;
+    background: white;
+    color: #7a1f2e;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  
+  .type-btn.active {
+    background: #7a1f2e;
+    color: white;
+  }
+  
+  /* --- Buttons --- */
+  #open-btn {
+    padding: 0.625rem 1.25rem;
+    background: #7a1f2e;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  
+  #apply-btn {
+    padding: 0.75rem;
+    background: #7a1f2e;
+    color: white;
+    border: none;
+    border-radius: 0.625rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: auto;
+  }
