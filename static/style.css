@@ -8,7 +8,7 @@
 
 body {
     font-family: 'Nunito', sans-serif;
-    background-color: #251a79;
+    background-color: #FFC832;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,7 +36,7 @@ body::after {
 h1 {
     font-size: 2rem;
     font-weight: 900;
-    color: #dfe4f8;
+    color: #A2263D;
     margin-bottom: 16px;
     letter-spacing: 0.5px;
 }
@@ -148,7 +148,7 @@ legend {
 
 button {
   color: #fff;
-  background-color: #ff854c;
+  background-color: #A2263D;
   padding: 12px 28px;
   font-size: 16px;
   border-radius: 25px;
@@ -234,7 +234,7 @@ input.submit {
   width: 250px;
   height: 400px;
   object-fit: cover;
-  border: 5px solid #dfe4f8;
+  border: 5px solid #A2263D;
   border-radius: 20px;
   display: block;
 }

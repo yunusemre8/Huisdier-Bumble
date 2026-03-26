@@ -23,61 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Kaarten voor de stack
   const cardsContainer = document.querySelector(".cards");
-
-  // Standaard verbergen
-zeroQuestionsBox.style.display = "block";
-firstQuestionsBox.style.display = "none";
-secondQuestionsBox.style.display = "none";
-thirdQuestionsBox.style.display = "none";
-fourthQuestionsBox.style.display = "none";
-fifthQuestionsBox.style.display = "none";
-submitButton.style.display = "none";
-
-// BACK knoppen
-backButton1.addEventListener("click", function () {
-  firstQuestionsBox.style.display = "none";
-  zeroQuestionsBox.style.display = "block";
-});
-backButton2.addEventListener("click", function () {
-  secondQuestionsBox.style.display = "none";
-  firstQuestionsBox.style.display = "block";
-});
-
-backButton3.addEventListener("click", function () {
-  thirdQuestionsBox.style.display = "none";
-  secondQuestionsBox.style.display = "block";
-});
-
-backButton4.addEventListener("click", function () {
-  fourthQuestionsBox.style.display = "none";
-  thirdQuestionsBox.style.display = "block";
-});
-
-// NEXT knoppen
-button1.addEventListener("click", function () {
-  zeroQuestionsBox.style.display = "none";
-  firstQuestionsBox.style.display = "block";
-});
-
-button2.addEventListener("click", function () {
-  firstQuestionsBox.style.display = "none";
-  secondQuestionsBox.style.display = "block";
-});
-button3.addEventListener("click", function () {
-  secondQuestionsBox.style.display = "none";
-  thirdQuestionsBox.style.display = "block";
-});
-
-button4.addEventListener("click", function () {
-  thirdQuestionsBox.style.display = "none";
-  fourthQuestionsBox.style.display = "block";
-});
-
-button5.addEventListener("click", function () {
-  fourthQuestionsBox.style.display = "none";
-  fifthQuestionsBox.style.display = "block";
-  submitButton.style.display = "block";
-});
+  
 
   // Functie card stack updaten //
   function updateStack() {
