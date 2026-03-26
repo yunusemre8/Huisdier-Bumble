@@ -102,15 +102,9 @@ updateBreeds(petTypeSelect.value)
 //User age calculate
 const userBirthDate = document.getElementById("userAge")
 
-userBirthDate.addEventListener("input", function(){
-  const selectedAge = new Date(userBirthDate.value)
-  const age= calculateAge(selectedAge)
-})
-
-
 function calculateAge(userBirthDate) {
-  const isToday = new Date()
-  let age = isToday.getFullYear() - userBirthDate.getFullYear()
+  const today = new Date()
+  let age = today.getFullYear() - userBirthDate.getFullYear()
 
   const calculateMonth = isToday.getMonth() - userBirthDate.getMonth()
 
@@ -131,7 +125,10 @@ form.addEventListener("submit", function (event) {
    event.preventDefault()
    document.getElementById("ageError").textContent = "Pet Playdates is for users aged 18+ only."
   }
-  console.log("Birth Date:", user.value)
+  console.log("Birth Date:", userBirthDate.value)
   console.log("Calculated age:", age)
 
 })
+
+
+//pet age calculate

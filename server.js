@@ -7,11 +7,21 @@ const { MongoClient, ObjectId } = require("mongodb");
 dotenv.config();
 
 const app = express();
+const router = express.Router();
+
 const port = process.env.PORT || 3000;
 
 const upload = multer({ dest: 'static/upload/' })
 
 const bcrypt = require("bcrypt")
+
+const uservalidate = (req, res, next) => {
+    if (req.session && req.session.userId) {
+        return next();
+    } else {
+        return res.redirect('/register');
+    }
+};
 
 let db;
 
@@ -52,6 +62,20 @@ async function createPasswordHash(password){
     }
 }
 
+function calculateAge(userBirthDate) {
+  const today = new Date()
+  let age = today.getFullYear() - userBirthDate.getFullYear()
+
+  const calculateMonth = today.getMonth() - userBirthDate.getMonth()
+
+  if (calculateMonth < 0 ||
+    (calculateMonth === 0 && Today.getDate() < userBirthDate.getDate())
+  ) {
+    age--;
+  }
+  return age
+}
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
@@ -69,13 +93,19 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             return res.send("Email already registered")
         }
 
+        const userBirthDate = new Date(req.body.userAge)
+        const age = calculateAge(userBirthDate)
+        if (age < 18) {
+            return res.status(400).send("Pet Playdates is for users aged 18+ only.");
+        }
         const passwordHash = await createPasswordHash(req.body.isPassword)
 
         const newUser = {
             userEmail: req.body.userEmail,
             passwordHash: passwordHash,
             userName: req.body.userName,
-            userAge: req.body.userAge,
+            userBirthDate: userBirthDate,
+            userAge: age,
             userCity: req.body.userCity,
             isFrequency: req.body.isFrequency,
             preferPlace: req.body.preferPlace,
@@ -89,9 +119,10 @@ app.post('/register', upload.single('cover'), async (req, res) => {
         const newAnimal = {
             ownerId: userId,
             petName: req.body.petName,
-            petBreed: req.body.petBreed,
+            petType: req.body.petType,
+            petBreed: req.body.isBreed,
             petWeight: Number(req.body.isKilo),
-            cover: req.file ? req.file.fielname : null,
+            cover: req.file ? req.file.filename : null,
             createdAt: new Date()
         }
 
@@ -106,12 +137,20 @@ app.post('/register', upload.single('cover'), async (req, res) => {
     }
 });
 
+app.use(express.json())
+router.get('/', home)
+router.get('/register', register)
+router.get('/profile/:id', uservalidate, profile)
+router.get('/matches/:id', uservalidate, matchesPage)
 
+app.use('/', router);
 
-app.get('/', home)
-app.get('/register', register)
-app.get('/profile/:id', profile)
-app.get('/matches/:id', matchesPage);
+// app.use('/', uservalidate, register, profile, matchesPage)
+
+// app.get('/', home)
+// app.get('/register', register)
+// app.get('/profile/:id', profile)
+// app.get('/matches/:id', matchesPage);
 
 
 function home(req, res) {
@@ -120,7 +159,6 @@ function home(req, res) {
 function register(req, res) {
     res.render('register')
 }
-
 
 app.post('/save-location', async (req, res) => {
     try {
