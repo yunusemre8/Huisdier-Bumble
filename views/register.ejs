@@ -49,9 +49,9 @@
     
             <label for="petAge">Pet's Age</label>
             <div class="button-row">
-            <input type="number" name="petAge" id="isAgeYear" placeholder="Birth Year">
+            <input type="number" name="petBirthYear" id="isAgeYear" placeholder="Birth Year">
             <!-- PS for us: Javascript calculates months and matches according to months -->
-            <input type="number" name="petAge" id="isAgeMonth" placeholder="Birth Month">
+            <input type="number" name="petBirthMonth" id="isAgeMonth" placeholder="Birth Month">
             </div>
 
             <div class="button-row">
@@ -114,7 +114,6 @@
                 <option value="isCafe">A pet friendly cafe</option>
             </select>
 
-
             <div class="button-row">
              <button type="button" id="button41">Back</button>
              <button type="button" id="button4">Next</button>
@@ -122,6 +121,13 @@
         </fieldset>
 
         <fieldset class="fifthQuestionsBox">
+            <label for="preferContact">How would you like to get in touch with your matches?</label>
+            <div class="button-row">
+                <span>via Email</span><input class="radiobutton" type="radio" name="preferContact" value="email">
+                <span>via Whatsapp</span><input class="radiobutton"type="radio" name="preferContact" value="whatsapp">
+                <div id="userPhone"> <span>Type je telefonnummer (optinaal)</span><input type="tel" name="userPhone"> </div>
+            </div>
+
             <label for="userEmail" id="userEmail">Your email address</label>
             <input type="email" name="userEmail" id="userEmail">
 

@@ -69,7 +69,7 @@ function calculateAge(userBirthDate) {
   const calculateMonth = today.getMonth() - userBirthDate.getMonth()
 
   if (calculateMonth < 0 ||
-    (calculateMonth === 0 && Today.getDate() < userBirthDate.getDate())
+    (calculateMonth === 0 && today.getDate() < userBirthDate.getDate())
   ) {
     age--;
   }
@@ -86,6 +86,10 @@ app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
+        console.log(req.body);
+        console.log("preferContact:", req.body.preferContact);
+        console.log("userPhone:", req.body.userPhone);
+        
         const existingUser = await db.collection('users').findOne({
             userEmail: req.body.userEmail
         })
@@ -107,11 +111,11 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             userBirthDate: userBirthDate,
             userAge: age,
             userCity: req.body.userCity,
+            userPhone: req.body.userPhone || null,
             isFrequency: req.body.isFrequency,
             preferPlace: req.body.preferPlace,
             createdAt: new Date(),
             location: null,
-
         };
         const userResult = await db.collection('users').insertOne(newUser)
         const userId = userResult.insertedId
