@@ -1,73 +1,191 @@
-
 const express = require("express");
 const session = require('express-session')
+const dotenv = require("dotenv");
+const multer = require("multer");
+const { MongoClient, ObjectId } = require("mongodb");
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const multer = require('multer');
-const upload = multer({dest: 'static/upload/'})
+const upload = multer({ dest: 'static/upload/' })
 
-const data = []
+const bcrypt = require("bcrypt")
 
-// express().post('/add-movie', upload.single('cover'), add)
+let db;
 
-function add(req, res){
+function add(req, res) {
     console.log(req.file.filename)
 }
 
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}))
+
+
+async function connectMongo() {
+    try {
+        const client = new MongoClient(process.env.MONGO_URI);
+        await client.connect();
+
+        db = client.db(process.env.DB_NAME);
+
+        await db.collection("users").createIndex({ location: "2dsphere" });
+
+        console.log("Database is connected");
+    } catch (error) {
+        console.error("DB couldn't be connected", error.message);
+        process.exit(1);
+    }
+}
+
+async function createPasswordHash(password){
+    try{
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+        return hashedPassword
+    } catch (error){
+        console.log('Error hashingpassword', error)
+    }
+}
+
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 app.use(express.static("static")); //user's images
 
-app.post('/register', upload.single('cover'), (req,res) => {
-    const id = req.body.userNickname.toLowerCase();
+app.post('/register', upload.single('cover'), async (req, res) => {
+    try {
+        const existingUser = await db.collection('users').findOne({
+            userEmail: req.body.userEmail
+        })
+        if(existingUser){
+            return res.send("Email already registered")
+        }
 
-    data.push({
-        id: id, 
-        userNickname: req.body.userNickname,
-        petName: req.body.petName,
-        cover: req.file ? req.file.filename : null,
-    })
+        const passwordHash = await createPasswordHash(req.body.isPassword, 10)
 
-    console.log(data);
-    res.redirect(`/profile/${id}`);
-})
+        const newUser = {
+            userEmail: req.body.userEmail,
+            // passwordHash: '',
+            userName: req.body.userName,
+            userAge: req.body.userAge,
+            userCity: req.body.userCity,
+            petName: req.body.petName,
+            cover: req.file ? req.file.filename : null,
+            isFrequency: req.body.isFrequency,
+            preferPlace: req.body.preferPlace,
+            createdAt: new Date(),
+            location: null,
+
+        };
+        const result = await db.collection('users').insertOne(newUser)
+        const userId = result.insertedId.toString()
+        req.session.userId = userId
+        res.redirect(`/matches/${userId}`)
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred during registration")
+
+    }
+});
 
 
-
-app.get('/',home)
+app.get('/', home)
 app.get('/register', register)
 app.get('/profile/:id', profile)
-app.get('/matching', matchPage)
+app.get('/matches/:id', matchesPage);
 
- 
-function home(req, res){
+
+function home(req, res) {
     res.send('Welcome to the club!')
 }
-function register(req, res){
+function register(req, res) {
     res.render('register')
 }
-function matchPage(req, res){
-    res.render('match-page')
+
+
+app.post('/save-location', async (req, res) => {
+    try {
+        const { id, lat, lng } = req.body;
+        if (!id || lat == null || lng == null) {
+            return res.status(400).json({
+                success: false,
+                message: 'id, lat en lng zijn verplicht'
+            })
+        }
+        const result = await db.collection('users').updateOne(
+            { id: id.toLowerCase() },
+            {
+                $set: {
+                    location: {
+                        type: "Point",
+                        coordinates: [Number(lng), Number(lat)]
+                    }
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'user doesnt exist'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Location saved'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+});
+
+
+async function profile(req, res) {
+    try {
+        const user = await db.collection("users").findOne({
+            id: req.params.id,
+        });
+        if (!user) return res.redirect("/register");
+        res.render("profile", { user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Profile couldn't be loaded")
+    }
 }
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`)
-})
 
-function profile(req, res){
-    const user = data.find(u => u.id === req.params.id)
+async function matchesPage(req, res) {
+    try {
+        const user = await db.collection("users").findOne({
+            _id: new ObjectId(req.params.id),
+        });
 
-    if(!user) return res.redirect('/register')
+        if (!user) return res.redirect("/register");
 
-    res.render('profile', { user })
+        res.render("matchesPage", { user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Matches page couldn't be loaded");
+    }
 }
 
-// app.use(session({
-//     resave = false,
-//     saveUninitialized: true,
-//     secret = process.env.SESSION_SECRET
-// }))
+async function startServer() {
+    await connectMongo();
+
+    app.listen(port, () => {
+        console.log(`Server running on http://localhost:${port}`);
+    });
+}
+
+startServer();
