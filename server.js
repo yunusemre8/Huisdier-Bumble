@@ -129,7 +129,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
         await db.collection("animals").insertOne(newAnimal)
 
         req.session.userId = userId.toString()
-        res.redirect(`/matches/${userId}`)
+        res.redirect(`/profile/${userId}`)
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred during registration")
@@ -201,17 +201,22 @@ app.post('/save-location', async (req, res) => {
     }
 });
 
-
 async function profile(req, res) {
     try {
         const user = await db.collection("users").findOne({
-            _id: new ObjectId (req.params.id),
+            _id: new ObjectId(req.params.id),
         });
+
         if (!user) return res.redirect("/register");
-        res.render("profile", { user });
+
+        const animal = await db.collection("animals").findOne({
+            ownerId: user._id
+        });
+
+        res.render("profile", { user, animal });
     } catch (error) {
         console.error(error);
-        res.status(500).send("Profile couldn't be loaded")
+        res.status(500).send("Profile couldn't be loaded");
     }
 }
 
