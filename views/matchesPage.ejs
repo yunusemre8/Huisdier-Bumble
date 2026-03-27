@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <meta name="description" content="Sign up page">
+    <title>Matches</title>
+    <meta name="description" content="Matches page">
     <link rel="stylesheet" href="/style.css">
 </head>
 
@@ -17,46 +17,25 @@
 <button class="filterbtn"><img src="/images/trashcan.png" alt="Filter button"></button>
 
 <div class="cards">
-  <article class="card">
-    <img class="matchingimages" src="/images/voorbeeldfotohond.jpg" alt="Example Dog 1">
+  <% animals.forEach(animal => { %>
+    <article class="card">
+      <img
+        class="matchingimages"
+        src="/upload/<%= animal.cover %>"
+        alt="<%= animal.petName || 'Animal' %>">
 
-    <button class="dislikebtn">
-      <img src="/images/trashcan.png" alt="Delete button">
-    </button>
+      <button class="dislikebtn">
+        <img src="/images/trashcan.png" alt="Delete button">
+      </button>
 
-    <button class="likebtn">
-      <img src="/images/yellowheart.png" alt="Heart button">
-    </button>
-  </article>
-
-  <article class="card">
-    <img class="matchingimages" src="/images/voorbeeldfotohond2.jpg" alt="Example Dog 2">
-
-    <button class="dislikebtn">
-      <img src="/images/trashcan.png" alt="Delete button">
-    </button>
-
-    <button class="likebtn">
-      <img src="/images/yellowheart.png" alt="Heart button">
-    </button>
-  </article>
-
-  <article class="card">
-    <img class="matchingimages" src="/images/voorbeeldfotohond3.jpg" alt="Example Dog 3">
-
-    <button class="dislikebtn">
-      <img src="/images/trashcan.png" alt="Delete button">
-    </button>
-
-    <button class="likebtn">
-      <img src="/images/yellowheart.png" alt="Heart button">
-    </button>
-  </article>
+      <button class="likebtn">
+        <img src="/images/yellowheart.png" alt="Heart button">
+      </button>
+    </article>
+  <% }) %>
 </div>
     
-    
-    <script src="/script.js"></script>
-    <!-- footer partials -->
+<script src="/script.js"></script>
 </body>
 
 </html>

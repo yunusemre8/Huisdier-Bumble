@@ -167,13 +167,15 @@ async function profile(req, res) {
 
 async function matchesPage(req, res) {
     try {
-        const user = await db.collection("users").findOne({
+        const currentUser = await db.collection("users").findOne({
             _id: new ObjectId(req.params.id),
         });
 
-        if (!user) return res.redirect("/register");
+        if (!currentUser) return res.redirect("/register");
 
-        res.render("matchesPage", { user });
+        const animals = await db.collection("animals").find({}).toArray();
+
+        res.render("matchesPage", { user: currentUser, animals: animals });
     } catch (error) {
         console.error(error);
         res.status(500).send("Matches page couldn't be loaded");
