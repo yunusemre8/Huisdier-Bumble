@@ -86,10 +86,6 @@ app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
-        console.log(req.body);
-        console.log("preferContact:", req.body.preferContact);
-        console.log("userPhone:", req.body.userPhone);
-        
         const existingUser = await db.collection('users').findOne({
             userEmail: req.body.userEmail
         })

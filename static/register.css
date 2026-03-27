@@ -180,7 +180,7 @@ select#isActivity {
   width: 100%;
 }
 
-input#isPassword, input#checkPassword, input#isEmail, input#isPhoneNumber {
+input#isPassword, input#checkPassword, input#isEmail, input#userPhone {
     height: 30px;
     margin-bottom: 10px;
     margin-top: 10px;

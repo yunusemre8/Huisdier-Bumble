@@ -132,3 +132,29 @@ form.addEventListener("submit", function (event) {
 
 
 //pet age calculate
+
+
+//phone number display & required
+
+const selectedWhatsapp = document.getElementById("isWhatsapp")
+const selectedEmail = document.getElementById("preferEmail")
+const isPhone = document.getElementById("isPhone")
+const phoneInput = document.getElementById("userPhone")
+
+isPhone.style.display = "none"
+phoneInput.required = false;
+
+function togglePhoneField(){
+  console.log("see that?")
+  if(selectedWhatsapp.checked){
+  isPhone.style.display = "block"
+  isPhone.required = true
+}else{
+  isPhone.style.display = "none"
+  phoneInput.required = false
+  phoneInput.value = ""
+}
+}
+
+selectedWhatsapp.addEventListener("change", togglePhoneField)
+selectedEmail.addEventListener("change", togglePhoneField)
