@@ -129,7 +129,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
         await db.collection("animals").insertOne(newAnimal)
 
         req.session.userId = userId.toString()
-        res.redirect(`/profile/${userId}`)
+        res.redirect(`/matches/${userId}`)
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred during registration")
