@@ -23,9 +23,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Kaarten voor de stack
   const cardsContainer = document.querySelector(".cards");
-  
 
-  // Functie card stack updaten //
+  async function saveSwipe(toUserId, action) {
+    const fromUserId = document.body.dataset.userId;
+
+    if (!fromUserId || !toUserId) {
+      console.error("fromUserId of toUserId ontbreekt");
+      return;
+    }
+
+    try {
+      const response = await fetch("/swipe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fromUserId,
+          toUserId,
+          action
+        })
+      });
+
+      const data = await response.json();
+      console.log("Swipe opgeslagen:", data);
+
+      if (data.isMatch) {
+        alert("It's a match!");
+      }
+    } catch (error) {
+      console.error("Fout bij swipe opslaan:", error);
+    }
+  }
+
   function updateStack() {
     const activeCards = document.querySelectorAll(".card:not(.swiped)");
 
@@ -36,35 +66,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Functie kaart swipen //
-
   function activateTopCard() {
     const topCard = document.querySelector(".card:not(.swiped)");
     if (!topCard) return;
-    
-  function swipeCard(card, direction) {
-  if (!card) return;
 
-  card.classList.add("swiped");
+    function swipeCard(card, direction) {
+      if (!card || card.classList.contains("swiped")) return;
 
-  card.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+      const toUserId = card.dataset.ownerId;
+      const action = direction === "right" ? "like" : "dislike";
 
-  if (direction === "right") {
-    card.style.transform = "translateX(150vw) rotate(25deg)";
-  } else {
-    card.style.transform = "translateX(-150vw) rotate(-25deg)";
-  }
+      saveSwipe(toUserId, action);
 
-  card.style.opacity = "0";
+      card.classList.add("swiped");
+      card.style.transition = "transform 0.3s ease, opacity 0.3s ease";
 
-  setTimeout(() => {
-    card.style.display = "none";
-    updateStack();
-    activateTopCard();
-  }, 300);
-}
+      if (direction === "right") {
+        card.style.transform = "translateX(150vw) rotate(25deg)";
+      } else {
+        card.style.transform = "translateX(-150vw) rotate(-25deg)";
+      }
 
-  // Swipe functionaliteit //
+      card.style.opacity = "0";
+
+      setTimeout(() => {
+        card.style.display = "none";
+        updateStack();
+        activateTopCard();
+      }, 300);
+    }
 
     let startX = 0;
     let isDragging = false;
@@ -92,45 +122,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
       topCard.style.transition = "transform 0.3s ease, opacity 0.3s ease";
 
-if (moveX > 100) {
-  topCard.classList.add("swiped");
-  topCard.style.transform = "translateX(150vw) rotate(25deg)";
-  topCard.style.opacity = "0";
+      if (moveX > 100) {
+        swipeCard(topCard, "right");
+      } else if (moveX < -100) {
+        swipeCard(topCard, "left");
+      } else {
+        updateStack();
+      }
+    };
 
-  setTimeout(() => {
-    topCard.style.display = "none";
-    updateStack();
-    activateTopCard();
-  }, 300);
+    const likeBtn = topCard.querySelector(".likebtn");
+    const dislikeBtn = topCard.querySelector(".dislikebtn");
 
-} else if (moveX < -100) {
-  topCard.classList.add("swiped");
-  topCard.style.transform = "translateX(-150vw) rotate(-25deg)";
-  topCard.style.opacity = "0";
-
-  setTimeout(() => {
-    topCard.style.display = "none";
-    updateStack();
-    activateTopCard();
-  }, 300);
-
-} else {
-  updateStack();
-}
+    if (likeBtn) {
+      likeBtn.onclick = () => swipeCard(topCard, "right");
     }
 
-  // Like en dislike knoppen //
-
-const likeBtn = topCard.querySelector(".likebtn");
-const dislikeBtn = topCard.querySelector(".dislikebtn");
-
-if (likeBtn) {
-  likeBtn.onclick = () => swipeCard(topCard, "right");
-}
-
-if (dislikeBtn) {
-  dislikeBtn.onclick = () => swipeCard(topCard, "left");
-}
+    if (dislikeBtn) {
+      dislikeBtn.onclick = () => swipeCard(topCard, "left");
+    }
   }
 
   if (cardsContainer) {

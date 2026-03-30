@@ -151,6 +151,73 @@ app.post('/save-location', async (req, res) => {
     }
 });
 
+app.post("/swipe", async (req, res) => {
+    try {
+        const { fromUserId, toUserId, action } = req.body;
+
+        if (!fromUserId || !toUserId || !action) {
+            return res.status(400).json({
+                success: false,
+                message: "fromUserId, toUserId and action are required"
+            });
+        }
+
+        const fromObjectId = new ObjectId(fromUserId);
+        const toObjectId = new ObjectId(toUserId);
+
+        await db.collection("swipes").updateOne(
+            {
+                fromUserId: fromObjectId,
+                toUserId: toObjectId
+            },
+            {
+                $set: {
+                    fromUserId: fromObjectId,
+                    toUserId: toObjectId,
+                    action,
+                    createdAt: new Date()
+                }
+            },
+            { upsert: true }
+        );
+
+        let isMatch = false;
+
+        if (action === "like") {
+            const reverseLike = await db.collection("swipes").findOne({
+                fromUserId: toObjectId,
+                toUserId: fromObjectId,
+                action: "like"
+            });
+
+            if (reverseLike) {
+                isMatch = true;
+
+                const existingMatch = await db.collection("matches").findOne({
+                    users: { $all: [fromObjectId, toObjectId] }
+                });
+
+                if (!existingMatch) {
+                    await db.collection("matches").insertOne({
+                        users: [fromObjectId, toObjectId],
+                        createdAt: new Date()
+                    });
+                }
+            }
+        }
+
+        res.json({
+            success: true,
+            isMatch
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+});
 
 async function profile(req, res) {
     try {
