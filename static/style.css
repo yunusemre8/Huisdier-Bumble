@@ -103,7 +103,7 @@
     gap: 0.5rem;
   }
   
-  .chip {
+  .single-chip, .multi-chip {
     padding: 0.5rem 1rem;
     border-radius: 1.25rem;
     border: 0.09375rem solid #7a1f2e;
@@ -114,13 +114,14 @@
     transition: all 0.15s;
   }
   
-  .chip.active {
+  .single-chip.active, .multi-chip.active {
     background: #7a1f2e;
     color: white;
   }
   
+  
   /* --- Type buttons --- */
-  .type-btn {
+  .type-button {
     padding: 0.625rem;
     border-radius: 0.5rem;
     border: 0.09375rem solid #7a1f2e;
@@ -131,13 +132,23 @@
     transition: all 0.15s;
   }
   
-  .type-btn.active {
+  /* .type-button.active {
     background: #7a1f2e;
     color: white;
-  }
+  } */
   
+  .type-button.active {
+    background-color: #7a1f2e;
+    color: white;
+}
+
+.type-button.active p {
+    color: white;
+}
+
+
   /* --- Buttons --- */
-  #open-btn {
+  #open-button {
     padding: 0.625rem 1.25rem;
     background: #7a1f2e;
     color: white;
@@ -148,7 +159,7 @@
     margin-bottom: 1rem;
   }
   
-  #apply-btn {
+  #apply-button {
     padding: 0.75rem;
     background: #7a1f2e;
     color: white;

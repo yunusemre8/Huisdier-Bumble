@@ -20,15 +20,15 @@
 
             <section>
                 <label>Pet Type</label>
-                <button class="type-btn" data-type="dog">Dog</button>
-                <button class="type-btn" data-type="cat">Cat</button>
+                <button class="type-button" data-type="dog">Dog</button>
+                <button class="type-button" data-type="cat">Cat</button>
             </section>
 
             <section>
                 <label>Breed</label>
                 <div class="chip-group">
                     <% dogBreeds.forEach(breed => { %>
-                        <button class="chip"><%= breed %></button>
+                        <button class="multi-chip"><%= breed %></button>
                     <% }) %>
                 </div>
             </section>
@@ -36,17 +36,17 @@
             <section>
                 <label>Size</label>
                 <div class="chip-group">
-                    <button class="chip">Small</button>
-                    <button class="chip">Medium</button>
-                    <button class="chip">Large</button>
+                    <button class="single-chip">Small</button>
+                    <button class="single-chip">Medium</button>
+                    <button class="single-chip">Large</button>
                 </div>
             </section>
 
-            <button id="apply-btn">Show Results</button>
+            <button id="apply-button">Show Results</button>
         </aside>
 
         <main>
-            <button id="open-btn">Filters</button>
+            <button id="open-button">Filters</button>
             <div id="results"></div>
         </main>
 
