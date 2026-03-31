@@ -152,71 +152,96 @@ app.post('/save-location', async (req, res) => {
 });
 
 app.post("/swipe", async (req, res) => {
-    try {
-        const { fromUserId, toUserId, action } = req.body;
+  try {
+    const { fromUserId, toUserId, action } = req.body;
 
-        if (!fromUserId || !toUserId || !action) {
-            return res.status(400).json({
-                success: false,
-                message: "fromUserId, toUserId and action are required"
-            });
-        }
+    console.log("Nieuwe swipe ontvangen:", { fromUserId, toUserId, action });
 
-        const fromObjectId = new ObjectId(fromUserId);
-        const toObjectId = new ObjectId(toUserId);
-
-        await db.collection("swipes").updateOne(
-            {
-                fromUserId: fromObjectId,
-                toUserId: toObjectId
-            },
-            {
-                $set: {
-                    fromUserId: fromObjectId,
-                    toUserId: toObjectId,
-                    action,
-                    createdAt: new Date()
-                }
-            },
-            { upsert: true }
-        );
-
-        let isMatch = false;
-
-        if (action === "like") {
-            const reverseLike = await db.collection("swipes").findOne({
-                fromUserId: toObjectId,
-                toUserId: fromObjectId,
-                action: "like"
-            });
-
-            if (reverseLike) {
-                isMatch = true;
-
-                const existingMatch = await db.collection("matches").findOne({
-                    users: { $all: [fromObjectId, toObjectId] }
-                });
-
-                if (!existingMatch) {
-                    await db.collection("matches").insertOne({
-                        users: [fromObjectId, toObjectId],
-                        createdAt: new Date()
-                    });
-                }
-            }
-        }
-
-        res.json({
-            success: true,
-            isMatch
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
+    if (!fromUserId || !toUserId || !action) {
+      return res.status(400).json({
+        success: false,
+        message: "fromUserId, toUserId en action zijn verplicht"
+      });
     }
+
+    if (!["like", "dislike"].includes(action)) {
+      return res.status(400).json({
+        success: false,
+        message: "Ongeldige action"
+      });
+    }
+
+    if (fromUserId === toUserId) {
+      return res.status(400).json({
+        success: false,
+        message: "Je kunt niet op jezelf swipen"
+      });
+    }
+
+    const fromObjectId = new ObjectId(fromUserId);
+    const toObjectId = new ObjectId(toUserId);
+
+    const result = await db.collection("swipes").updateOne(
+      {
+        fromUserId: fromObjectId,
+        toUserId: toObjectId
+      },
+      {
+        $set: {
+          fromUserId: fromObjectId,
+          toUserId: toObjectId,
+          action: action,
+          createdAt: new Date()
+        }
+      },
+      { upsert: true }
+    );
+
+    console.log("Swipe opgeslagen in MongoDB:", result);
+
+    const savedSwipe = await db.collection("swipes").findOne({
+      fromUserId: fromObjectId,
+      toUserId: toObjectId
+    });
+
+    console.log("Opgeslagen document:", savedSwipe);
+
+    let isMatch = false;
+
+    if (action === "like") {
+      const reverseLike = await db.collection("swipes").findOne({
+        fromUserId: toObjectId,
+        toUserId: fromObjectId,
+        action: "like"
+      });
+
+      if (reverseLike) {
+        isMatch = true;
+
+        const existingMatch = await db.collection("matches").findOne({
+          users: { $all: [fromObjectId, toObjectId] }
+        });
+
+        if (!existingMatch) {
+          await db.collection("matches").insertOne({
+            users: [fromObjectId, toObjectId],
+            createdAt: new Date()
+          });
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      isMatch
+    });
+  } catch (error) {
+    console.error("Fout in /swipe route:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
 });
 
 async function profile(req, res) {
@@ -233,20 +258,54 @@ async function profile(req, res) {
 }
 
 async function matchesPage(req, res) {
-    try {
-        const currentUser = await db.collection("users").findOne({
-            _id: new ObjectId(req.params.id),
-        });
+  try {
+    const currentUserId = new ObjectId(req.params.id);
 
-        if (!currentUser) return res.redirect("/register");
+    const currentUser = await db.collection("users").findOne({
+      _id: currentUserId,
+    });
 
-        const animals = await db.collection("animals").find({}).toArray();
-
-        res.render("matchesPage", { user: currentUser, animals: animals });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Matches page couldn't be loaded");
+    if (!currentUser) {
+      return res.redirect("/register");
     }
+
+    const mySwipes = await db.collection("swipes").find({
+      fromUserId: currentUserId
+    }).toArray();
+
+    console.log("mySwipes:", mySwipes);
+
+    const swipedUserIds = mySwipes
+      .map((swipe) => {
+        if (!swipe.toUserId) return null;
+
+        if (swipe.toUserId instanceof ObjectId) {
+          return swipe.toUserId;
+        }
+
+        try {
+          return new ObjectId(swipe.toUserId);
+        } catch (error) {
+          return null;
+        }
+      })
+      .filter(Boolean);
+
+    swipedUserIds.push(currentUserId);
+
+    console.log("swipedUserIds:", swipedUserIds);
+
+    const animals = await db.collection("users").find({
+      _id: { $nin: swipedUserIds }
+    }).toArray();
+
+    console.log("animals left:", animals.map(animal => animal._id.toString()));
+
+    res.render("matchesPage", { user: currentUser, animals });
+  } catch (error) {
+    console.error("matchesPage error:", error);
+    res.status(500).send("Matches page couldn't be loaded");
+  }
 }
 
 async function startServer() {

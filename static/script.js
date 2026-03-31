@@ -56,15 +56,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function updateStack() {
-    const activeCards = document.querySelectorAll(".card:not(.swiped)");
+function updateStack() {
+  const activeCards = document.querySelectorAll(".card:not(.swiped)");
 
-    activeCards.forEach((card, index) => {
-      card.style.zIndex = activeCards.length - index;
-      card.style.transform = `scale(${1 - index * 0.05}) translateY(${index * 10}px)`;
-      card.style.opacity = "1";
-    });
-  }
+  activeCards.forEach((card, index) => {
+    const scale = Math.max(0.9, 1 - index * 0.03);
+    const offset = Math.min(index * 8, 24);
+
+    card.style.zIndex = activeCards.length - index;
+    card.style.transform = `scale(${scale}) translateY(${offset}px)`;
+    card.style.opacity = "1";
+  });
+}
 
   function activateTopCard() {
     const topCard = document.querySelector(".card:not(.swiped)");
