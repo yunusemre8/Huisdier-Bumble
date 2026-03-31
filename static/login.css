@@ -27,6 +27,7 @@
     --whitespace-1: 0.5rem;
     --whitespace-2: 1rem;
     --whitespace-3: 1.5rem;
+    --whitespace-4: 2.5rem;
 }
 *,
 *::before,
@@ -87,7 +88,7 @@ fieldset {
     gap: var(--whitespace-2);
     border: none;
     margin: 0;
-    padding: var(--whitespace-1) 0 var(--whitespace-3);
+    padding: 0 var(--whitespace-4); 
     width: min(100%, 24rem);
     position: relative;
     z-index: 1;
@@ -205,6 +206,12 @@ ul li a {
 ul li a:hover {
     color: color-mix(in srgb, var(--color-button-accent) 75%, black);
     text-decoration: underline;
+}
+
+.error {
+    color: var(--color-button-accent);
+    font-size: clamp(0.85rem, 3vw, 1rem);
+    margin-bottom: var(--whitespace-1);
 }
 
 @media (max-width: 30rem) {

@@ -153,8 +153,40 @@ function register(req, res) {
     res.render('register')
 }
 function login(req,res){
-    res.render('login')
+    res.render('login',
+    { error: null,
+        oldEmail: ''
+    })
 }
+app.post('/login', async (req, res) => {
+    try {
+        const { userEmail, isPassword } = req.body
+        const user = await db.collection('users').findOne({ userEmail })
+
+        if (!user) {
+            return res.render('login', {
+                error: 'Email or password is incorrect', //user couldnt find, email enumeration
+                oldEmail: userEmail
+            })
+        }
+
+        const isMatch = await bcrypt.compare(isPassword, user.passwordHash)
+
+        if (!isMatch) {
+            return res.render('login', {
+                error: 'Email or password is incorrect',
+                oldEmail: userEmail
+            })
+        }
+
+        req.session.userId = user._id.toString()
+        res.redirect(`/profile/${user._id}`)
+    } catch (error) {
+        console.error(error)
+        res.status(500).send('Login error')
+    }
+})
+
 app.post('/save-location', async (req, res) => {
     try {
         const { id, lat, lng } = req.body;
