@@ -1,3 +1,6 @@
+const form = document.querySelector("form");
+
+const welcomeBox = document.querySelector(".welcome");
 const firstQuestionsBox = document.querySelector(".firstQuestionsBox");
 const secondQuestionsBox = document.querySelector(".secondQuestionsBox");
 const thirdQuestionsBox = document.querySelector(".thirdQuestionsBox");
@@ -13,55 +16,64 @@ const backButton4 = document.getElementById("button51");
 const button1 = document.getElementById("button1");
 const button2 = document.getElementById("button2");
 const button3 = document.getElementById("button3");
-const button4 = document.getElementById("button4")
+const button4 = document.getElementById("button4");
 
-firstQuestionsBox.style.display = "block";
-secondQuestionsBox.style.display = "none";
-thirdQuestionsBox.style.display = "none";
-fourthQuestionsBox.style.display = "none";
-fifthQuestionsBox.style.display = "none";
-submitButton.style.display = "none";
+function hideAll() {
+  welcomeBox.classList.add("hidden");
+  firstQuestionsBox.classList.add("hidden");
+  secondQuestionsBox.classList.add("hidden");
+  thirdQuestionsBox.classList.add("hidden");
+  fourthQuestionsBox.classList.add("hidden");
+  fifthQuestionsBox.classList.add("hidden");
+}
 
-const form = document.querySelector("form")
+function showStep(step) {
+  hideAll();
 
-backButton1.addEventListener("click", function () {
-  secondQuestionsBox.style.display = "none";
-  firstQuestionsBox.style.display = "block";
+  if (step === 1) {
+    welcomeBox.classList.remove("hidden");
+    firstQuestionsBox.classList.remove("hidden");
+  } else if (step === 2) {
+    secondQuestionsBox.classList.remove("hidden");
+  } else if (step === 3) {
+    thirdQuestionsBox.classList.remove("hidden");
+  } else if (step === 4) {
+    fourthQuestionsBox.classList.remove("hidden");
+  } else if (step === 5) {
+    fifthQuestionsBox.classList.remove("hidden");
+  }
+}
+
+button1.addEventListener("click", () => {
+  const selectedDate = new Date(userBirthDate.value);
+  const age = calculateAge(selectedDate);
+  const ageWarning = document.getElementById("ageWarning");
+
+  if (!userBirthDate.value) {
+    document.getElementById("ageError").textContent = "Please choose your birthday.";
+    return;
+  }
+
+  if (age < 18) {
+    ageWarning.classList.add("error-active");
+    return;
+  }
+
+  ageWarning.classList.remove("error-active");
+  document.getElementById("ageError").textContent = "";
+  showStep(2);
 });
-backButton2.addEventListener("click", function () {
-  thirdQuestionsBox.style.display = "none";
-  secondQuestionsBox.style.display = "block";
-});
 
-backButton3.addEventListener("click", function () {
-  fourthQuestionsBox.style.display = "none";
-  thirdQuestionsBox.style.display = "block";
-});
+button2.addEventListener("click", () => showStep(3));
+button3.addEventListener("click", () => showStep(4));
+button4.addEventListener("click", () => showStep(5));
 
-backButton4.addEventListener("click", function () {
-  fifthQuestionsBox.style.display = "none";
-  fourthQuestionsBox.style.display = "block";
-})
+backButton1.addEventListener("click", () => showStep(1));
+backButton2.addEventListener("click", () => showStep(2));
+backButton3.addEventListener("click", () => showStep(3));
+backButton4.addEventListener("click", () => showStep(4));
 
-button1.addEventListener("click", function () {
-  firstQuestionsBox.style.display = "none";
-  secondQuestionsBox.style.display = "block";
-});
-
-button2.addEventListener("click", function () {
-  secondQuestionsBox.style.display = "none";
-  thirdQuestionsBox.style.display = "block";
-});
-button3.addEventListener("click", function () {
-  thirdQuestionsBox.style.display = "none";
-  fourthQuestionsBox.style.display = "block";
-});
-
-button4.addEventListener("click", function () {
-  fourthQuestionsBox.style.display = "none";
-  fifthQuestionsBox.style.display = "block";
-  submitButton.style.display = "block";
-})
+showStep(1);
 
 //breeds
 
@@ -106,10 +118,10 @@ function calculateAge(userBirthDate) {
   const today = new Date()
   let age = today.getFullYear() - userBirthDate.getFullYear()
 
-  const calculateMonth = isToday.getMonth() - userBirthDate.getMonth()
+  const calculateMonth = today.getMonth() - userBirthDate.getMonth()
 
   if (calculateMonth < 0 ||
-    (calculateMonth === 0 && isToday.getDate() < userBirthDate.getDate())
+    (calculateMonth === 0 && today.getDate() < userBirthDate.getDate())
   ) {
     age--;
   }
