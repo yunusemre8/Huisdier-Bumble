@@ -139,19 +139,12 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 
 app.use(express.json())
 router.get('/', home)
+router.get('/login', login)
 router.get('/register', register)
 router.get('/profile/:id', uservalidate, profile)
 router.get('/matches/:id', uservalidate, matchesPage)
 
 app.use('/', router);
-
-// app.use('/', uservalidate, register, profile, matchesPage)
-
-// app.get('/', home)
-// app.get('/register', register)
-// app.get('/profile/:id', profile)
-// app.get('/matches/:id', matchesPage);
-
 
 function home(req, res) {
     res.send('Welcome to the club!')
@@ -159,7 +152,9 @@ function home(req, res) {
 function register(req, res) {
     res.render('register')
 }
-
+function login(req,res){
+    res.render('login')
+}
 app.post('/save-location', async (req, res) => {
     try {
         const { id, lat, lng } = req.body;

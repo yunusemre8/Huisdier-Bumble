@@ -5,24 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <meta name="description" content="Login page">
+    <link rel="stylesheet" href="/login.css">
 </head>
 
 <body>
+    <img src="/images/logo.png" alt="Logo-Pet-Playdates">
     <fieldset>
         <legend>Login</legend>
 
         <label for="userEmail" id="userEmail">Your email address</label>
-        <input type="email" name="userEmail" id="userEmail">
+        <input type="email" name="userEmail" id="userEmail" required>
 
         <label for="isPassword">Password</label>
-        <input type="password" id="isPassword" name="isPassword">
+        <input type="password" id="isPassword" name="isPassword" required>
     </fieldset>
 
     <ul>
-        <li><a href="changePassword.ejs">Forgot your password?</a></li>
-        <li><a href="register.ejs">New here?</a></li>
+        <li><a href="/changePassword">Forgot your password?</a></li>
+        <li><a href="/register">New here?</a></li>
     </ul>
 
+    <script defer src="/login.js"></script>
 </body>
 
 </html>
