@@ -10,6 +10,17 @@ const button2 = document.getElementById("button2");
 const button3 = document.getElementById("button3");
 const button4 = document.getElementById("button4");
 
+data.push({
+  id: "emma",
+  userNickname: "Emma",
+  petName: "Bobby",
+  email: "emma@email.com",
+  phone: "",
+  cover: null,
+});
+
+submitButton.style.display = "none";
+
 button1.addEventListener("click", function () {
   zeroQuestionsBox.style.display = "none";
   firstQuestionsBox.style.display = "block";

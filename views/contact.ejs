@@ -13,33 +13,49 @@
 
       <div class="match-profiles">
         <article class="profile-card">
-          <img src="/images/profile-1.jpg" alt="Profiel van Lisa" />
+          <img src="/images/lisaprofiel 2.png" alt="Profiel van Lisa" />
         </article>
 
         <div class="heart-circle">♥</div>
 
         <article class="profile-card">
-          <img src="/images/profile-2.jpg" alt="Profiel van Emma" />
+          <img src="/images/emmaprofiel 2.png" alt="Profiel van Emma" />
         </article>
       </div>
 
       <section class="contact-card">
         <h2>Deel je contactgegevens</h2>
         <p>
-          Jullie zijn gematcht! Deel eenvoudig je contactgegevens en praat verder
-          met Lisa over het plannen van een leuke playdate! Gebruik bijvoorbeeld:
+          Jullie zijn gematcht! Deel eenvoudig je contactgegevens en praat verder over het plannen van een leuke playdate! Gebruik bijvoorbeeld:
         </p>
 
         <div class="contact-buttons">
-          <a class="contact-button whatsapp" href="#">
-            <span>Whatsapp</span>
-            <span>&gt;</span>
-          </a>
-
-          <a class="contact-button gmail" href="#">
+          <a
+            class="contact-button gmail"
+            href="mailto:<%= matchUser.email %>?subject=Leuk%20dat%20we%20gematcht%20zijn&body=Hoi%20<%= matchUser.userNickname %>,%0D%0A%0D%0ALeuk%20dat%20we%20gematcht%20zijn!%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F"
+          >
             <span>Gmail</span>
             <span>&gt;</span>
           </a>
+
+          <% if (matchUser.phone && matchUser.phone.trim() !== '') { %>
+            <a
+              class="contact-button whatsapp"
+              href="https://wa.me/<%= matchUser.phone %>?text=Hoi%20<%= matchUser.userNickname %>!%20Leuk%20dat%20we%20gematcht%20zijn.%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F"
+              target="_blank"
+            >
+              <span>Whatsapp</span>
+              <span>&gt;</span>
+            </a>
+          <% } else { %>
+            <div class="contact-button whatsapp-disabled">
+              <span>Whatsapp</span>
+              <span>!</span>
+            </div>
+            <p class="phone-message">
+              Deze gebruiker heeft geen telefoonnummer gedeeld.
+            </p>
+          <% } %>
         </div>
       </section>
 
@@ -51,8 +67,8 @@
 
       <nav class="bottom-nav">
         <a href="/" aria-label="Home">☝</a>
-        <a href="/contact" aria-label="Chat">💬</a>
-        <a href="/profile" aria-label="Profiel">◯</a>
+        <a href="/contact/<%= matchUser.id %>" aria-label="Chat">💬</a>
+        <a href="/profile/<%= matchUser.id %>" aria-label="Profiel">◯</a>
       </nav>
     </section>
   </main>

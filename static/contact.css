@@ -22,13 +22,13 @@
     width: 100%;
     max-width: 28rem;
     min-height: 52rem;
-    background-color: #efc65b;
+    background-color: #FFC832;
     padding: 4rem 1.5rem 7rem;
     overflow: hidden;
   }
   
   .match-title {
-    color: #9d2c52;
+    color: #8B1A1A;
     font-size: 2.1rem;
     font-weight: 800;
     text-align: center;
@@ -47,7 +47,7 @@
   .profile-card {
     width: 9.5rem;
     height: 9.5rem;
-    border: 3px solid #9d2c52;
+    border: 3px solid #8B1A1A;
     border-radius: 0.9rem;
     overflow: hidden;
     background: #fff;
@@ -64,7 +64,7 @@
   .heart-circle {
     width: 4.5rem;
     height: 4.5rem;
-    background-color: #9d2c52;
+    background-color: #8B1A1A;
     color: #f8e7b6;
     border-radius: 50%;
     display: flex;
@@ -128,7 +128,7 @@
     display: block;
     width: fit-content;
     margin: 1rem auto 0;
-    background-color: #a33a57;
+    background-color: #8B1A1A;
     color: #f8e7b6;
     text-decoration: none;
     font-weight: 700;
@@ -155,7 +155,7 @@
   
   .bottom-nav a {
     text-decoration: none;
-    color: #9d2c52;
+    color: #8B1A1A;
     font-size: 2rem;
   }
   
@@ -201,3 +201,17 @@
       font-size: 1.6rem;
     }
   }
+
+  .whatsapp-disabled {
+    background-color: #cfcfcf;
+    color: #666;
+    cursor: not-allowed;
+  }
+  
+  .phone-message {
+    margin-top: 0.5rem;
+    color: #8b2047;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  
