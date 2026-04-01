@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> <%= isPageTitle %> </title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1><%= isPageTitle %></h1>
+        <p> Find the perfect play buddy for your pet based on your interests and preferences</p>
+    </header>
+    <main>
+        <!-- filter form -->
+         <form action="/filter" method="GET">
+            <fieldset> 
+                <!-- fieldset not necessary? -->
+                <legend>Search</legend>
+
+                <label for="searchHere">Search</label>
+                <input type="text" name="searchHere">
+            </fieldset>
+            <fieldset>
+                <legend>Filters</legend>
+
+                <label for="petType">Pet Type</label>
+                <select name="petType" id="petType">
+                    <option value="cat">Cat</option>
+                    <option value="dog">Dog</option>
+                    <option value="rabbit">Rabbit</option>
+                </select>
+
+                <label for="isBreed">Cat Breeds</label>
+                <!-- IMPORTANT: it should be arrays and depends on pet type, if else-->
+                <select name="isBreed" id="isBreed"> 
+
+                    <option value="isBritishShorthair">British Shorthair</option>
+                    <option value="isEuropeanShorthair">European Shorthair</option>
+                    <option value="isRagdoll">Ragdoll</option>
+                    <option value="isMaineCoon">Maine Coon</option>
+                    <option value="isDomestic">Domestic Cat</option>
+                    <option value="isPersian">Persian</option>
+                    <option value="isMix">Mix Cat</option>
+                    <option value="isOther">Other</option>
+                </select>
+
+                <label for="isAge">Age</label>
+                <input type="number" name="isAge" id="isAgeYear" placeholder="Year">
+                <input type="number" name="isAge" id="isAgeMonth" placeholder="Month">
+
+                <label for="playOutside"><input type="radio" name="mayOutside" value="yes">Can play outside?</label>
+
+            </fieldset>
+            
+            <button type="submit">Show results</button>
+         </form>
+    </main>
+</body>
+</html>
