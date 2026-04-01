@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <meta name="description" content="Profile page">
+</head>
+<body>
+
+    <h1>Profile</h1>
+
+    <h2>User: <%= user.userName %></h2>
+    <p>City: <%= user.userCity %></p>
+
+
+    <% if (animal) { %>
+
+        <% if (animal.cover) { %>
+            <img src="/upload/<%= animal.cover %>" alt="Picture of <%= animal.petName %>" width="150">
+        <% } %>
+
+        <p>Pet name: <%= animal.petName %></p>
+        <p>Pet type: <%= animal.petType %></p>
+        <p>Breed: <%= animal.petBreed %></p>
+    <% } %>
+
+    <a href="/register">Register again</a>
+
+</body>
+</html>
