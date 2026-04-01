@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <meta name="description" content="Login page">
+    <link rel="stylesheet" href="/login.css">
+</head>
+
+<body>
+    <img src="/images/logo.png" alt="Logo-Pet-Playdates">
+    <form action="/login" method="POST">
+        <fieldset>
+            <legend>Welcome</legend>
+
+         <label for="userEmail">Your email address</label>
+         <input type="email" name="userEmail" id="userEmail" value="<%= oldEmail || '' %>" required>
+
+         <label for="isPassword">Password</label>
+         <input type="password" id="isPassword" name="isPassword" required>
+
+         <% if (error) { %>
+            <p class="error"><%= error %></p>
+         <% } %>
+
+         <input type="submit" class="submit" value="Login">
+     </fieldset>
+    </form>
+
+    <ul>
+        <li><a href="/changePassword">Forgot your password?</a></li>
+        <li><a href="/register">New here?</a></li>
+    </ul>
+
+    <script defer src="/login.js"></script>
+</body>
+
+</html>

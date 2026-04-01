@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <meta name="description" content="Sign up page">
+    <link rel="stylesheet" href="/matches.css">
+</head>
+
+<body data-user-id="<%= user.id %>">
+    <h1>Find your best matches</h1>
+    <button id="locationButton">Share my location</button>
+    <p id="isLocation"></p>
+
+    <div id="userProfile">
+        <h2>Your profile</h2>
+
+     <% if (user.cover) { %>
+
+        <img id='profilPic' src="/upload/<%= user.cover %>" width="150">
+
+        <% } %>
+
+            <h2>User: <%= user.userName %>
+            </h2>
+
+            <p>Pet name: <%= user.petName %>
+            </p>
+
+            <a href="/register">Register again</a>
+
+    </div>
+
+    <button>Filters</button>
+
+    <article>
+        <section>
+            <img src="" alt="">
+            <p>User Name</p>
+            <p>Pet Type Pet name en pet Age</p>
+        </section>
+        <section>
+            <img src="" alt="">
+            <p>User Name</p>
+            <p>Pet Type Pet name en pet Age</p>
+        </section>
+        <section>
+            <img src="" alt="">
+            <p>User Name</p>
+            <p>Pet Type Pet name en pet Age</p>
+        </section>
+    </article>
+    
+    <script defer src="/matches.js"></script>
+    <!-- footer partials -->
+</body>
+
+</html>
