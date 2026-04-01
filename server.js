@@ -127,17 +127,18 @@ app.post('/register', upload.single('cover'), async (req, res) => {
         }
 
         await db.collection("animals").insertOne(newAnimal)
+
+
         req.session.userId = userId.toString()
         res.redirect(`/profile/${userId}`)
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred during registration")
->>>>>>> JavaScript-linter
+
 
     }
 });
 
-app.use(express.json())
 router.get('/', home)
 router.get('/login', login)
 router.get('/register', register)
@@ -152,15 +153,12 @@ function home(req, res) {
 function register(req, res) {
     res.render('register')
 }
-<<<<<<< HEAD
 
 function contact(req, res){
     res.render('contact')
 }
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`)
-=======
+
 function login(req,res){
     res.render('login',
     { error: null,
@@ -193,47 +191,47 @@ app.post('/login', async (req, res) => {
     } catch (error) {
         console.error(error)
         res.status(500).send('Login error')
-    }
->>>>>>> JavaScript-linter
-})
-
-app.post('/save-location', async (req, res) => {
+    }})
+    
+app.post("/save-location", async (req, res) => {
     try {
         const { id, lat, lng } = req.body;
+
         if (!id || lat == null || lng == null) {
             return res.status(400).json({
                 success: false,
-                message: 'id, lat en lng zijn verplicht'
-            })
+                message: "id, lat en lng zijn verplicht",
+            });
         }
-        const result = await db.collection('users').updateOne(
-            { _id: new ObjectId (req.params.id) },
+
+        const result = await db.collection("users").updateOne(
+            { _id: new ObjectId(id) },
             {
                 $set: {
                     location: {
                         type: "Point",
-                        coordinates: [Number(lng), Number(lat)]
-                    }
-                }
+                        coordinates: [Number(lng), Number(lat)],
+                    },
+                },
             }
         );
 
         if (result.matchedCount === 0) {
             return res.status(404).json({
                 success: false,
-                message: 'user doesnt exist'
+                message: "user doesnt exist",
             });
         }
 
         res.json({
             success: true,
-            message: 'Location saved'
+            message: "Location saved",
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({
             success: false,
-            message: 'Server error'
+            message: "Server error",
         });
     }
 });
@@ -257,14 +255,15 @@ async function profile(req, res) {
     }
 }
 
-<<<<<<< HEAD
+
 // app.use(session({
 //     resave = false,
 //     saveUninitialized: true,
 //     secret = process.env.SESSION_SECRET
 // }))
 
-=======
+
+
 async function matchesPage(req, res) {
     try {
         const user = await db.collection("users").findOne({
@@ -290,6 +289,4 @@ async function startServer() {
 
 startServer();
 
-
-//https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/routes
->>>>>>> JavaScript-linter
+// https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/routes
