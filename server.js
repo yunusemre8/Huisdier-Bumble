@@ -127,13 +127,6 @@ app.post('/register', upload.single('cover'), async (req, res) => {
         }
 
         await db.collection("animals").insertOne(newAnimal)
-
-<<<<<<< HEAD
-app.get('/',home)
-app.get('/register', register)
-app.get('/profile/:id', profile)
-app.get('/contact', contact)
-=======
         req.session.userId = userId.toString()
         res.redirect(`/profile/${userId}`)
     } catch (error) {
