@@ -16,74 +16,36 @@
       <section class="matches-card">
         <h1>Your matches</h1>
 
-        <article class="match-item">
-          <button class="remove-btn">X</button>
+        <% if (matches.length === 0) { %>
+          <p>Je hebt nog geen matches.</p>
+        <% } %>
 
-          <div class="match-left">
-            <img src="/images/sophie 2.png" alt="Sophie" class="match-image" />
+        <% matches.forEach(match => { %>
+          <article class="match-item">
+            <button class="remove-btn">X</button>
 
-            <div class="match-info">
-              <h2>Sophie</h2>
-              <p>Dog mom 🐶</p>
-              <p>Age: 28</p>
+            <div class="match-left">
+              <img
+                src="<%= match.cover ? '/upload/' + match.cover : '/images/sophie 2.png' %>"
+                alt="<%= match.userNickname %>"
+                class="match-image"
+              />
+
+              <div class="match-info">
+                <h2><%= match.userNickname %></h2>
+                <p><%= match.petName %></p>
+                <p><%= match.email %></p>
+              </div>
             </div>
-          </div>
 
-          <div class="heart-button">♥</div>
-        </article>
-
-        <article class="match-item">
-          <button class="remove-btn">X</button>
-
-          <div class="match-left">
-            <img src="/images/emmaprofiel 2.png" alt="Emma" class="match-image" />
-
-            <div class="match-info">
-              <h2>Emma</h2>
-              <p>Dog mom 🐶</p>
-              <p>Age 31</p>
-            </div>
-          </div>
-
-          <div class="heart-button">♥</div>
-        </article>
-
-        <article class="match-item">
-          <button class="remove-btn">X</button>
-
-          <div class="match-left">
-            <img src="/images/Mark 2.png" alt="Mark" class="match-image" />
-
-            <div class="match-info">
-              <h2>Mark</h2>
-              <p>Dog dad 🐶</p>
-              <p>Age 32</p>
-            </div>
-          </div>
-
-          <div class="heart-button">♥</div>
-        </article>
-
-        <article class="match-item">
-          <button class="remove-btn">X</button>
-
-          <div class="match-left">
-            <img src="/images/Dean 2.png" alt="Dean" class="match-image" />
-
-            <div class="match-info">
-              <h2>Dean</h2>
-              <p>Dog dad 🐶</p>
-              <p>Age 26</p>
-            </div>
-          </div>
-
-          <div class="heart-button">♥</div>
-        </article>
+            <a href="/contact/<%= match._id %>" class="heart-button">♥</a>
+          </article>
+        <% }) %>
       </section>
 
       <nav class="bottom-nav">
         <a href="/" class="nav-icon">☝</a>
-        <a href="/contact" class="nav-icon">💬</a>
+        <a href="/yourmatches" class="nav-icon">💬</a>
         <a href="/profile/test" class="nav-icon">◯</a>
       </nav>
     </section>

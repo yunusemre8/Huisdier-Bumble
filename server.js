@@ -1,52 +1,66 @@
+require("dotenv").config();
 
 const express = require("express");
 const session = require("express-session");
+const { MongoClient, ObjectId } = require("mongodb");
+const multer = require("multer");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const multer = require("multer");
 const upload = multer({ dest: "static/upload/" });
 
-const data = [];
+const dbUri = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME;
 
-data.push({
-    id: "emma",
-    userNickname: "Emma",
-    petName: "Bobby",
-    email: "emma@email.com",
-    phone: "31612345678",
-    cover: null,
-  });
+if (!dbUri) {
+    throw new Error("MONGO_URI ontbreekt in je .env bestand");
+}
+
+const client = new MongoClient(dbUri);
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("static"));
 
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-app.use(express.static("static"));
-
-app.post("/register", upload.single("cover"), (req, res) => {
-    const id = req.body.userNickname.toLowerCase();
-
-    data.push({
-        id: id,
-        userNickname: req.body.userNickname,
-        petName: req.body.petName,
-        email: req.body.email || "",
-        phone: req.body.phone || "",
-        cover: req.file ? req.file.filename : null,
-    });
-
-    console.log(data);
-    res.redirect(`/profile/${id}`);
-});
+async function connectDB() {
+    try {
+        await client.connect();
+        console.log("Database is connected");
+    } catch (error) {
+        console.error("DB couldn't be connected", error.message);
+    }
+}
 
 app.get("/", home);
 app.get("/register", register);
 app.get("/profile/:id", profile);
-app.get("/contact/:id", contact);
+app.get("/contact/:ownerId", contact);
 app.get("/yourmatches", yourmatches);
+
+app.post("/register", upload.single("cover"), async (req, res) => {
+    try {
+        const db = client.db(dbName);
+        const usersCollection = db.collection("users");
+
+        const newUser = {
+            userNickname: req.body.userNickname,
+            petName: req.body.petName,
+            email: req.body.email || "",
+            phone: req.body.phone || "",
+            cover: req.file ? req.file.filename : null,
+        };
+
+        const result = await usersCollection.insertOne(newUser);
+
+        res.redirect(`/profile/${result.insertedId}`);
+    } catch (error) {
+        console.error("Fout bij registreren:", error.message);
+        res.status(500).send("Er ging iets mis bij het registreren.");
+    }
+});
 
 function home(req, res) {
     res.send("Welcome to the club!");
@@ -56,28 +70,74 @@ function register(req, res) {
     res.render("register");
 }
 
-function contact(req, res) {
-    const matchUser = data.find((u) => u.id === req.params.id);
+async function profile(req, res) {
+    try {
+        const userId = req.params.id;
 
-    if (!matchUser) {
-        return res.send("Match gebruiker niet gevonden");
+        if (!ObjectId.isValid(userId)) {
+            return res.status(400).send("Ongeldige gebruiker-id.");
+        }
+
+        const db = client.db(dbName);
+        const usersCollection = db.collection("users");
+
+        const user = await usersCollection.findOne({
+            _id: new ObjectId(userId),
+        });
+
+        if (!user) {
+            return res.redirect("/register");
+        }
+
+        res.render("profile", { user });
+    } catch (error) {
+        console.error("Fout in profile route:", error.message);
+        res.status(500).send("Er ging iets mis bij het ophalen van het profiel.");
     }
-
-    res.render("contact", { matchUser });
 }
 
-function yourmatches(req, res) {
-    res.render("yourmatches");
+async function contact(req, res) {
+    try {
+        const ownerId = req.params.ownerId;
+
+        if (!ObjectId.isValid(ownerId)) {
+            return res.status(400).send("Ongeldige gebruiker-id.");
+        }
+
+        const db = client.db(dbName);
+        const usersCollection = db.collection("users");
+
+        const matchUser = await usersCollection.findOne({
+            _id: new ObjectId(ownerId),
+        });
+
+        if (!matchUser) {
+            return res.status(404).send("Match gebruiker niet gevonden");
+        }
+
+        res.render("contact", { matchUser });
+    } catch (error) {
+        console.error("Fout in contact route:", error.message);
+        res.status(500).send("Er ging iets mis bij het ophalen van de contactgegevens.");
+    }
 }
 
-function profile(req, res) {
-    const user = data.find((u) => u.id === req.params.id);
+async function yourmatches(req, res) {
+    try {
+        const db = client.db(dbName);
+        const usersCollection = db.collection("users");
 
-    if (!user) return res.redirect("/register");
+        const matches = await usersCollection.find().toArray();
 
-    res.render("profile", { user });
+        res.render("yourmatches", { matches });
+    } catch (error) {
+        console.error("Fout in yourmatches route:", error.message);
+        res.status(500).send("Er ging iets mis bij het ophalen van de matches.");
+    }
 }
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+connectDB().then(() => {
+    app.listen(port, () => {
+        console.log(`Server running on http://localhost:${port}`);
+    });
 });

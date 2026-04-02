@@ -214,4 +214,18 @@
     font-size: 0.95rem;
     font-weight: 600;
   }
+
+  .gmail-disabled,
+.whatsapp-disabled {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.8rem;
+  padding: 0.95rem 1rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  background-color: #cfcfcf;
+  color: #666;
+  cursor: not-allowed;
+}
   
