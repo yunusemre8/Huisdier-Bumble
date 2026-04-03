@@ -44,12 +44,15 @@ function showStep(step) {
   }
 }
 
+//User age calculate
+
 button1.addEventListener("click", () => {
   const selectedDate = new Date(userBirthDate.value);
   const age = calculateAge(selectedDate);
   const ageWarning = document.getElementById("ageWarning");
 
   if (!userBirthDate.value) {
+    ageWarning.classList.remove("error-active");
     document.getElementById("ageError").textContent = "Please choose your birthday.";
     return;
   }
@@ -60,9 +63,39 @@ button1.addEventListener("click", () => {
   }
 
   ageWarning.classList.remove("error-active");
-  document.getElementById("ageError").textContent = "";
   showStep(2);
 });
+
+const userBirthDate = document.getElementById("userAge")
+
+function calculateAge(userBirthDate) {
+  const today = new Date()
+  let age = today.getFullYear() - userBirthDate.getFullYear()
+
+  const calculateMonth = today.getMonth() - userBirthDate.getMonth()
+
+  if (calculateMonth < 0 ||
+    (calculateMonth === 0 && today.getDate() < userBirthDate.getDate())
+  ) {
+    age--;
+  }
+  return age
+}
+
+form.addEventListener("submit", function (event) {
+
+  const selectedDate = new Date(userBirthDate.value)
+  const age = calculateAge(selectedDate)
+
+  if(age<18){
+   event.preventDefault()
+   document.getElementById("ageError").textContent = "Pet Playdates is for users aged 18+ only."
+  }
+  console.log("Birth Date:", userBirthDate.value)
+  console.log("Calculated age:", age)
+
+})
+
 
 button2.addEventListener("click", () => showStep(3));
 button3.addEventListener("click", () => showStep(4));
@@ -111,40 +144,6 @@ petTypeSelect.addEventListener("change", () => {
 
 updateBreeds(petTypeSelect.value)
 
-//User age calculate
-const userBirthDate = document.getElementById("userAge")
-
-function calculateAge(userBirthDate) {
-  const today = new Date()
-  let age = today.getFullYear() - userBirthDate.getFullYear()
-
-  const calculateMonth = today.getMonth() - userBirthDate.getMonth()
-
-  if (calculateMonth < 0 ||
-    (calculateMonth === 0 && today.getDate() < userBirthDate.getDate())
-  ) {
-    age--;
-  }
-  return age
-}
-
-form.addEventListener("submit", function (event) {
-
-  const selectedDate = new Date(userBirthDate.value)
-  const age = calculateAge(selectedDate)
-
-  if(age<18){
-   event.preventDefault()
-   document.getElementById("ageError").textContent = "Pet Playdates is for users aged 18+ only."
-  }
-  console.log("Birth Date:", userBirthDate.value)
-  console.log("Calculated age:", age)
-
-})
-
-
-//pet age calculate
-
 
 //phone number display & required
 
@@ -170,3 +169,21 @@ function togglePhoneField(){
 
 selectedWhatsapp.addEventListener("change", togglePhoneField)
 selectedEmail.addEventListener("change", togglePhoneField)
+
+//passwords match
+
+const password = document.getElementById('isPassword')
+const checkPass = document.getElementById('checkPassword')
+const matchText = document.getElementById('passwordMatch')
+
+function checkPasswords(){
+  if(password.value === checkPass.value){
+    matchText.textContent = 'Passwords match'
+    matchText.style.color = 'green'
+  }else{
+    matchText.textContent= 'Passwords do not match'
+    matchText.style.color= 'red'
+  }
+}
+
+checkPass.addEventListener('input', checkPasswords)
