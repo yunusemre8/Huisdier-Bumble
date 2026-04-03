@@ -10,6 +10,8 @@ dotenv.config();
 const app = express();
 const router = express.Router();
 
+const userValidate = require('./middleware/userValidate');
+
 const port = process.env.PORT || 3000;
 const upload = multer({ dest: "static/upload/" });
 
@@ -18,13 +20,6 @@ const catBreeds = ["Persian", "Maine Coon", "Siamese", "Ragdoll", "Bengal", "Sco
 
 
 let db;
-
-const uservalidate = (req, res, next) => {
-    if (req.session && req.session.userId) {
-        return next();
-    }
-    return res.redirect("/register");
-};
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -88,6 +83,10 @@ function register(req, res) {
     res.render("register");
 }
 
+function changePassword(req,res){
+    res.render("changePassword");
+}
+
 function login(req, res) {
     res.render("login", {
         error: null,
@@ -110,9 +109,10 @@ function filterPage(req, res) {
 router.get("/", home);
 router.get("/login", login);
 router.get("/register", register);
-router.get("/profile/:id", uservalidate, profile);
-router.get("/matches/:id", uservalidate, matchesPage);
-router.get("/filter", uservalidate, filterPage);
+router.get("/profile/:id", userValidate, profile);
+router.get("/matches/:id", userValidate, matchesPage);
+router.get("/filter", userValidate, filterPage);
+router.get("/changePassword", userValidate, changePassword);
 
 app.use("/", router);
 
@@ -247,6 +247,27 @@ app.post("/save-location", async (req, res) => {
     }
 });
 
+async function changePassword(req, res) {
+    try {
+        const user = await db.collection("users").findOne({
+            _id: new ObjectId(req.session.userId)
+        });
+
+        if (!user) {
+            return res.redirect("/login");
+        }
+
+        const animal = await db.collection("animals").findOne({
+            ownerId: user._id
+        });
+
+        res.render("changePassword", { user, animal });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Change password page could not be loaded");
+    }
+}
+
 app.get("/api/pets", async (req, res) => {
     try {
         const { petType, breeds, size } = req.query;
@@ -297,6 +318,24 @@ async function profile(req, res) {
     } catch (error) {
         console.error(error);
         res.status(500).send("Profile couldn't be loaded");
+    }
+}
+
+async function changePassword(req,res){
+    try {
+        const user = await db.collection('users').findOne({
+            _id: new ObjectId(req.session.userId)
+        });
+        if(!user){
+            return res.redirect('/login');
+        }
+        const animal = await db.collection('animals').findOne({
+            ownerId: user._id
+        });
+        res.render('changePassword', {user, animal});
+    } catch (error){
+        console.error(error);
+        res.status(500).send('Password change could not be loaded');
     }
 }
 
