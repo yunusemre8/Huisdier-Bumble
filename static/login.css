@@ -49,6 +49,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: var(--whitespace-2);
+    padding-bottom: calc(5rem + var(--whitespace-2));
     position: relative;
     overflow-x: hidden;
 }
