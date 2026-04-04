@@ -19,7 +19,6 @@
     --color-button-accent: hsl(349 62 39.2);
     --color-text-button: hsl(360 0 98.9);
     --color-button-accent-soft: hsl(349 62 70);
-
     --color-input: hsl(42, 52%, 80%);
     --color-input-shadow: hsl(42, 32%, 72%);
     --color-progress-passive: hsl(336, 74%, 81%);
@@ -148,7 +147,7 @@ input[type="password"] {
     border-radius: 0.9rem;
     background: hsl(42, 65%, 83%);
     color: var(--color-text-light);
-    padding: 0.95rem 1rem;
+    padding: .7rem 1rem;
     box-shadow: 0 0.5rem 0 0 var(--color-input-shadow);
     font-size: 1rem;
     font-weight: 700;
