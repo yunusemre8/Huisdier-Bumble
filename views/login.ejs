@@ -11,32 +11,39 @@
 
 <body>
     <img src="/images/logo.png" alt="Logo-Pet-Playdates">
-    <form action="/login" method="POST">
-        <fieldset>
-            <legend>Welcome</legend>
 
-            <label for="userEmail">Your email address</label>
-            <input type="email" name="userEmail" id="userEmail" value="<%= oldEmail || '' %>" required>
+    <% if (message) { %>
+        <div class="<%= message.type %>">
+            <%= message.text %>
+        </div>
+        <% } %>
 
-            <label for="isPassword">Password</label>
-            <input type="password" id="isPassword" name="isPassword" required>
+            <form action="/login" method="POST">
+                <fieldset>
+                    <legend>Welcome</legend>
 
-            <% if (error) { %>
-                <p class="error">
-                    <%= error %>
-                </p>
-                <% } %>
+                    <label for="userEmail">Your email address</label>
+                    <input type="email" name="userEmail" id="userEmail" value="<%= oldEmail || '' %>" required>
 
-                    <input type="submit" class="submit" value="Login">
-        </fieldset>
-    </form>
+                    <label for="isPassword">Password</label>
+                    <input type="password" id="isPassword" name="isPassword" required>
 
-    <ul>
-        <li><a href="/changePassword">Forgot your password?</a></li>
-        <li><a href="/register">New here?</a></li>
-    </ul>
-    
-    <script defer src="/login.js"></script>
+                    <% if (error) { %>
+                        <p class="error">
+                            <%= error %>
+                        </p>
+                        <% } %>
+
+                            <input type="submit" class="submit" value="Login">
+                </fieldset>
+            </form>
+
+            <ul>
+                <li><a href="/changePassword">Forgot your password?</a></li>
+                <li><a href="/register">New here?</a></li>
+            </ul>
+
+            <script defer src="/login.js"></script>
 </body>
 
 </html>

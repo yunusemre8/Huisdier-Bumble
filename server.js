@@ -11,6 +11,7 @@ const app = express();
 const router = express.Router();
 
 const userValidate = require('./middleware/userValidate');
+const messageMiddleware = require('./middleware/message')
 
 const port = process.env.PORT || 3000;
 const upload = multer({ dest: "static/upload/" });
@@ -21,18 +22,21 @@ const catBreeds = ["Persian", "Maine Coon", "Siamese", "Ragdoll", "Bengal", "Sco
 
 let db;
 
+
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 }));
 
-app.use(express.static("static"));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(messageMiddleware)
+app.use(express.static("static"))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
-app.set("view engine", "ejs");
-app.set("views", "views");
+app.set("view engine", "ejs")
+app.set("views", "views")
 
 async function connectMongo() {
     try {
@@ -83,7 +87,7 @@ function register(req, res) {
     res.render("register");
 }
 
-function changePassword(req,res){
+function changePassword(req, res) {
     res.render("changePassword");
 }
 
@@ -126,7 +130,7 @@ app.post("/register", upload.single("cover"), async (req, res) => {
             return res.send("Email already registered");
         }
 
-        if(req.body.isPassword !== req.body.checkPassword){
+        if (req.body.isPassword !== req.body.checkPassword) {
             return res.statusMessage(400).send('Passwords do not match')
         }
         const userBirthDate = new Date(req.body.userAge);
@@ -197,12 +201,73 @@ app.post("/login", async (req, res) => {
         }
 
         req.session.userId = user._id.toString();
-        res.redirect(`/profile/${user._id}`);
+        return res.redirect(`/profile/${user._id}`);
     } catch (error) {
         console.error(error);
         res.status(500).send("Login error");
     }
 });
+
+app.post("/changePassword", async (req, res) => {
+    try {
+        const userId = req.session.userId
+        if (!userId) {
+            return res.redirect('/login')
+        }
+        const user = await db.collection('users').findOne({
+            _id: new ObjectId(userId)
+        })
+
+        if (!user) {
+            return res.redirect('/login')
+        }
+        const { currentPassword, newPassword, confirmNewPassword } = req.body
+
+        console.log("newPassword:", newPassword)
+        console.log("confirmNewPassword:", confirmNewPassword)
+
+        if (newPassword !== confirmNewPassword) {
+            req.session.message = {
+                type: 'error',
+                text: 'New passwords do not match.'
+            }
+            return res.redirect(`/changePassword`)
+            
+        }
+        const isMatch = await bcrypt.compare(currentPassword, user.passwordHash)
+        if (!isMatch) {
+            req.session.message ={ 
+                type: 'error',
+                text: 'Current password is wrong'
+            }
+            return res.redirect(`/changePassword`)
+        }
+
+        if (currentPassword === newPassword) {
+            req.session.message = {
+             type: 'error',
+             text: 'New password must be different from current password.'
+            }
+            return res.redirect('/changePassword')
+        }
+
+        const newPasswordHash = await bcrypt.hash(newPassword, 10)
+
+        await db.collection('users').updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: { passwordHash: newPasswordHash } }
+        )
+        req.session.message = {
+            type: 'success',
+            text: 'Password updated successfully!'
+        }
+        return res.redirect(`/changePassword`)
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).send('password could not updated')
+    }
+})
 
 app.post("/save-location", async (req, res) => {
     try {
@@ -321,19 +386,19 @@ async function profile(req, res) {
     }
 }
 
-async function changePassword(req,res){
+async function changePassword(req, res) {
     try {
         const user = await db.collection('users').findOne({
             _id: new ObjectId(req.session.userId)
         });
-        if(!user){
+        if (!user) {
             return res.redirect('/login');
         }
         const animal = await db.collection('animals').findOne({
             ownerId: user._id
         });
-        res.render('changePassword', {user, animal});
-    } catch (error){
+        res.render('changePassword', { user, animal });
+    } catch (error) {
         console.error(error);
         res.status(500).send('Password change could not be loaded');
     }
