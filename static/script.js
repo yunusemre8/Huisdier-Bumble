@@ -56,18 +56,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-function updateStack() {
-  const activeCards = document.querySelectorAll(".card:not(.swiped)");
+  function updateStack() {
+    const activeCards = document.querySelectorAll(".card:not(.swiped)");
 
-  activeCards.forEach((card, index) => {
-    const scale = Math.max(0.9, 1 - index * 0.03);
-    const offset = Math.min(index * 8, 24);
+    activeCards.forEach((card, index) => {
+      const scale = Math.max(0.9, 1 - index * 0.03);
+      const offset = Math.min(index * 8, 24);
 
-    card.style.zIndex = activeCards.length - index;
-    card.style.transform = `scale(${scale}) translateY(${offset}px)`;
-    card.style.opacity = "1";
-  });
-}
+      card.style.zIndex = activeCards.length - index;
+
+      if (!card.classList.contains("dragging")) {
+        card.style.transform = `scale(${scale}) translateY(${offset}px)`;
+      }
+
+      card.style.opacity = "1";
+    });
+  }
 
   function activateTopCard() {
     const topCard = document.querySelector(".card:not(.swiped)");
@@ -103,9 +107,12 @@ function updateStack() {
     let isDragging = false;
 
     topCard.onmousedown = (e) => {
+      if (e.target.closest(".likebtn") || e.target.closest(".dislikebtn")) return;
+
       isDragging = true;
       startX = e.clientX;
       topCard.style.transition = "none";
+      topCard.classList.add("dragging");
     };
 
     document.onmousemove = (e) => {
@@ -121,6 +128,8 @@ function updateStack() {
       if (!isDragging) return;
 
       isDragging = false;
+      topCard.classList.remove("dragging");
+
       const moveX = e.clientX - startX;
 
       topCard.style.transition = "transform 0.3s ease, opacity 0.3s ease";
@@ -138,12 +147,23 @@ function updateStack() {
     const dislikeBtn = topCard.querySelector(".dislikebtn");
 
     if (likeBtn) {
-      likeBtn.onclick = () => swipeCard(topCard, "right");
+      likeBtn.onclick = (e) => {
+        e.stopPropagation();
+        swipeCard(topCard, "right");
+      };
     }
 
     if (dislikeBtn) {
-      dislikeBtn.onclick = () => swipeCard(topCard, "left");
+      dislikeBtn.onclick = (e) => {
+        e.stopPropagation();
+        swipeCard(topCard, "left");
+      };
     }
+
+    topCard.ondblclick = (e) => {
+      if (e.target.closest(".likebtn") || e.target.closest(".dislikebtn")) return;
+      topCard.classList.toggle("flipped");
+    };
   }
 
   if (cardsContainer) {

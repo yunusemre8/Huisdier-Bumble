@@ -23,10 +23,12 @@ body::after {
     position: fixed;
     pointer-events: none;
 }
+
 body::before {
     bottom: 180px;
     left: 20px;
 }
+
 body::after {
     top: 260px;
     right: 10px;
@@ -93,20 +95,18 @@ h2.step-question {
 }
 
 fieldset {
-  border: none;
-  padding: 20px;
-  margin: 0;
+    border: none;
+    padding: 20px;
+    margin: 0;
 }
 
 .firstQuestionsBox,
 .secondQuestionsBox,
 .thirdQuestionsBox,
 .fourthQuestionsBox,
-input[type="submit"
-]{
+input[type="submit"] {
     display: none;
 }
-
 
 label {
     color: #A2263D;
@@ -118,7 +118,7 @@ label {
 }
 
 input {
-  display: block;
+    display: block;
     width: 100%;
     padding: 10px 60px 10px 22px;
     border-radius: 18px;
@@ -132,7 +132,8 @@ input {
     transition: box-shadow 0.2s ease;
 }
 
-input#isAgeYear, input#isAgeMonth {
+input#isAgeYear,
+input#isAgeMonth {
     width: 50%;
 }
 
@@ -142,20 +143,20 @@ legend {
 }
 
 .button-row {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 button {
-  color: #fff;
-  background-color: #A2263D;
-  padding: 12px 28px;
-  font-size: 16px;
-  border-radius: 25px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  margin-top: 2rem;
+    color: #fff;
+    background-color: #A2263D;
+    padding: 12px 28px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 2rem;
 }
 
 button#button1 {
@@ -167,10 +168,13 @@ button#button1 {
 }
 
 select#isActivity {
-  width: 100%;
+    width: 100%;
 }
 
-input#isPassword, input#checkPassword, input#isEmail, input#isPhoneNumber {
+input#isPassword,
+input#checkPassword,
+input#isEmail,
+input#isPhoneNumber {
     height: 30px;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -189,7 +193,8 @@ input.submit {
     text-align: center;
 }
 
-.filterbtn, .locationbtn {
+.filterbtn,
+.locationbtn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -200,7 +205,8 @@ input.submit {
     top: 1.5em;
 }
 
-.filterbtn img, .locationbtn img {
+.filterbtn img,
+.locationbtn img {
     width: 30px;
     height: 30px;
 }
@@ -214,72 +220,128 @@ input.submit {
 }
 
 .cards {
-  position: relative;
-  width: 250px;
-  height: 400px;
-  margin: 1.5em auto 0;
+    position: relative;
+    width: 250px;
+    height: 400px;
+    margin: 1.5em auto 0;
 }
 
 .card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 400px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  cursor: grab;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 400px;
+    cursor: grab;
+    perspective: 1000px;
+    transform-origin: center center;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.card-front {
+    background-color: white;
+}
+
+.card-back {
+    background-color: #FFF5D6;
+    border: 5px solid #A2263D;
+    color: #A2263D;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+.card-back h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.card-back p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c2c2c;
 }
 
 .matchingimages {
-  width: 250px;
-  height: 400px;
-  object-fit: cover;
-  border: 5px solid #A2263D;
-  border-radius: 20px;
-  display: block;
+    width: 250px;
+    height: 400px;
+    object-fit: cover;
+    border: 5px solid #A2263D;
+    border-radius: 20px;
+    display: block;
 }
 
-.likebtn, .dislikebtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  bottom: 15px;
-  z-index: 2;
+.likebtn,
+.dislikebtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    bottom: 15px;
+    z-index: 3;
 }
 
-.likebtn img, .dislikebtn img {
-  width: 30px;
-  height: 30px;
+.likebtn img,
+.dislikebtn img {
+    width: 30px;
+    height: 30px;
 }
 
 .dislikebtn {
-  left: 15px;
+    left: 15px;
 }
 
 .likebtn {
-  right: 15px;
+    right: 15px;
 }
 
 .swipe-right {
-  transform: translateX(500px) rotate(20deg);
-  opacity: 0;
+    transform: translateX(500px) rotate(20deg);
+    opacity: 0;
 }
 
 .swipe-left {
-  transform: translateX(-500px) rotate(-20deg);
-  opacity: 0;
+    transform: translateX(-500px) rotate(-20deg);
+    opacity: 0;
 }
 
 .cards,
 .cards img {
-  user-select: none;
-  -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .matchingimages {
-  pointer-events: none;
+    pointer-events: none;
 }
