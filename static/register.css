@@ -49,7 +49,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: var(--whitespace-3);
+    padding: 0 var(--whitespace-3);
     position: relative;
     overflow-x: hidden;
 }
@@ -358,7 +358,7 @@ form::before {
 /* mobile spacing */
 @media (max-width: 30rem) {
     body {
-        padding-inline: 0.9rem;
+        padding-inline: var(--whitespace-3);
     }
 
     .button-row {
