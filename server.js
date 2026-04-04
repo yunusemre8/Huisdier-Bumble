@@ -230,7 +230,9 @@ app.post('/register', upload.single('cover'), async (req, res) => {
         await db.collection("animals").insertOne(newAnimal)
 
         req.session.userId = userId.toString()
-        res.redirect(`/profile/${userId}`)
+        req.session.save(() => {
+            res.redirect(`/profile/${userId}`)
+        })
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred during registration")
@@ -238,10 +240,9 @@ app.post('/register', upload.single('cover'), async (req, res) => {
     }
 });
 
-app.use(express.json())
 router.get('/', home)
 router.get('/register', register)
-router.get('/profile', profile)
+router.get('/profile/:id', profile)
 router.get('/matches/:id', uservalidate, matchesPage)
 
 app.use('/', router);
@@ -271,7 +272,7 @@ app.post('/save-location', async (req, res) => {
             })
         }
         const result = await db.collection('users').updateOne(
-            { _id: new ObjectId (req.params.id) },
+          { _id: new ObjectId(req.body.id) },
             {
                 $set: {
                     location: {
@@ -339,7 +340,7 @@ async function matchesPage(req, res) {
 const dogBreeds = ['Labrador', 'Golden Retriever', 'Poodle', 'Border Collie', 'Beagle', 'French Bulldog'];
 const catBreeds = ['Persian', 'Maine Coon', 'Siamese', 'Ragdoll', 'Bengal', 'Scottish Fold'];
 
-router.get('/filter', uservalidate, filterPage);
+router.get('/filter', filterPage);
 
 
 

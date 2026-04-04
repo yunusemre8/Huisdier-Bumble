@@ -1,31 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <meta name="description" content="Profile page">
+    <title>Profiel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/profile.css">
+    <link rel="stylesheet" href="/footer.css">
 </head>
 <body>
 
-    <h1>Profile</h1>
+    <div class="card">
+        <h1>Profiel</h1>
 
-    <h2>User: <%= user.userName %></h2>
-    <p>City: <%= user.userCity %></p>
+        <div class="user-info">
+            <p class="name"><%= user.userName %></p>
+            <p class="city">📍 <%= user.userCity %></p>
+        </div>
 
-
-    <% if (animal) { %>
-
-        <% if (animal.cover) { %>
-            <img src="/upload/<%= animal.cover %>" alt="Picture of <%= animal.petName %>" width="150">
+        <% if (animal) { %>
+        <div class="pet-info">
+            <% if (animal.cover) { %>
+                <img src="/upload/<%= animal.cover %>" alt="<%= animal.petName %>">
+            <% } %>
+            <div class="pet-details">
+                <p class="pet-name"><%= animal.petName %></p>
+                <p><%= animal.petType %> · <%= animal.petBreed %></p>
+            </div>
+        </div>
         <% } %>
 
-        <p>Pet name: <%= animal.petName %></p>
-        <p>Pet type: <%= animal.petType %></p>
-        <p>Breed: <%= animal.petBreed %></p>
-    <% } %>
-
-    <a href="/register">Register again</a>
-
+        <div class="actions">
+            <button id="locationBtn">📍 Locatie opslaan</button>
+            <a href="/register">Opnieuw registreren</a>
+        </div>
+    </div>
+    <%- include('partials/footer', { user: user }) %>
+    <script src="/js/profile.js"></script>
 </body>
 </html>
