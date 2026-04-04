@@ -15,25 +15,27 @@
         <fieldset>
             <legend>Welcome</legend>
 
-         <label for="userEmail">Your email address</label>
-         <input type="email" name="userEmail" id="userEmail" value="<%= oldEmail || '' %>" required>
+            <label for="userEmail">Your email address</label>
+            <input type="email" name="userEmail" id="userEmail" value="<%= oldEmail || '' %>" required>
 
-         <label for="isPassword">Password</label>
-         <input type="password" id="isPassword" name="isPassword" required>
+            <label for="isPassword">Password</label>
+            <input type="password" id="isPassword" name="isPassword" required>
 
-         <% if (error) { %>
-            <p class="error"><%= error %></p>
-         <% } %>
+            <% if (error) { %>
+                <p class="error">
+                    <%= error %>
+                </p>
+                <% } %>
 
-         <input type="submit" class="submit" value="Login">
-     </fieldset>
+                    <input type="submit" class="submit" value="Login">
+        </fieldset>
     </form>
 
     <ul>
         <li><a href="/changePassword">Forgot your password?</a></li>
         <li><a href="/register">New here?</a></li>
     </ul>
-
+    
     <script defer src="/login.js"></script>
 </body>
 
