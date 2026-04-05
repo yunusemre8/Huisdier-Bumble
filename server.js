@@ -187,6 +187,7 @@ app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
+      console.log('Register çalışıyor:', req.body)
         const existingUser = await db.collection('users').findOne({
             userEmail: req.body.userEmail
         })
@@ -215,6 +216,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             location: null,
         };
         const userResult = await db.collection('users').insertOne(newUser)
+        console.log('insertOne result:', userResult)  // bunu ekle
         const userId = userResult.insertedId
 
         const newAnimal = {
@@ -244,6 +246,11 @@ router.get('/', home)
 router.get('/register', register)
 router.get('/profile/:id', profile)
 router.get('/matches/:id', uservalidate, matchesPage)
+router.get('/edit-profile/:id', editProfilePage)
+router.post('/edit-profile/:id', upload.single('cover'), editProfilePost)
+router.get('/add-pet/:id', addPetPage)
+router.post('/add-pet/:id', upload.single('cover'), addPetPost)
+router.post('/delete-account/:id', deleteAccount)
 
 app.use('/', router);
 
@@ -373,6 +380,59 @@ function filterPage(req, res) {
     });
 }
 
+async function editProfilePage(req, res) {
+  const user = await db.collection('users').findOne({ _id: new ObjectId(req.params.id) })
+  const animal = await db.collection('animals').findOne({ ownerId: user._id })
+  res.render('edit-profile', { user, animal })
+}
+
+async function editProfilePost(req, res) {
+  const userId = new ObjectId(req.params.id)
+
+  await db.collection('users').updateOne({ _id: userId }, {
+      $set: {
+          userName: req.body.userName,
+          userCity: req.body.userCity,
+          userPhone: req.body.userPhone || null,
+          isFrequency: req.body.isFrequency,
+          preferPlace: req.body.preferPlace,
+      }
+  })
+
+  await db.collection('animals').updateOne({ ownerId: userId }, {
+      $set: {
+          petName: req.body.petName,
+          petType: req.body.petType,
+          petBreed: req.body.isBreed,
+          petWeight: Number(req.body.isKilo),
+          ...(req.file && { cover: req.file.filename })
+      }
+  })
+
+  res.redirect(`/profile/${req.params.id}`)
+}
+
+async function addPetPage(req, res) {
+  res.render('add-pet', { userId: req.params.id })
+}
+
+async function addPetPost(req, res) {
+  const userId = new ObjectId(req.params.id)
+
+  const newAnimal = {
+      ownerId: userId,
+      petName: req.body.petName,
+      petType: req.body.petType,
+      petBreed: req.body.isBreed,
+      petWeight: Number(req.body.isKilo),
+      cover: req.file ? req.file.filename : null,
+      createdAt: new Date()
+  }
+
+  await db.collection('animals').insertOne(newAnimal)
+  res.redirect(`/profile/${req.params.id}`)
+}
+
 async function startServer() {
     await connectMongo();
 
@@ -381,7 +441,25 @@ async function startServer() {
     });
 }
 
+async function deleteAccount(req, res) {
+  const userId = new ObjectId(req.params.id)
+
+  await db.collection('animals').deleteMany({ ownerId: userId })
+  await db.collection('users').deleteOne({ _id: userId })
+
+  req.session.destroy(() => {
+      res.redirect('/register')
+  })
+}
+
+
 startServer();
 
 
 //https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/routes
+
+
+// edit profile: register sorularini defistir
+// another pet/delete your pet
+// delete youyr account
+// locatie opslaan
