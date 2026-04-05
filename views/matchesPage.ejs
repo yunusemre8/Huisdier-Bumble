@@ -6,83 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matches</title>
     <meta name="description" content="Matches page">
-    <!-- <link rel="stylesheet" href="/style.css"> -->
-    <link rel="stylesheet" href="/matches.css">
-    <!-- <link rel="stylesheet" href="/filter.css"> -->
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body data-user-id="<%= user._id %>">
+    
+<h1 class="titlematchpage">Find your match</h1>
 
-<aside class="sidebar" id="sidebar">
-    <h2>Filters</h2>
-    <button id="close-button">X</button>
+<button class="locationbtn" type="button">
+  <img src="/images/locationpoint.png" alt="Location button">
+</button>
 
-    <section>
-        <label>Pet Type</label>
-        <button class="type-button" data-type="dog">Dog</button>
-        <button class="type-button" data-type="cat">Cat</button>
-    </section>
+<button class="filterbtn" type="button">
+  <img src="/images/filterbutton.png" alt="Filter button">
+</button>
 
-    <section>
-        <label>Breed</label>
-        <div class="chip-group" id="breed-chips">
-            <% dogBreeds.forEach(breed => { %>
-                <button class="multi-chip"><%= breed %></button>
-            <% }) %>
-        </div>
-    </section>
+<div class="cards">
+  <% animals.forEach(animal => { %>
+    <article class="card" data-owner-id="<%= animal._id %>">
+      <div class="card-inner">
+        
+        <div class="card-front">
+          <img
+            class="matchingimages"
+            src="/upload/<%= animal.cover %>"
+            alt="<%= animal.petName || 'Animal' %>">
 
-    <section>
-        <label>Size</label>
-        <div class="chip-group">
-            <button class="single-chip">Small</button>
-            <button class="single-chip">Medium</button>
-            <button class="single-chip">Large</button>
-        </div>
-    </section>
+          <button class="dislikebtn" type="button">
+            <img src="/images/trashcan.png" alt="Delete button">
+          </button>
 
-    <button id="apply-button">Show Results</button>
-</aside>
-
-<div class="page">
-    <main>
-        <div class="match-header">
-            <h1 class="titlematchpage">Find your match</h1>
-            <button class="locationbtn" type="button">
-                <img src="/images/locationpoint.png" alt="Location button">
-            </button>
-            <button class="filterbtn" type="button" id="open-button">
-                <img src="/images/filterbutton.png" alt="Filter button">
-            </button>
+          <button class="likebtn" type="button">
+            <img src="/images/yellowheart.png" alt="Heart button">
+          </button>
         </div>
 
-        <div class="cards" id="results">
-            <% animals.forEach(animal => { %>
-                <article class="card" data-owner-id="<%= animal._id %>">
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <img class="matchingimages" src="/upload/<%= animal.cover %>" alt="<%= animal.petName || 'Animal' %>">
-                            <button class="dislikebtn" type="button">
-                                <img src="/images/trashcan.png" alt="Delete button">
-                            </button>
-                            <button class="likebtn" type="button">
-                                <img src="/images/yellowheart.png" alt="Heart button">
-                            </button>
-                        </div>
-                        <div class="card-back">
-                            <h2><%= animal.petName || 'Naam onbekend' %></h2>
-                            <p><strong>Soort:</strong> <%= animal.petType || 'Onbekend' %></p>
-                            <p><strong>Ras:</strong> <%= animal.petBreed || 'Onbekend' %></p>
-                            <p><strong>Gewicht:</strong> <%= animal.petWeight || 'Onbekend' %></p>
-                        </div>
-                    </div>
-                </article>
-            <% }) %>
+        <div class="card-back">
+          <h2><%= animal.petName || 'Naam onbekend' %></h2>
+          <p><strong>Soort:</strong> <%= animal.petType || 'Onbekend' %></p>
+          <p><strong>Ras:</strong> <%= animal.petBreed || 'Onbekend' %></p>
+          <p><strong>Gewicht:</strong> <%= animal.petWeight || 'Onbekend' %></p>
         </div>
-    </main>
+
+      </div>
+    </article>
+  <% }) %>
 </div>
-
+    
 <script src="/script.js"></script>
-<script src="/filter.js"></script>
 </body>
+
 </html>
