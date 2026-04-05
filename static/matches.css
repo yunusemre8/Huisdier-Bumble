@@ -1,0 +1,345 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #FFC832;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 60px;
+}
+
+body::before,
+body::after {
+    content: '🐾';
+    font-size: 48px;
+    opacity: 0.25;
+    position: fixed;
+    pointer-events: none;
+}
+
+body::before {
+    bottom: 180px;
+    left: 20px;
+}
+
+body::after {
+    top: 260px;
+    right: 10px;
+    font-size: 36px;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #A2263D;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 18.75rem;
+    background: white;
+    padding: 1.5rem 1.25rem;
+    border-right: 0.0625rem solid #e0e0e0;
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    z-index: 100;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-family: 'Nunito', sans-serif;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    color: #7a1f2e;
+}
+
+#close-button {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: none;
+    border: 0.0625rem solid #ccc;
+    border-radius: 0.375rem;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0;
+    padding: 0;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+section label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7a1f2e;
+}
+
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.single-chip, .multi-chip {
+    padding: 0.5rem 1rem;
+    border-radius: 1.25rem;
+    border: 0.09375rem solid #7a1f2e;
+    background: white;
+    color: #7a1f2e;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 0;
+}
+
+.single-chip.active, .multi-chip.active {
+    background: #7a1f2e;
+    color: white;
+}
+
+.likebtn,
+.dislikebtn,
+.filterbtn,
+.locationbtn {
+    background-color: #A2263D;
+    border: none;
+}
+
+.type-button {
+    padding: 0.625rem;
+    border-radius: 0.5rem;
+    border: 0.09375rem solid #7a1f2e;
+    background: white;
+    color: #7a1f2e;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 0;
+}
+
+.type-button.active {
+    background-color: #7a1f2e;
+    color: white;
+}
+
+#open-button, 
+.likebtn,
+.dislikebtn,
+.filterbtn,
+.locationbtn {
+    background-color: #A2263D;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+#apply-button {
+    padding: 0.75rem;
+    background: #7a1f2e;
+    color: white;
+    border: none;
+    border-radius: 0.625rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+
+/* --- Match header --- */
+.match-header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+
+.titlematchpage {
+    max-width: 60%;
+    text-align: center;
+}
+
+.filterbtn,
+.locationbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-top: 0;
+}
+
+.filterbtn img,
+.locationbtn img {
+    width: 30px;
+    height: 30px;
+}
+
+.locationbtn {
+    left: 0;
+}
+
+.filterbtn {
+    right: 0;
+}
+
+/* --- Cards --- */
+.cards {
+    position: relative;
+    width: 250px;
+    height: 400px;
+    margin: 0 auto;
+}
+
+.card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 400px;
+    cursor: grab;
+    perspective: 1000px;
+    transform-origin: center center;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.card-front {
+    background-color: white;
+}
+
+.card-back {
+    background-color: #FFF5D6;
+    border: 5px solid #A2263D;
+    color: #A2263D;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+.card-back h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.card-back p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c2c2c;
+}
+
+.matchingimages {
+    width: 250px;
+    height: 400px;
+    object-fit: cover;
+    border: 5px solid #A2263D;
+    border-radius: 20px;
+    display: block;
+    pointer-events: none;
+}
+
+.likebtn,
+.dislikebtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    bottom: 15px;
+    z-index: 3;
+    margin-top: 0;
+}
+
+.likebtn img,
+.dislikebtn img {
+    width: 30px;
+    height: 30px;
+}
+
+.dislikebtn {
+    left: 15px;
+}
+
+.likebtn {
+    right: 15px;
+}
+
+.swipe-right {
+    transform: translateX(500px) rotate(20deg);
+    opacity: 0;
+}
+
+.swipe-left {
+    transform: translateX(-500px) rotate(-20deg);
+    opacity: 0;
+}
+
+.cards,
+.cards img {
+    user-select: none;
+    -webkit-user-drag: none;
+}

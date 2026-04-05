@@ -12,6 +12,9 @@ const upload = multer({ dest: 'static/upload/' })
 
 const bcrypt = require("bcrypt")
 
+const dogBreeds = ['Labrador', 'Golden Retriever', 'Poodle', 'Border Collie', 'Beagle', 'French Bulldog'];
+const catBreeds = ['Persian', 'Maine Coon', 'Siamese', 'Ragdoll', 'Bengal', 'Scottish Fold'];
+
 let db;
 
 function add(req, res) {
@@ -287,9 +290,11 @@ async function matchesPage(req, res) {
 
     swipedUserIds.push(currentUserId);
 
-    const animals = await db.collection("users").find({
-      _id: { $nin: swipedUserIds }
-    }).toArray();
+    // const animals = await db.collection("users").find({
+    //   _id: { $nin: swipedUserIds }
+    // }).toArray();
+
+    const animals = await db.collection("animals").find().toArray();
 
     res.render("matchesPage", { user: currentUser, animals, dogBreeds, catBreeds });
   } catch (error) {
