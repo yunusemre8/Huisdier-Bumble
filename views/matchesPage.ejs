@@ -7,21 +7,53 @@
     <title>Matches</title>
     <meta name="description" content="Matches page">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/filter.css">
 </head>
 
 <body data-user-id="<%= user._id %>">
-    
+
+<aside class="sidebar" id="sidebar">
+    <h2>Filters</h2>
+    <button id="close-button">X</button>
+
+    <section>
+        <label>Pet Type</label>
+        <button class="type-button" data-type="dog">Dog</button>
+        <button class="type-button" data-type="cat">Cat</button>
+    </section>
+
+    <section>
+        <label>Breed</label>
+        <div class="chip-group" id="breed-chips">
+            <% dogBreeds.forEach(breed => { %>
+                <button class="multi-chip"><%= breed %></button>
+            <% }) %>
+        </div>
+    </section>
+
+    <section>
+        <label>Size</label>
+        <div class="chip-group">
+            <button class="single-chip">Small</button>
+            <button class="single-chip">Medium</button>
+            <button class="single-chip">Large</button>
+        </div>
+    </section>
+
+    <button id="apply-button">Show Results</button>
+</aside>
+
 <h1 class="titlematchpage">Find your match</h1>
 
 <button class="locationbtn" type="button">
   <img src="/images/locationpoint.png" alt="Location button">
 </button>
 
-<button class="filterbtn" type="button">
+<button class="filterbtn" type="button" id="open-button">
   <img src="/images/filterbutton.png" alt="Filter button">
 </button>
 
-<div class="cards">
+<div class="cards" id="results">
   <% animals.forEach(animal => { %>
     <article class="card" data-owner-id="<%= animal._id %>">
       <div class="card-inner">
@@ -45,15 +77,4 @@
           <h2><%= animal.petName || 'Naam onbekend' %></h2>
           <p><strong>Soort:</strong> <%= animal.petType || 'Onbekend' %></p>
           <p><strong>Ras:</strong> <%= animal.petBreed || 'Onbekend' %></p>
-          <p><strong>Gewicht:</strong> <%= animal.petWeight || 'Onbekend' %></p>
-        </div>
-
-      </div>
-    </article>
-  <% }) %>
-</div>
-    
-<script src="/script.js"></script>
-</body>
-
-</html>
+          <p><strong>Gewicht:</strong> <%= animal.p

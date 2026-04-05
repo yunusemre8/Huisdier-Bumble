@@ -273,16 +273,10 @@ async function matchesPage(req, res) {
       fromUserId: currentUserId
     }).toArray();
 
-    console.log("mySwipes:", mySwipes);
-
     const swipedUserIds = mySwipes
       .map((swipe) => {
         if (!swipe.toUserId) return null;
-
-        if (swipe.toUserId instanceof ObjectId) {
-          return swipe.toUserId;
-        }
-
+        if (swipe.toUserId instanceof ObjectId) return swipe.toUserId;
         try {
           return new ObjectId(swipe.toUserId);
         } catch (error) {
@@ -293,15 +287,11 @@ async function matchesPage(req, res) {
 
     swipedUserIds.push(currentUserId);
 
-    console.log("swipedUserIds:", swipedUserIds);
-
     const animals = await db.collection("users").find({
       _id: { $nin: swipedUserIds }
     }).toArray();
 
-    console.log("animals left:", animals.map(animal => animal._id.toString()));
-
-    res.render("matchesPage", { user: currentUser, animals });
+    res.render("matchesPage", { user: currentUser, animals, dogBreeds, catBreeds });
   } catch (error) {
     console.error("matchesPage error:", error);
     res.status(500).send("Matches page couldn't be loaded");
