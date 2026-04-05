@@ -6,6 +6,8 @@ const { MongoClient, ObjectId } = require("mongodb");
 dotenv.config();
 
 const app = express();
+const router = express.Router();
+
 const port = process.env.PORT || 3000;
 
 const upload = multer({ dest: 'static/upload/' })
@@ -15,11 +17,15 @@ const bcrypt = require("bcrypt")
 const dogBreeds = ['Labrador', 'Golden Retriever', 'Poodle', 'Border Collie', 'Beagle', 'French Bulldog'];
 const catBreeds = ['Persian', 'Maine Coon', 'Siamese', 'Ragdoll', 'Bengal', 'Scottish Fold'];
 
-let db;
+const uservalidate = (req, res, next) => {
+    if (req.session && req.session.userId) {
+        return next();
+    } else {
+        return res.redirect('/register');
+    }
+};
 
-function add(req, res) {
-    console.log(req.file.filename)
-}
+let db;
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -27,16 +33,12 @@ app.use(session({
     saveUninitialized: false,
 }))
 
-
 async function connectMongo() {
     try {
         const client = new MongoClient(process.env.MONGO_URI);
         await client.connect();
-
         db = client.db(process.env.DB_NAME);
-
         await db.collection("users").createIndex({ location: "2dsphere" });
-
         console.log("Database is connected");
     } catch (error) {
         console.error("DB couldn't be connected", error.message);
@@ -54,13 +56,21 @@ async function createPasswordHash(password){
     }
 }
 
+function calculateAge(userBirthDate) {
+    const today = new Date()
+    let age = today.getFullYear() - userBirthDate.getFullYear()
+    const calculateMonth = today.getMonth() - userBirthDate.getMonth()
+    if (calculateMonth < 0 || (calculateMonth === 0 && today.getDate() < userBirthDate.getDate())) {
+        age--;
+    }
+    return age
+}
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
-
 app.set('view engine', 'ejs')
 app.set('views', 'views')
-
-app.use(express.static("static")); //user's images
+app.use(express.static("static"));
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
@@ -71,241 +81,268 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             return res.send("Email already registered")
         }
 
-        const passwordHash = await createPasswordHash(req.body.isPassword, 10)
+        const userBirthDate = new Date(req.body.userAge)
+        const age = calculateAge(userBirthDate)
+        if (age < 18) {
+            return res.status(400).send("Pet Playdates is for users aged 18+ only.");
+        }
+        const passwordHash = await createPasswordHash(req.body.isPassword)
 
         const newUser = {
             userEmail: req.body.userEmail,
-            // passwordHash: '',
+            passwordHash: passwordHash,
             userName: req.body.userName,
-            userAge: req.body.userAge,
+            userBirthDate: userBirthDate,
+            userAge: age,
             userCity: req.body.userCity,
-            petName: req.body.petName,
-            cover: req.file ? req.file.filename : null,
+            userPhone: req.body.userPhone || null,
             isFrequency: req.body.isFrequency,
             preferPlace: req.body.preferPlace,
             createdAt: new Date(),
             location: null,
-
         };
-        const result = await db.collection('users').insertOne(newUser)
-        const userId = result.insertedId.toString()
-        req.session.userId = userId
-        res.redirect(`/matches/${userId}`)
+        const userResult = await db.collection('users').insertOne(newUser)
+        const userId = userResult.insertedId
+
+        const newAnimal = {
+            ownerId: userId,
+            petName: req.body.petName,
+            petType: req.body.petType,
+            petBreed: req.body.isBreed,
+            petWeight: Number(req.body.isKilo),
+            cover: req.file ? req.file.filename : null,
+            createdAt: new Date()
+        }
+
+        await db.collection("animals").insertOne(newAnimal)
+
+        req.session.userId = userId.toString()
+        req.session.save(() => {
+            res.redirect(`/matches/${userId}`)
+        })
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred during registration")
-
     }
 });
 
+router.get('/', home)
+router.get('/register', register)
+router.get('/profile/:id', profile)
+router.get('/matches/:id', matchesPage)
+router.get('/filter', filterPage)
+router.get('/edit-profile/:id', editProfilePage)
+router.post('/edit-profile/:id', upload.single('cover'), editProfilePost)
+router.get('/add-pet/:id', addPetPage)
+router.post('/add-pet/:id', upload.single('cover'), addPetPost)
+router.post('/delete-account/:id', deleteAccount)
 
-app.get('/', home)
-app.get('/register', register)
-app.get('/profile/:id', profile)
-app.get('/matches/:id', matchesPage);
-
+app.use('/', router);
 
 function home(req, res) {
     res.send('Welcome to the club!')
 }
+
 function register(req, res) {
     res.render('register')
 }
 
+function filterPage(req, res) {
+    res.render('filter', { isPageTitle: 'Huisdier Bumble', dogBreeds, catBreeds })
+}
 
 app.post('/save-location', async (req, res) => {
     try {
         const { id, lat, lng } = req.body;
         if (!id || lat == null || lng == null) {
-            return res.status(400).json({
-                success: false,
-                message: 'id, lat en lng zijn verplicht'
-            })
+            return res.status(400).json({ success: false, message: 'id, lat en lng zijn verplicht' })
         }
         const result = await db.collection('users').updateOne(
-            { id: id.toLowerCase() },
-            {
-                $set: {
-                    location: {
-                        type: "Point",
-                        coordinates: [Number(lng), Number(lat)]
-                    }
-                }
-            }
+            { _id: new ObjectId(req.body.id) },
+            { $set: { location: { type: "Point", coordinates: [Number(lng), Number(lat)] } } }
         );
-
         if (result.matchedCount === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'user doesnt exist'
-            });
+            return res.status(404).json({ success: false, message: 'user doesnt exist' });
         }
-
-        res.json({
-            success: true,
-            message: 'Location saved'
-        });
+        res.json({ success: true, message: 'Location saved' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error'
-        });
+        res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 
 app.post("/swipe", async (req, res) => {
-  try {
-    const { fromUserId, toUserId, action } = req.body;
+    try {
+        const { fromUserId, toUserId, action } = req.body;
+        console.log("Nieuwe swipe ontvangen:", { fromUserId, toUserId, action });
 
-    console.log("Nieuwe swipe ontvangen:", { fromUserId, toUserId, action });
-
-    if (!fromUserId || !toUserId || !action) {
-      return res.status(400).json({
-        success: false,
-        message: "fromUserId, toUserId en action zijn verplicht"
-      });
-    }
-
-    if (!["like", "dislike"].includes(action)) {
-      return res.status(400).json({
-        success: false,
-        message: "Ongeldige action"
-      });
-    }
-
-    if (fromUserId === toUserId) {
-      return res.status(400).json({
-        success: false,
-        message: "Je kunt niet op jezelf swipen"
-      });
-    }
-
-    const fromObjectId = new ObjectId(fromUserId);
-    const toObjectId = new ObjectId(toUserId);
-
-    const result = await db.collection("swipes").updateOne(
-      {
-        fromUserId: fromObjectId,
-        toUserId: toObjectId
-      },
-      {
-        $set: {
-          fromUserId: fromObjectId,
-          toUserId: toObjectId,
-          action: action,
-          createdAt: new Date()
+        if (!fromUserId || !toUserId || !action) {
+            return res.status(400).json({ success: false, message: "fromUserId, toUserId en action zijn verplicht" });
         }
-      },
-      { upsert: true }
-    );
-
-    console.log("Swipe opgeslagen in MongoDB:", result);
-
-    const savedSwipe = await db.collection("swipes").findOne({
-      fromUserId: fromObjectId,
-      toUserId: toObjectId
-    });
-
-    console.log("Opgeslagen document:", savedSwipe);
-
-    let isMatch = false;
-
-    if (action === "like") {
-      const reverseLike = await db.collection("swipes").findOne({
-        fromUserId: toObjectId,
-        toUserId: fromObjectId,
-        action: "like"
-      });
-
-      if (reverseLike) {
-        isMatch = true;
-
-        const existingMatch = await db.collection("matches").findOne({
-          users: { $all: [fromObjectId, toObjectId] }
-        });
-
-        if (!existingMatch) {
-          await db.collection("matches").insertOne({
-            users: [fromObjectId, toObjectId],
-            createdAt: new Date()
-          });
+        if (!["like", "dislike"].includes(action)) {
+            return res.status(400).json({ success: false, message: "Ongeldige action" });
         }
-      }
-    }
+        if (fromUserId === toUserId) {
+            return res.status(400).json({ success: false, message: "Je kunt niet op jezelf swipen" });
+        }
 
-    res.json({
-      success: true,
-      isMatch
-    });
-  } catch (error) {
-    console.error("Fout in /swipe route:", error);
-    res.status(500).json({
-      success: false,
-      message: "Server error"
-    });
-  }
+        const fromObjectId = new ObjectId(fromUserId);
+        const toObjectId = new ObjectId(toUserId);
+
+        const result = await db.collection("swipes").updateOne(
+            { fromUserId: fromObjectId, toUserId: toObjectId },
+            { $set: { fromUserId: fromObjectId, toUserId: toObjectId, action: action, createdAt: new Date() } },
+            { upsert: true }
+        );
+
+        console.log("Swipe opgeslagen in MongoDB:", result);
+
+        let isMatch = false;
+        if (action === "like") {
+            const reverseLike = await db.collection("swipes").findOne({
+                fromUserId: toObjectId,
+                toUserId: fromObjectId,
+                action: "like"
+            });
+            if (reverseLike) {
+                isMatch = true;
+                const existingMatch = await db.collection("matches").findOne({
+                    users: { $all: [fromObjectId, toObjectId] }
+                });
+                if (!existingMatch) {
+                    await db.collection("matches").insertOne({
+                        users: [fromObjectId, toObjectId],
+                        createdAt: new Date()
+                    });
+                }
+            }
+        }
+        res.json({ success: true, isMatch });
+    } catch (error) {
+        console.error("Fout in /swipe route:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+app.get('/api/pets', async (req, res) => {
+    try {
+        const { petType, breeds, size } = req.query;
+        const query = {};
+        if (petType) query.petType = petType;
+        if (breeds) query.petBreed = { $in: breeds.split(',') };
+        if (size) {
+            const ranges = { small: [0, 10], medium: [10, 25], large: [25, 999] };
+            const [min, max] = ranges[size];
+            query.petWeight = { $gte: min, $lt: max };
+        }
+        const pets = await db.collection('animals').find(query).toArray();
+        res.json(pets);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 async function profile(req, res) {
     try {
-        const user = await db.collection("users").findOne({
-            id: req.params.id,
-        });
+        const user = await db.collection("users").findOne({ _id: new ObjectId(req.params.id) });
         if (!user) return res.redirect("/register");
-        res.render("profile", { user });
+        const animal = await db.collection("animals").findOne({ ownerId: user._id });
+        res.render("profile", { user, animal });
     } catch (error) {
         console.error(error);
-        res.status(500).send("Profile couldn't be loaded")
+        res.status(500).send("Profile couldn't be loaded");
     }
 }
 
 async function matchesPage(req, res) {
-  try {
-    const currentUserId = new ObjectId(req.params.id);
+    try {
+        const currentUserId = new ObjectId(req.params.id);
+        const currentUser = await db.collection("users").findOne({ _id: currentUserId });
+        if (!currentUser) return res.redirect("/register");
 
-    const currentUser = await db.collection("users").findOne({
-      _id: currentUserId,
-    });
+        const mySwipes = await db.collection("swipes").find({ fromUserId: currentUserId }).toArray();
 
-    if (!currentUser) {
-      return res.redirect("/register");
+        const swipedUserIds = mySwipes
+            .map((swipe) => {
+                if (!swipe.toUserId) return null;
+                if (swipe.toUserId instanceof ObjectId) return swipe.toUserId;
+                try { return new ObjectId(swipe.toUserId); } catch (error) { return null; }
+            })
+            .filter(Boolean);
+
+        swipedUserIds.push(currentUserId);
+
+        const animals = await db.collection("animals").find({
+            ownerId: { $nin: swipedUserIds }
+        }).toArray();
+
+        res.render("matchesPage", { user: currentUser, animals, dogBreeds, catBreeds });
+    } catch (error) {a
+        console.error("matchesPage error:", error);
+        res.status(500).send("Matches page couldn't be loaded");
     }
+}
 
-    const mySwipes = await db.collection("swipes").find({
-      fromUserId: currentUserId
-    }).toArray();
+async function editProfilePage(req, res) {
+    const user = await db.collection('users').findOne({ _id: new ObjectId(req.params.id) })
+    const animal = await db.collection('animals').findOne({ ownerId: user._id })
+    res.render('edit-profile', { user, animal })
+}
 
-    const swipedUserIds = mySwipes
-      .map((swipe) => {
-        if (!swipe.toUserId) return null;
-        if (swipe.toUserId instanceof ObjectId) return swipe.toUserId;
-        try {
-          return new ObjectId(swipe.toUserId);
-        } catch (error) {
-          return null;
+async function editProfilePost(req, res) {
+    const userId = new ObjectId(req.params.id)
+    await db.collection('users').updateOne({ _id: userId }, {
+        $set: {
+            userName: req.body.userName,
+            userCity: req.body.userCity,
+            userPhone: req.body.userPhone || null,
+            isFrequency: req.body.isFrequency,
+            preferPlace: req.body.preferPlace,
         }
-      })
-      .filter(Boolean);
+    })
+    await db.collection('animals').updateOne({ ownerId: userId }, {
+        $set: {
+            petName: req.body.petName,
+            petType: req.body.petType,
+            petBreed: req.body.isBreed,
+            petWeight: Number(req.body.isKilo),
+            ...(req.file && { cover: req.file.filename })
+        }
+    })
+    res.redirect(`/profile/${req.params.id}`)
+}
 
-    swipedUserIds.push(currentUserId);
+async function addPetPage(req, res) {
+    res.render('add-pet', { userId: req.params.id })
+}
 
-    // const animals = await db.collection("users").find({
-    //   _id: { $nin: swipedUserIds }
-    // }).toArray();
+async function addPetPost(req, res) {
+    const userId = new ObjectId(req.params.id)
+    const newAnimal = {
+        ownerId: userId,
+        petName: req.body.petName,
+        petType: req.body.petType,
+        petBreed: req.body.isBreed,
+        petWeight: Number(req.body.isKilo),
+        cover: req.file ? req.file.filename : null,
+        createdAt: new Date()
+    }
+    await db.collection('animals').insertOne(newAnimal)
+    res.redirect(`/profile/${req.params.id}`)
+}
 
-    const animals = await db.collection("animals").find().toArray();
-
-    res.render("matchesPage", { user: currentUser, animals, dogBreeds, catBreeds });
-  } catch (error) {
-    console.error("matchesPage error:", error);
-    res.status(500).send("Matches page couldn't be loaded");
-  }
+async function deleteAccount(req, res) {
+    const userId = new ObjectId(req.params.id)
+    await db.collection('animals').deleteMany({ ownerId: userId })
+    await db.collection('users').deleteOne({ _id: userId })
+    req.session.destroy(() => {
+        res.redirect('/register')
+    })
 }
 
 async function startServer() {
     await connectMongo();
-
     app.listen(port, () => {
         console.log(`Server running on http://localhost:${port}`);
     });
