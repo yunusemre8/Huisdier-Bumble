@@ -236,3 +236,24 @@ footer {
   font-weight: 600;
   margin-bottom: 1.25rem;
 }
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.08);
+  }
+  40% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heart-circle {
+  animation: heartBeat 1.8s ease-in-out infinite;
+}
