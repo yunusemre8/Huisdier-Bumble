@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: #251a79;
+  background-color: #FFC832;
   font-family: 'Nunito', sans-serif;
   display: flex;
   justify-content: center;
@@ -44,41 +44,40 @@ body::after {
 }
 
 .match-screen {
-  position: relative;
   width: 100%;
-  max-width: 28rem;
-  min-height: 52rem;
-  background-color: #FFC832;
-  padding: 4rem 1.5rem 7rem;
-  overflow: hidden;
+  max-width: 430px;
+  min-height: 932px;
+  background: #FFF5D6;
   border-radius: 28px;
+  position: relative;
+  padding: 2rem 1.5rem 7rem;
+  overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
 .match-title {
   color: #A2263D;
-  font-size: 2.1rem;
-  font-weight: 900;
+  font-size: 2.35rem;
   text-align: center;
-  line-height: 1.15;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 900;
+  line-height: 1.05;
 }
-
 .match-profiles {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 2.5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .profile-card {
-  width: 9.5rem;
-  height: 9.5rem;
-  border: 4px solid #dfe4f8;
-  border-radius: 1rem;
+  width: 92px;
+  height: 92px;
+  border-radius: 16px;
   overflow: hidden;
   background: #FFF5D6;
+  border: 4px solid #dfe4f8;
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
@@ -87,15 +86,16 @@ body::after {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
 .heart-circle {
-  width: 4.5rem;
-  height: 4.5rem;
-  background-color: #ff854c;
-  color: #fff;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
+  background: #ff854c;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,29 +105,29 @@ body::after {
 }
 
 .contact-card {
-  background-color: #FFF5D6;
+  background: #FFF5D6;
   border-radius: 20px;
   padding: 1.25rem;
-  margin: 0 auto 1.2rem;
-  max-width: 22.5rem;
+  margin-bottom: 1.4rem;
   position: relative;
-  z-index: 2;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .contact-card h2 {
-  font-size: 1.9rem;
-  margin-bottom: 1rem;
   color: #A2263D;
-  font-weight: 800;
+  font-size: 1.7rem;
+  margin-bottom: 1rem;
+  font-weight: 900;
+  line-height: 1.08;
+  word-break: break-word;
 }
 
 .contact-card p {
-  font-size: 1.2rem;
-  line-height: 1.4;
   color: #A2263D;
-  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
   font-weight: 600;
+  margin-bottom: 1.25rem;
 }
 
 .contact-buttons {
@@ -136,7 +136,9 @@ body::after {
   gap: 0.9rem;
 }
 
-.contact-button {
+.contact-button,
+.whatsapp-disabled,
+.gmail-disabled {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,7 +147,11 @@ body::after {
   padding: 0.95rem 1rem;
   font-weight: 700;
   font-size: 1.1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-button.gmail {
+  background-color: #dfe4f8;
+  color: #251a79;
 }
 
 .contact-button.whatsapp {
@@ -153,9 +159,18 @@ body::after {
   color: #fff;
 }
 
-.contact-button.gmail {
-  background-color: #dfe4f8;
-  color: #251a79;
+.whatsapp-disabled,
+.gmail-disabled {
+  background-color: #cfcfcf;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.phone-message {
+  margin-top: 0.5rem;
+  color: #A2263D;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .park-button {
@@ -174,139 +189,50 @@ body::after {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-.bottom-nav {
-  position: absolute;
+footer {
+  position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-color: #FFF5D6;
+  background: var(--color-background-soft);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 1.2rem 1rem;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
-}
-
-.bottom-nav a {
-  text-decoration: none;
-  color: #A2263D;
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.paw {
-  position: absolute;
-  color: rgba(223, 228, 248, 0.45);
-  font-size: 3rem;
-  z-index: 1;
-}
-
-.paw-left {
-  left: 0.6rem;
-  bottom: 9rem;
-}
-
-.paw-right {
-  right: 0.6rem;
-  bottom: 8.7rem;
-}
-
-.paw-bottom {
-  left: 8rem;
-  bottom: 4.8rem;
-}
-
-.whatsapp-disabled,
-.gmail-disabled {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 18px;
-  padding: 0.95rem 1rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  background-color: #cfcfcf;
-  color: #666;
-  cursor: not-allowed;
-}
-
-.phone-message {
-  margin-top: 0.5rem;
-  color: #A2263D;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-@media (max-width: 480px) {
-  .match-screen {
-    padding: 3rem 1rem 6.5rem;
-    border-radius: 22px;
-  }
-
-  .match-title {
-    font-size: 1.8rem;
-  }
-
-  .profile-card {
-    width: 8rem;
-    height: 8rem;
-  }
-
-  .heart-circle {
-    width: 3.7rem;
-    height: 3.7rem;
-    font-size: 1.6rem;
-  }
-
-  .contact-card p {
-    font-size: 1.05rem;
-  }
-
-  .contact-button,
-  .whatsapp-disabled,
-  .gmail-disabled {
-    font-size: 1rem;
-  }
-}
-
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--color-background-soft);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0.875rem 2.5rem;
-    border-radius: 1.5rem 1.5rem 0 0;
-    box-shadow: 0 -0.25rem 1.25rem rgba(155, 90, 0, 0.15);
-    z-index: 100;
+  padding: 0.875rem 2.5rem;
+  border-radius: 1.5rem 1.5rem 0 0;
+  box-shadow: 0 -0.25rem 1.25rem rgba(155, 90, 0, 0.15);
+  z-index: 100;
 }
 
 .footer-btn {
-    color: var(--color-button-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    border-radius: 50%;
-    text-decoration: none;
-    transition: transform 0.15s, background 0.15s;
+  color: var(--color-button-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
 }
 
 .footer-btn:hover {
-    transform: translateY(-0.1875rem);
-    background: rgba(155, 27, 48, 0.1);
+  transform: translateY(-0.1875rem);
+  background: rgba(155, 27, 48, 0.1);
 }
 
 .footer-btn img {
-    width: 1.75rem;
-    height: 1.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .footer-btn.active {
-    background: rgba(155, 27, 48, 0.12);
+  background: rgba(155, 27, 48, 0.12);
+}
+
+.contact-card p {
+  color: #A2263D;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
 }

@@ -52,28 +52,28 @@ async function connectMongo() {
     }
 }
 
-async function createPasswordHash(password){
-    try{
+async function createPasswordHash(password) {
+    try {
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
         return hashedPassword
-    } catch (error){
+    } catch (error) {
         console.log('Error hashingpassword', error)
     }
 }
 
 function calculateAge(userBirthDate) {
-  const today = new Date()
-  let age = today.getFullYear() - userBirthDate.getFullYear()
+    const today = new Date()
+    let age = today.getFullYear() - userBirthDate.getFullYear()
 
-  const calculateMonth = today.getMonth() - userBirthDate.getMonth()
+    const calculateMonth = today.getMonth() - userBirthDate.getMonth()
 
-  if (calculateMonth < 0 ||
-    (calculateMonth === 0 && today.getDate() < userBirthDate.getDate())
-  ) {
-    age--;
-  }
-  return age
+    if (calculateMonth < 0 ||
+        (calculateMonth === 0 && today.getDate() < userBirthDate.getDate())
+    ) {
+        age--;
+    }
+    return age
 }
 
 app.use(express.urlencoded({ extended: true }));
@@ -89,7 +89,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
         const existingUser = await db.collection('users').findOne({
             userEmail: req.body.userEmail
         })
-        if(existingUser){
+        if (existingUser) {
             return res.send("Email already registered")
         }
 
@@ -114,7 +114,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             location: null,
         };
         const userResult = await db.collection('users').insertOne(newUser)
-        console.log('insertOne result:', userResult)  
+        console.log('insertOne result:', userResult)
         const userId = userResult.insertedId
 
         const newAnimal = {
@@ -131,7 +131,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 
         req.session.userId = userId.toString()
         req.session.save(() => {
-          res.redirect(`/matches/${userId}`)
+            res.redirect(`/matches/${userId}`)
         })
     } catch (error) {
         console.error(error);
@@ -180,7 +180,7 @@ app.post('/save-location', async (req, res) => {
             })
         }
         const result = await db.collection('users').updateOne(
-          { _id: new ObjectId(req.body.id) },
+            { _id: new ObjectId(req.body.id) },
             {
                 $set: {
                     location: {
@@ -212,52 +212,52 @@ app.post('/save-location', async (req, res) => {
 });
 
 app.post("/swipe", async (req, res) => {
-  try {
-      const { fromUserId, toUserId, action } = req.body;
-      if (!fromUserId || !toUserId || !action) {
-          return res.status(400).json({ success: false, message: "fromUserId, toUserId en action zijn verplicht" });
-      }
-      if (!["like", "dislike"].includes(action)) {
-          return res.status(400).json({ success: false, message: "Ongeldige action" });
-      }
-      if (fromUserId === toUserId) {
-          return res.status(400).json({ success: false, message: "Je kunt niet op jezelf swipen" });
-      }
+    try {
+        const { fromUserId, toUserId, action } = req.body;
+        if (!fromUserId || !toUserId || !action) {
+            return res.status(400).json({ success: false, message: "fromUserId, toUserId en action zijn verplicht" });
+        }
+        if (!["like", "dislike"].includes(action)) {
+            return res.status(400).json({ success: false, message: "Ongeldige action" });
+        }
+        if (fromUserId === toUserId) {
+            return res.status(400).json({ success: false, message: "Je kunt niet op jezelf swipen" });
+        }
 
-      const fromObjectId = new ObjectId(fromUserId);
-      const toObjectId = new ObjectId(toUserId);
+        const fromObjectId = new ObjectId(fromUserId);
+        const toObjectId = new ObjectId(toUserId);
 
-      const result = await db.collection("swipes").updateOne(
-          { fromUserId: fromObjectId, toUserId: toObjectId },
-          { $set: { fromUserId: fromObjectId, toUserId: toObjectId, action: action, createdAt: new Date() } },
-          { upsert: true }
-      );
+        const result = await db.collection("swipes").updateOne(
+            { fromUserId: fromObjectId, toUserId: toObjectId },
+            { $set: { fromUserId: fromObjectId, toUserId: toObjectId, action: action, createdAt: new Date() } },
+            { upsert: true }
+        );
 
-      let isMatch = false;
-      if (action === "like") {
-          const reverseLike = await db.collection("swipes").findOne({
-              fromUserId: toObjectId,
-              toUserId: fromObjectId,
-              action: "like"
-          });
-          if (reverseLike) {
-              isMatch = true;
-              const existingMatch = await db.collection("matches").findOne({
-                  users: { $all: [fromObjectId, toObjectId] }
-              });
-              if (!existingMatch) {
-                  await db.collection("matches").insertOne({
-                      users: [fromObjectId, toObjectId],
-                      createdAt: new Date()
-                  });
-              }
-          }
-      }
-      res.json({ success: true, isMatch });
-  } catch (error) {
-      console.error("Fout in /swipe route:", error);
-      res.status(500).json({ success: false, message: "Server error" });
-  }
+        let isMatch = false;
+        if (action === "like") {
+            const reverseLike = await db.collection("swipes").findOne({
+                fromUserId: toObjectId,
+                toUserId: fromObjectId,
+                action: "like"
+            });
+            if (reverseLike) {
+                isMatch = true;
+                const existingMatch = await db.collection("matches").findOne({
+                    users: { $all: [fromObjectId, toObjectId] }
+                });
+                if (!existingMatch) {
+                    await db.collection("matches").insertOne({
+                        users: [fromObjectId, toObjectId],
+                        createdAt: new Date()
+                    });
+                }
+            }
+        }
+        res.json({ success: true, isMatch });
+    } catch (error) {
+        console.error("Fout in /swipe route:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
 });
 
 async function profile(req, res) {
@@ -281,32 +281,32 @@ async function profile(req, res) {
 
 // eski matchesPage fonksiyonunu bununla değiştir
 async function matchesPage(req, res) {
-  try {
-      const currentUserId = new ObjectId(req.params.id);
-      const currentUser = await db.collection("users").findOne({ _id: currentUserId });
-      if (!currentUser) return res.redirect("/register");
+    try {
+        const currentUserId = new ObjectId(req.params.id);
+        const currentUser = await db.collection("users").findOne({ _id: currentUserId });
+        if (!currentUser) return res.redirect("/register");
 
-      const mySwipes = await db.collection("swipes").find({ fromUserId: currentUserId }).toArray();
+        const mySwipes = await db.collection("swipes").find({ fromUserId: currentUserId }).toArray();
 
-      const swipedUserIds = mySwipes
-          .map((swipe) => {
-              if (!swipe.toUserId) return null;
-              if (swipe.toUserId instanceof ObjectId) return swipe.toUserId;
-              try { return new ObjectId(swipe.toUserId); } catch (error) { return null; }
-          })
-          .filter(Boolean);
+        const swipedUserIds = mySwipes
+            .map((swipe) => {
+                if (!swipe.toUserId) return null;
+                if (swipe.toUserId instanceof ObjectId) return swipe.toUserId;
+                try { return new ObjectId(swipe.toUserId); } catch (error) { return null; }
+            })
+            .filter(Boolean);
 
-      swipedUserIds.push(currentUserId);
+        swipedUserIds.push(currentUserId);
 
-      const animals = await db.collection("animals").find({
-          ownerId: { $nin: swipedUserIds }
-      }).toArray();
+        const animals = await db.collection("animals").find({
+            ownerId: { $nin: swipedUserIds }
+        }).toArray();
 
-      res.render("matchesPage", { user: currentUser, animals, dogBreeds, catBreeds });
-  } catch (error) {
-      console.error("matchesPage error:", error);
-      res.status(500).send("Matches page couldn't be loaded");
-  }
+        res.render("matchesPage", { user: currentUser, animals, dogBreeds, catBreeds });
+    } catch (error) {
+        console.error("matchesPage error:", error);
+        res.status(500).send("Matches page couldn't be loaded");
+    }
 }
 
 const dogBreeds = ['Labrador', 'Golden Retriever', 'Poodle', 'Border Collie', 'Beagle', 'French Bulldog'];
@@ -317,43 +317,43 @@ router.get('/filter', filterPage);
 
 
 app.get('/api/pets', async (req, res) => {
-  try {
-      const { petType, breeds, size, frequency, place, city } = req.query;
+    try {
+        const { petType, breeds, size, frequency, place, city } = req.query;
 
-      const matchAnimal = {};
-      const matchOwner = {};
+        const matchAnimal = {};
+        const matchOwner = {};
 
-      if (petType) matchAnimal.petType = petType;
-      if (breeds) matchAnimal.petBreed = { $in: breeds.split(',') };
-      if (size) {
-          const ranges = { small: [0, 10], medium: [10, 25], large: [25, 999] };
-          const [min, max] = ranges[size];
-          matchAnimal.petWeight = { $gte: min, $lt: max };
-      }
+        if (petType) matchAnimal.petType = petType;
+        if (breeds) matchAnimal.petBreed = { $in: breeds.split(',') };
+        if (size) {
+            const ranges = { small: [0, 10], medium: [10, 25], large: [25, 999] };
+            const [min, max] = ranges[size];
+            matchAnimal.petWeight = { $gte: min, $lt: max };
+        }
 
-      if (frequency) matchOwner['owner.isFrequency'] = frequency;
-      if (place) matchOwner['owner.preferPlace'] = place;
-      if (city) matchOwner['owner.userCity'] = { $regex: city, $options: 'i' };
+        if (frequency) matchOwner['owner.isFrequency'] = frequency;
+        if (place) matchOwner['owner.preferPlace'] = place;
+        if (city) matchOwner['owner.userCity'] = { $regex: city, $options: 'i' };
 
-      const pets = await db.collection('animals').aggregate([
-          { $match: matchAnimal },
-          {
-              $lookup: {
-                  from: 'users',
-                  localField: 'ownerId',
-                  foreignField: '_id',
-                  as: 'owner'
-              }
-          },
-          { $unwind: '$owner' },
-          { $match: matchOwner }
-      ]).toArray();
+        const pets = await db.collection('animals').aggregate([
+            { $match: matchAnimal },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'ownerId',
+                    foreignField: '_id',
+                    as: 'owner'
+                }
+            },
+            { $unwind: '$owner' },
+            { $match: matchOwner }
+        ]).toArray();
 
-      res.json(pets);
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Server error' });
-  }
+        res.json(pets);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 function filterPage(req, res) {
@@ -365,108 +365,100 @@ function filterPage(req, res) {
 }
 
 async function editProfilePage(req, res) {
-  const user = await db.collection('users').findOne({ _id: new ObjectId(req.params.id) })
-  const animal = await db.collection('animals').findOne({ ownerId: user._id })
-  res.render('edit-profile', { user, animal })
+    const user = await db.collection('users').findOne({ _id: new ObjectId(req.params.id) })
+    const animal = await db.collection('animals').findOne({ ownerId: user._id })
+    res.render('edit-profile', { user, animal })
 }
 
 async function editProfilePost(req, res) {
-  const userId = new ObjectId(req.params.id)
+    const userId = new ObjectId(req.params.id)
 
-  await db.collection('users').updateOne({ _id: userId }, {
-      $set: {
-          userName: req.body.userName,
-          userCity: req.body.userCity,
-          userPhone: req.body.userPhone || null,
-          isFrequency: req.body.isFrequency,
-          preferPlace: req.body.preferPlace,
-      }
-  })
+    await db.collection('users').updateOne({ _id: userId }, {
+        $set: {
+            userName: req.body.userName,
+            userCity: req.body.userCity,
+            userPhone: req.body.userPhone || null,
+            isFrequency: req.body.isFrequency,
+            preferPlace: req.body.preferPlace,
+        }
+    })
 
-  await db.collection('animals').updateOne({ ownerId: userId }, {
-      $set: {
-          petName: req.body.petName,
-          petType: req.body.petType,
-          petBreed: req.body.isBreed,
-          petWeight: Number(req.body.isKilo),
-          ...(req.file && { cover: req.file.filename })
-      }
-  })
+    await db.collection('animals').updateOne({ ownerId: userId }, {
+        $set: {
+            petName: req.body.petName,
+            petType: req.body.petType,
+            petBreed: req.body.isBreed,
+            petWeight: Number(req.body.isKilo),
+            ...(req.file && { cover: req.file.filename })
+        }
+    })
 
-  res.redirect(`/profile/${req.params.id}`)
+    res.redirect(`/profile/${req.params.id}`)
 }
 
 async function addPetPage(req, res) {
-  res.render('add-pet', { userId: req.params.id })
+    res.render('add-pet', { userId: req.params.id })
 }
 
 async function addPetPost(req, res) {
-  const userId = new ObjectId(req.params.id)
+    const userId = new ObjectId(req.params.id)
 
-  const newAnimal = {
-      ownerId: userId,
-      petName: req.body.petName,
-      petType: req.body.petType,
-      petBreed: req.body.isBreed,
-      petWeight: Number(req.body.isKilo),
-      cover: req.file ? req.file.filename : null,
-      createdAt: new Date()
-  }
+    const newAnimal = {
+        ownerId: userId,
+        petName: req.body.petName,
+        petType: req.body.petType,
+        petBreed: req.body.isBreed,
+        petWeight: Number(req.body.isKilo),
+        cover: req.file ? req.file.filename : null,
+        createdAt: new Date()
+    }
 
-  await db.collection('animals').insertOne(newAnimal)
-  res.redirect(`/profile/${req.params.id}`)
+    await db.collection('animals').insertOne(newAnimal)
+    res.redirect(`/profile/${req.params.id}`)
 }
 
 async function showYourMatches(req, res) {
-  try {
-    const currentUserId = req.session.userId;
-    let matches = await db.collection('users').find().toArray();
-
-    if (currentUserId && ObjectId.isValid(currentUserId)) {
-      matches = matches.filter(
-        (u) => u._id.toString() !== currentUserId.toString()
-      );
+    try {
+        const currentUserId = req.session.userId; let matches =
+            await db.collection('users').find().toArray();
+        if (currentUserId && ObjectId.isValid(currentUserId)) {
+            matches = matches.filter((u) => u._id.toString() !== currentUserId.toString());
+        } const user = currentUserId ?
+            await db.collection('users').findOne({ _id: new ObjectId(currentUserId) }) : null; res.render("yourmatches", { matches, user });
     }
-
-    const user = currentUserId ? await db.collection('users').findOne({ _id: new ObjectId(currentUserId) }) : null;
-
-    res.render("yourmatches", { matches, user });
-  } catch (error) {
-    console.error("Fout in yourmatches route:", error.message);
-    res.status(500).send("Er ging iets mis bij het ophalen van de matches.");
-  }
+    catch (error) { console.error("Fout in yourmatches route:", error.message); res.status(500).send("Er ging iets mis bij het ophalen van de matches."); }
 }
 
 async function showContact(req, res) {
-  try {
-    const ownerId = req.params.ownerId;
-    if (!ObjectId.isValid(ownerId)) return res.status(400).send("Ongeldige gebruiker-id.");
+    try {
+        const ownerId = req.params.ownerId;
+        if (!ObjectId.isValid(ownerId)) return res.status(400).send("Ongeldige gebruiker-id.");
 
-    const matchUser = await db.collection('users').findOne({ _id: new ObjectId(ownerId) });
-    if (!matchUser) return res.status(404).send("Match gebruiker niet gevonden");
+        const matchUser = await db.collection('users').findOne({ _id: new ObjectId(ownerId) });
+        if (!matchUser) return res.status(404).send("Match gebruiker niet gevonden");
 
-    let user = null;
-    if (req.session.userId && ObjectId.isValid(req.session.userId)) {
-      user = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
+        let user = null;
+        if (req.session.userId && ObjectId.isValid(req.session.userId)) {
+            user = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
+        }
+        if (!user) user = matchUser;
+
+        res.render("contact", { matchUser, user });
+    } catch (error) {
+        console.error("Fout in contact route:", error.message);
+        res.status(500).send("Er ging iets mis.");
     }
-    if (!user) user = matchUser;
-
-    res.render("contact", { matchUser, user });
-  } catch (error) {
-    console.error("Fout in contact route:", error.message);
-    res.status(500).send("Er ging iets mis.");
-  }
 }
 
 async function deleteAccount(req, res) {
-  const userId = new ObjectId(req.params.id)
-  
-  await db.collection('animals').deleteMany({ ownerId: userId })
-  await db.collection('users').deleteOne({ _id: userId })
-  
-  req.session.destroy(() => {
-    res.redirect('/register')
-  })
+    const userId = new ObjectId(req.params.id)
+
+    await db.collection('animals').deleteMany({ ownerId: userId })
+    await db.collection('users').deleteOne({ _id: userId })
+
+    req.session.destroy(() => {
+        res.redirect('/register')
+    })
 }
 
 async function startServer() {

@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: #251a79;
+  background-color: #FFC832;
   font-family: 'Nunito', sans-serif;
   display: flex;
   justify-content: center;
@@ -47,7 +47,7 @@ body::after {
   width: 100%;
   max-width: 430px;
   min-height: 932px;
-  background: #FFC832;
+  background: #FFF5D6;
   border-radius: 28px;
   position: relative;
   padding: 2rem 1.5rem 7rem;
@@ -149,7 +149,7 @@ body::after {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #FFF5D6;
+  background: #ffd865;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   display: flex;
