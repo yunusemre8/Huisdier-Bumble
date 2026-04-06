@@ -14,8 +14,8 @@
       <div class="match-profiles">
         <article class="profile-card">
           <img
-            src="<%= currentUser.cover ? '/upload/' + currentUser.cover : '/images/default-profile.png' %>"
-            alt="<%= currentUser.userNickname || 'Jouw profiel' %>"
+            src="<%= typeof currentUser !== 'undefined' && currentUser && currentUser.cover ? '/upload/' + currentUser.cover : '/images/default-profile.png' %>"
+            alt="<%= typeof currentUser !== 'undefined' && currentUser && currentUser.userNickname ? currentUser.userNickname : 'Jouw profiel' %>"
           />
         </article>
 
@@ -23,8 +23,8 @@
 
         <article class="profile-card">
           <img
-            src="<%= matchUser.cover ? '/upload/' + matchUser.cover : '/images/default-profile.png' %>"
-            alt="<%= matchUser.userNickname || matchUser.userName || 'Match' %>"
+            src="<%= typeof matchUser !== 'undefined' && matchUser && matchUser.cover ? '/upload/' + matchUser.cover : '/images/default-profile.png' %>"
+            alt="<%= typeof matchUser !== 'undefined' && matchUser && (matchUser.userNickname || matchUser.userName) ? (matchUser.userNickname || matchUser.userName) : 'Match' %>"
           />
         </article>
       </div>
@@ -37,10 +37,10 @@
         </p>
 
         <%
-          const name = matchUser.userNickname || matchUser.userName || "";
-          const email = matchUser.email || matchUser.userEmail || "";
-          const phone = matchUser.phone || matchUser.userPhone || "";
-          const city = matchUser.userCity || matchUser.city || "Amsterdam";
+          const name = (typeof matchUser !== 'undefined' && matchUser && (matchUser.userNickname || matchUser.userName)) ? (matchUser.userNickname || matchUser.userName) : "";
+          const email = (typeof matchUser !== 'undefined' && matchUser && (matchUser.email || matchUser.userEmail)) ? (matchUser.email || matchUser.userEmail) : "";
+          const phone = (typeof matchUser !== 'undefined' && matchUser && (matchUser.phone || matchUser.userPhone)) ? (matchUser.phone || matchUser.userPhone) : "";
+          const city = (typeof matchUser !== 'undefined' && matchUser && (matchUser.userCity || matchUser.city)) ? (matchUser.userCity || matchUser.city) : "Amsterdam";
         %>
 
         <div class="contact-buttons">

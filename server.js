@@ -127,7 +127,7 @@ async function showContact(req, res) {
     });
 
     if (!matchUser) {
-      return res.status(404).send("Match gebruiker niet gevonden.");
+      return res.status(404).send("Match gebruiker niet gevonden");
     }
 
     let currentUser = null;
