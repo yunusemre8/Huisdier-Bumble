@@ -1,88 +1,93 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact</title>
-    <link rel="stylesheet" href="/contact.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact</title>
+  <link rel="stylesheet" href="/contact.css" />
 </head>
-
 <body>
-    <main class="match-page">
-        <section class="match-screen">
-            <h1 class="match-title">You found your match!</h1>
+  <main class="match-page">
+    <section class="match-screen">
+      <h1 class="match-title">You found your match!</h1>
 
-            <div class="match-profiles">
-                <article class="profile-card">
-                    <img src="/images/lisaprofiel 2.png" alt="Jouw profiel" />
-                </article>
+      <div class="match-profiles">
+        <article class="profile-card">
+          <img src="/images/lisaprofiel 2.png" alt="Jouw profiel" />
+        </article>
 
-                <div class="heart-circle">♥</div>
+        <div class="heart-circle">♥</div>
 
-                <article class="profile-card">
-                    <img src="/images/emmaprofiel 2.png"
-                        alt="<%= matchUser.userNickname || matchUser.userName || 'Match' %>" />
-                </article>
-            </div>
+        <article class="profile-card">
+          <img
+            src="/images/emmaprofiel 2.png"
+            alt="<%= matchUser.userNickname || matchUser.userName || 'Match' %>"
+          />
+        </article>
+      </div>
 
-            <section class="contact-card">
-                <h2>Deel je contactgegevens</h2>
-                <p>
-                    Jullie zijn gematcht! Deel eenvoudig je contactgegevens en praat verder over het plannen van een
-                    leuke playdate.
-                </p>
+      <section class="contact-card">
+        <h2>Deel je contactgegevens</h2>
+        <p>
+          Jullie zijn gematcht! Deel eenvoudig je contactgegevens en praat verder
+          over het plannen van een leuke playdate.
+        </p>
 
-                <%
-                    const name = matchUser.userNickname || matchUser.userName || "";
-                    const email = matchUser.email || matchUser.userEmail || "";
-                    const phone = matchUser.phone || matchUser.userPhone || "";
-                    const city = matchUser.userCity || matchUser.city || "Amsterdam";
-                %>
+        <%
+          const name = matchUser.userNickname || matchUser.userName || "";
+          const email = matchUser.email || matchUser.userEmail || "";
+          const phone = matchUser.phone || matchUser.userPhone || "";
+          const city = matchUser.userCity || matchUser.city || "Amsterdam";
+        %>
 
-                <div class="contact-buttons">
-                    <% if (email && email.trim() !== "") { %>
-                        <a class="contact-button gmail"
-                            href="mailto:<%= email %>?subject=Leuk%20dat%20we%20gematcht%20zijn&body=Hoi%20<%= name %>,%0D%0A%0D%0ALeuk%20dat%20we%20gematcht%20zijn!%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F">
-                            <span>Gmail</span>
-                            <span>&gt;</span>
-                        </a>
-                    <% } else { %>
-                        <div class="contact-button gmail-disabled">
-                            <span>Gmail</span>
-                            <span>!</span>
-                        </div>
-                    <% } %>
-
-                    <% if (phone && phone.trim() !== "") { %>
-                        <a class="contact-button whatsapp"
-                            href="https://wa.me/<%= phone %>?text=Hoi%20<%= name %>!%20Leuk%20dat%20we%20gematcht%20zijn.%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F"
-                            target="_blank">
-                            <span>Whatsapp</span>
-                            <span>&gt;</span>
-                        </a>
-                    <% } else { %>
-                        <div class="contact-button whatsapp-disabled">
-                            <span>Whatsapp</span>
-                            <span>!</span>
-                        </div>
-                    <% } %>
-                </div>
-            </section>
-
-            <a class="park-button"
-                href="https://www.google.com/maps/search/dog+park+<%= encodeURIComponent(city) %>"
-                target="_blank">
-                Find the perfect park 🐾
+        <div class="contact-buttons">
+          <% if (email && email.trim() !== "") { %>
+            <a
+              class="contact-button gmail"
+              href="mailto:<%= email %>?subject=Leuk%20dat%20we%20gematcht%20zijn&body=Hoi%20<%= name %>,%0D%0A%0D%0ALeuk%20dat%20we%20gematcht%20zijn!%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F"
+            >
+              <span>Gmail</span>
+              <span>&gt;</span>
             </a>
+          <% } else { %>
+            <div class="contact-button gmail-disabled">
+              <span>Gmail</span>
+              <span>!</span>
+            </div>
+          <% } %>
 
-            <nav class="bottom-nav">
-                <a href="/" aria-label="Home">☝</a>
-                <a href="/yourmatches" aria-label="Matches">💬</a>
-                <a href="#" aria-label="Profiel">◯</a>
-            </nav>
-        </section>
-    </main>
+          <% if (phone && phone.trim() !== "") { %>
+            <a
+              class="contact-button whatsapp"
+              href="https://wa.me/<%= phone %>?text=Hoi%20<%= name %>!%20Leuk%20dat%20we%20gematcht%20zijn.%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F"
+              target="_blank"
+            >
+              <span>Whatsapp</span>
+              <span>&gt;</span>
+            </a>
+          <% } else { %>
+            <div class="contact-button whatsapp-disabled">
+              <span>Whatsapp</span>
+              <span>!</span>
+            </div>
+          <% } %>
+        </div>
+      </section>
+
+      <a
+        class="park-button"
+        href="https://www.google.com/maps/search/dog+park+<%= encodeURIComponent(city) %>"
+        target="_blank"
+      >
+        Find the perfect park 🐾
+      </a>
+
+      <nav class="bottom-nav">
+        <a href="/" aria-label="Home">☝</a>
+        <a href="/yourmatches" aria-label="Matches">💬</a>
+        <a href="#" aria-label="Profiel">◯</a>
+      </nav>
+    </section>
+  </main>
 </body>
-
 </html>

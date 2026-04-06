@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your matches</title>
   <link rel="stylesheet" href="/yourmatches.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 <body>
   <main class="matches-page">
@@ -18,29 +18,28 @@
 
         <% if (matches.length === 0) { %>
           <p>Je hebt nog geen matches.</p>
-        <% } %>
+        <% } else { %>
+          <% matches.forEach((match) => { %>
+            <article class="match-item">
+              <button type="button" class="remove-btn">X</button>
 
-        <% matches.forEach(match => { %>
-          <article class="match-item">
-            <button class="remove-btn">X</button>
+              <div class="match-left">
+                <img
+                  class="match-image"
+                  src="<%= match.cover ? '/upload/' + match.cover : '/images/sophie 2.png' %>"
+                  alt="<%= match.userNickname || match.userName %>"
+                />
 
-            <div class="match-left">
-              <img
-                src="<%= match.cover ? '/upload/' + match.cover : '/images/sophie 2.png' %>"
-                alt="<%= match.userNickname %>"
-                class="match-image"
-              />
-
-              <div class="match-info">
-                <h2><%= match.userNickname %></h2>
-                <p><%= match.petName %></p>
-                <p><%= match.email %></p>
+                <div class="match-info">
+                  <h2><%= match.userNickname || match.userName %></h2>
+                  <p><%= match.petName %></p>
+                </div>
               </div>
-            </div>
 
-            <a href="/contact/<%= match._id %>" class="heart-button">♥</a>
-          </article>
-        <% }) %>
+              <a href="/contact/<%= match._id %>" class="heart-button">♥</a>
+            </article>
+          <% }) %>
+        <% } %>
       </section>
 
       <nav class="bottom-nav">
