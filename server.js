@@ -201,7 +201,7 @@ app.post("/login", async (req, res) => {
         }
 
         req.session.userId = user._id.toString();
-        return res.redirect(`/profile/${user._id}`);
+        return res.redirect(`/matchesPage/${user._id}`);
     } catch (error) {
         console.error(error);
         res.status(500).send("Login error");
