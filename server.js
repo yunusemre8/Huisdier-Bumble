@@ -150,6 +150,8 @@ router.post('/edit-profile/:id', upload.single('cover'), editProfilePost)
 router.get('/add-pet/:id', addPetPage)
 router.post('/add-pet/:id', upload.single('cover'), addPetPost)
 router.post('/delete-account/:id', deleteAccount)
+router.get('/yourmatches', showYourMatches)
+router.get('/contact/:ownerId', showContact)
 
 app.use('/', router);
 
@@ -415,6 +417,58 @@ async function addPetPost(req, res) {
   res.redirect(`/profile/${req.params.id}`)
 }
 
+async function showYourMatches(req, res) {
+  try {
+    const currentUserId = req.session.userId;
+    let matches = await db.collection('users').find().toArray();
+
+    if (currentUserId && ObjectId.isValid(currentUserId)) {
+      matches = matches.filter(
+        (u) => u._id.toString() !== currentUserId.toString()
+      );
+    }
+
+    const user = currentUserId ? await db.collection('users').findOne({ _id: new ObjectId(currentUserId) }) : null;
+
+    res.render("yourmatches", { matches, user });
+  } catch (error) {
+    console.error("Fout in yourmatches route:", error.message);
+    res.status(500).send("Er ging iets mis bij het ophalen van de matches.");
+  }
+}
+
+async function showContact(req, res) {
+  try {
+    const ownerId = req.params.ownerId;
+    if (!ObjectId.isValid(ownerId)) return res.status(400).send("Ongeldige gebruiker-id.");
+
+    const matchUser = await db.collection('users').findOne({ _id: new ObjectId(ownerId) });
+    if (!matchUser) return res.status(404).send("Match gebruiker niet gevonden");
+
+    let user = null;
+    if (req.session.userId && ObjectId.isValid(req.session.userId)) {
+      user = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
+    }
+    if (!user) user = matchUser;
+
+    res.render("contact", { matchUser, user });
+  } catch (error) {
+    console.error("Fout in contact route:", error.message);
+    res.status(500).send("Er ging iets mis.");
+  }
+}
+
+async function deleteAccount(req, res) {
+  const userId = new ObjectId(req.params.id)
+  
+  await db.collection('animals').deleteMany({ ownerId: userId })
+  await db.collection('users').deleteOne({ _id: userId })
+  
+  req.session.destroy(() => {
+    res.redirect('/register')
+  })
+}
+
 async function startServer() {
     await connectMongo();
 
@@ -423,25 +477,7 @@ async function startServer() {
     });
 }
 
-async function deleteAccount(req, res) {
-  const userId = new ObjectId(req.params.id)
-
-  await db.collection('animals').deleteMany({ ownerId: userId })
-  await db.collection('users').deleteOne({ _id: userId })
-
-  req.session.destroy(() => {
-      res.redirect('/register')
-  })
-}
-
-
 startServer();
 
 
 //https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/routes
-
-
-// edit profile: register sorularini defistir
-// another pet/delete your pet
-// delete youyr account
-// locatie opslaan
