@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profiel</title>
+    <title>Profile</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="/profile.css">
 </head>
 <body>
     <div class="card">
         <div class="card-header">
-            <h1>Profiel</h1>
+            <h1>Profile</h1>
             <button class="settings-btn" id="settingsBtn">⚙️</button>
         </div>
         
         <div class="settings-menu" id="settingsMenu">
-            <a href="/edit-profile/<%= user._id %>">✏️ Profiel bewerken</a>
-            <a href="/add-pet/<%= user._id %>">🐾 Huisdier toevoegen</a>
-            <a href="/changePassword/<%= user._id %>">🔑 Wachtwoord wijzigen</a>
-            <button id="deleteAccountBtn">🗑️ Account verwijderen</button>
+            <a href="/edit-profile/<%= user._id %>">Edit your profile</a>
+            <a href="/add-pet/<%= user._id %>">🐾 Add another pet</a>
+            <a href="/changePassword/<%= user._id %>">🔑 Change password</a>
+            <button id="deleteAccountBtn">Delete your account</button>
         </div>
 
         <div class="user-info">
@@ -39,8 +39,8 @@
         <% } %>
 
         <div class="actions">
-            <button id="locationBtn">📍 Locatie opslaan</button>
-            <a href="/register">Opnieuw registreren</a>
+            <button id="locationBtn">Share your location</button>
+            <a href="/register">Register again</a>
         </div>
     </div>
     <%- include('partials/footer', { user: user }) %>
