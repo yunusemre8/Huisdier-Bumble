@@ -82,7 +82,7 @@ app.use(express.json())
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
-app.use(express.static("static")); //user's images
+app.use(express.static("static"));
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
@@ -143,7 +143,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 router.get('/', home)
 router.get('/register', register)
 router.get('/profile/:id', profile)
-// router.get('/matches/:id', uservalidate, matchesPage)
+router.get('/matches/:id', uservalidate, matchesPage)
 router.get('/matches/:id', matchesPage)
 router.get('/edit-profile/:id', editProfilePage)
 router.post('/edit-profile/:id', upload.single('cover'), editProfilePost)
@@ -155,12 +155,6 @@ router.get('/contact/:ownerId', showContact)
 
 app.use('/', router);
 
-// app.use('/', uservalidate, register, profile, matchesPage)
-
-// app.get('/', home)
-// app.get('/register', register)
-// app.get('/profile/:id', profile)
-// app.get('/matches/:id', matchesPage);
 
 
 function home(req, res) {
@@ -279,7 +273,6 @@ async function profile(req, res) {
     }
 }
 
-// eski matchesPage fonksiyonunu bununla değiştir
 async function matchesPage(req, res) {
     try {
         const currentUserId = new ObjectId(req.params.id);
@@ -470,6 +463,3 @@ async function startServer() {
 }
 
 startServer();
-
-
-//https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/routes
