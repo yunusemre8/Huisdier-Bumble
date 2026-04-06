@@ -1,21 +1,11 @@
 <footer>
-<<<<<<< HEAD
-    <a href="<%= user ? '/matches/' + user._id : '/register' %>" class="footer-btn">
+    <a href="/matches/<%= user._id %>" class="footer-btn">
         <img src="/images/match.png" alt="match">
     </a>
     <a href="/yourmatches" class="footer-btn">
-        <img src="/images/chat.png" alt="chat">
-    </a>
-    <a href="<%= user ? '/profile/' + user._id : '/register' %>" class="footer-btn">
-=======
-    <a href="/filter" class="footer-btn">
-        <img src="/images/match.png" alt="match">
-    </a>
-    <a href="/matches/<%= user._id %>" class="footer-btn">
-        <img src="/images/chat.png" alt="chat">
+        <img src="/images/heart.png" alt="chat">
     </a>
     <a href="/profile/<%= user._id %>" class="footer-btn">
->>>>>>> ceren/merge-1
         <img src="/images/profile.png" alt="profiel">
     </a>
 </footer>
