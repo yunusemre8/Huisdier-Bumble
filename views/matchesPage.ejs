@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matches</title>
+    <meta name="description" content="Matches page">
+    <link rel="stylesheet" href="/matches.css">
+</head>
+
+<body data-user-id="<%= user._id %>">
+    <div class="swipe-hint" id="swipeHint">
+        <img src="/images/match.png" alt="swipe">
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+        <h2>Filters</h2>
+        <button id="close-button">X</button>
+    
+        <section>
+            <label>Pet Type</label>
+            <button class="type-button" data-type="dog">Dog</button>
+            <button class="type-button" data-type="cat">Cat</button>
+        </section>
+    
+        <section>
+            <label>Breed</label>
+            <div class="chip-group" id="breed-chips"></div>
+        </section>
+    
+        <section>
+            <label>Weight</label>
+            <div class="chip-group">
+                <button class="single-chip" data-size="small">0 – 10 kg</button>
+                <button class="single-chip" data-size="medium">10 – 25 kg</button>
+                <button class="single-chip" data-size="large">25+ kg</button>
+            </div>
+        </section>
+    
+        <section>
+            <label>Meetup frequency</label>
+            <div class="chip-group">
+                <button class="frequency-chip" data-frequency="weekly">Weekly</button>
+                <button class="frequency-chip" data-frequency="everyFewWeeks">Every few weeks</button>
+                <button class="frequency-chip" data-frequency="occasionally">Occasionally</button>
+                <button class="frequency-chip" data-frequency="flexibel">Flexible</button>
+            </div>
+        </section>
+    
+        <section>
+            <label>Meetup place</label>
+            <div class="chip-group">
+                <button class="place-chip" data-place="isOutdoor">Outdoor</button>
+                <button class="place-chip" data-place="isGarden">Garden</button>
+                <button class="place-chip" data-place="isHome">At home</button>
+                <button class="place-chip" data-place="isCafe">Café</button>
+            </div>
+        </section>
+    
+        <section>
+            <label>City</label>
+            <input type="text" id="city-input" placeholder="e.g. Amsterdam">
+        </section>
+        <button id="reset-button">Reset filters</button>
+        <button id="apply-button">Show Results</button>
+    </aside>
+    
+    <h1 class="titlematchpage">Find your match</h1>
+    
+    <button class="locationbtn" type="button" id="locationBtn">
+        <img src="/images/locationpoint.png" alt="Location button">
+      </button>
+    
+    <button class="filterbtn" type="button" id="open-button">
+      <img src="/images/filterbutton.png" alt="Filter button">
+    </button>
+    
+    <div class="cards" id="results">
+      <% animals.forEach(animal => { %>
+        <article class="card" data-owner-id="<%= animal._id %>">
+          <div class="card-inner">
+            <div class="card-front">
+              <img class="matchingimages" src="/upload/<%= animal.cover %>" alt="<%= animal.petName || 'Animal' %>">
+              <button class="dislikebtn" type="button">
+                <img src="/images/trashcan.png" alt="Delete button">
+              </button>
+              <button class="likebtn" type="button">
+                <img src="/images/yellowheart.png" alt="Heart button">
+              </button>
+            </div>
+            <div class="card-back">
+              <h2><%= animal.petName || 'Naam onbekend' %></h2>
+              <p><strong>Soort:</strong> <%= animal.petType || 'Onbekend' %></p>
+              <p><strong>Ras:</strong> <%= animal.petBreed || 'Onbekend' %></p>
+              <p><strong>Gewicht:</strong> <%= animal.petWeight || 'Onbekend' %></p>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+    
+    <script src="/script.js"></script>
+    <script src="/filter.js"></script>
+    </body>
+    <%- include('partials/footer', { user: user }) %>
+</html>

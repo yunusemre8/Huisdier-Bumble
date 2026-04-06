@@ -1,0 +1,11 @@
+<footer>
+    <a href="<%= user ? '/matches/' + user._id : '/register' %>" class="footer-btn">
+        <img src="/images/match.png" alt="match">
+    </a>
+    <a href="/yourmatches" class="footer-btn">
+        <img src="/images/chat.png" alt="chat">
+    </a>
+    <a href="<%= user ? '/profile/' + user._id : '/register' %>" class="footer-btn">
+        <img src="/images/profile.png" alt="profiel">
+    </a>
+</footer>

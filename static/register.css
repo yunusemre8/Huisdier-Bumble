@@ -1,0 +1,198 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{
+    --font-body: 'Nunito', sans-serif;
+    /* --font-heading:; */
+    --color-background: hsl(42 97.7 65.9);
+    --color-text: hsl(241 0 5);
+    --color-background-button: hsl(349 62 39.2);
+    --color-text-button: hsl(360 0 98.9);
+    --color-background-card: hsl(349 62 70);
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+body::before,
+body::after {
+    content: '🐾';
+    font-size: 2em;
+    opacity: 0.25;
+    position: fixed;
+    pointer-events: none;
+}
+body::before {
+    bottom: 180px;
+    left: 20px;
+}
+body::after {
+    top: 18rem;
+    right: .8rem;
+    font-size: 2rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #A2263D;
+    margin-bottom: 1rem;
+}
+
+.welcome-text {
+    font-size: 1.05rem;
+    color: #2c2c2c;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 21rem;
+    text-align: left;
+    width: 100%;
+}
+
+h2.step-question {
+    color: #A2263D;
+    margin-bottom: 1em;
+}
+
+.name-input {
+    position: relative;
+    width: 100%;
+    max-width: 21rem;
+    margin-bottom: 3rem;
+}
+
+.name-input input[type="text"] {
+    width: 100%;
+    padding: 20px 60px 20px 22px;
+    border-radius: 18px;
+    border: none;
+    background-color: #FFF5D6;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s ease;
+}
+
+.name-input input[type="text"]::placeholder {
+    color: #bba96e;
+    font-weight: 600;
+}
+
+.name-input .paw-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+fieldset {
+  border: none;
+  padding: 20px;
+  margin: 0;
+}
+
+.firstQuestionsBox,
+.secondQuestionsBox,
+.thirdQuestionsBox,
+.fourthQuestionsBox,
+input[type="submit"
+]{
+    display: none;
+}
+
+
+label {
+    color: #A2263D;
+    font-size: 24px;
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+input {
+  display: block;
+    width: 100%;
+    padding: 10px 60px 10px 22px;
+    border-radius: 18px;
+    border: none;
+    background-color: #FFF5D6;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s ease;
+}
+
+input#isAgeYear, input#isAgeMonth {
+    width: 50%;
+}
+
+legend {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  color: #fff;
+  background-color: #A2263D;
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 2rem;
+}
+
+button#button1 {
+    float: right;
+}
+
+.radiobutton {
+    width: 10%;
+}
+
+select#isActivity {
+  width: 100%;
+}
+
+input#isPassword, input#checkPassword, input#isEmail, input#isPhoneNumber {
+    height: 30px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-radius: 0;
+    background-color: #fff;
+    border: 1px solid #000;
+}
+
+input.submit {
+    background-color: var(--color-background-button);
+    color: var(--color-text-button);
+    max-width: 6rem;
+    max-height: 3rem;
+    border-radius: .6rem;
+}
