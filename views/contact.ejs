@@ -13,14 +13,17 @@
 
       <div class="match-profiles">
         <article class="profile-card">
-          <img src="/images/lisaprofiel 2.png" alt="Jouw profiel" />
+          <img
+            src="<%= currentUser.cover ? '/upload/' + currentUser.cover : '/images/default-profile.png' %>"
+            alt="<%= currentUser.userNickname || 'Jouw profiel' %>"
+          />
         </article>
 
         <div class="heart-circle">♥</div>
 
         <article class="profile-card">
           <img
-            src="/images/emmaprofiel 2.png"
+            src="<%= matchUser.cover ? '/upload/' + matchUser.cover : '/images/default-profile.png' %>"
             alt="<%= matchUser.userNickname || matchUser.userName || 'Match' %>"
           />
         </article>
@@ -59,7 +62,7 @@
           <% if (phone && phone.trim() !== "") { %>
             <a
               class="contact-button whatsapp"
-              href="https://wa.me/<%= phone %>?text=Hoi%20<%= name %>!%20Leuk%20dat%20we%20gematcht%20zijn.%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F"
+              href="https://wa.me/<%= phone.replace(/[^0-9]/g, '') %>?text=Hoi%20<%= name %>!%20Leuk%20dat%20we%20gematcht%20zijn.%20Zullen%20we%20een%20keer%20afspreken%20voor%20een%20playdate%3F"
               target="_blank"
             >
               <span>Whatsapp</span>

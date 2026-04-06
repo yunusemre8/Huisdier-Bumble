@@ -22,6 +22,14 @@ const client = new MongoClient(dbUri);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("static"));
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "geheim123",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -71,6 +79,8 @@ async function createRegister(req, res) {
 
     const result = await usersCollection.insertOne(newUser);
 
+    req.session.userId = result.insertedId.toString();
+
     res.redirect(`/profile/${result.insertedId}`);
   } catch (error) {
     console.error("Fout bij registreren:", error.message);
@@ -87,7 +97,9 @@ async function showProfile(req, res) {
     }
 
     const usersCollection = getUsersCollection();
-    const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+    const user = await usersCollection.findOne({
+      _id: new ObjectId(userId),
+    });
 
     if (!user) {
       return res.redirect("/register");
@@ -109,15 +121,28 @@ async function showContact(req, res) {
     }
 
     const usersCollection = getUsersCollection();
+
     const matchUser = await usersCollection.findOne({
       _id: new ObjectId(ownerId),
     });
 
     if (!matchUser) {
-      return res.status(404).send("Match gebruiker niet gevonden");
+      return res.status(404).send("Match gebruiker niet gevonden.");
     }
 
-    res.render("contact", { matchUser });
+    let currentUser = null;
+
+    if (req.session.userId && isValidId(req.session.userId)) {
+      currentUser = await usersCollection.findOne({
+        _id: new ObjectId(req.session.userId),
+      });
+    }
+
+    if (!currentUser) {
+      currentUser = matchUser;
+    }
+
+    res.render("contact", { matchUser, currentUser });
   } catch (error) {
     console.error("Fout in contact route:", error.message);
     res.status(500).send("Er ging iets mis bij het ophalen van de contactgegevens.");
@@ -127,7 +152,15 @@ async function showContact(req, res) {
 async function showYourMatches(req, res) {
   try {
     const usersCollection = getUsersCollection();
-    const matches = await usersCollection.find().toArray();
+    const currentUserId = req.session.userId;
+
+    let matches = await usersCollection.find().toArray();
+
+    if (currentUserId && isValidId(currentUserId)) {
+      matches = matches.filter(
+        (user) => user._id.toString() !== currentUserId.toString()
+      );
+    }
 
     res.render("yourmatches", { matches });
   } catch (error) {
