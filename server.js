@@ -86,7 +86,6 @@ app.use(express.static("static")); //user's images
 
 app.post('/register', upload.single('cover'), async (req, res) => {
     try {
-      console.log('Register çalışıyor:', req.body)
         const existingUser = await db.collection('users').findOne({
             userEmail: req.body.userEmail
         })
@@ -115,7 +114,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
             location: null,
         };
         const userResult = await db.collection('users').insertOne(newUser)
-        console.log('insertOne result:', userResult)  // bunu ekle
+        console.log('insertOne result:', userResult)  
         const userId = userResult.insertedId
 
         const newAnimal = {
@@ -132,7 +131,7 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 
         req.session.userId = userId.toString()
         req.session.save(() => {
-            res.redirect(`/profile/${userId}`)
+          res.redirect(`/matches/${userId}`)
         })
     } catch (error) {
         console.error(error);
@@ -144,7 +143,8 @@ app.post('/register', upload.single('cover'), async (req, res) => {
 router.get('/', home)
 router.get('/register', register)
 router.get('/profile/:id', profile)
-router.get('/matches/:id', uservalidate, matchesPage)
+// router.get('/matches/:id', uservalidate, matchesPage)
+router.get('/matches/:id', matchesPage)
 router.get('/edit-profile/:id', editProfilePage)
 router.post('/edit-profile/:id', upload.single('cover'), editProfilePost)
 router.get('/add-pet/:id', addPetPage)
@@ -209,6 +209,55 @@ app.post('/save-location', async (req, res) => {
     }
 });
 
+app.post("/swipe", async (req, res) => {
+  try {
+      const { fromUserId, toUserId, action } = req.body;
+      if (!fromUserId || !toUserId || !action) {
+          return res.status(400).json({ success: false, message: "fromUserId, toUserId en action zijn verplicht" });
+      }
+      if (!["like", "dislike"].includes(action)) {
+          return res.status(400).json({ success: false, message: "Ongeldige action" });
+      }
+      if (fromUserId === toUserId) {
+          return res.status(400).json({ success: false, message: "Je kunt niet op jezelf swipen" });
+      }
+
+      const fromObjectId = new ObjectId(fromUserId);
+      const toObjectId = new ObjectId(toUserId);
+
+      const result = await db.collection("swipes").updateOne(
+          { fromUserId: fromObjectId, toUserId: toObjectId },
+          { $set: { fromUserId: fromObjectId, toUserId: toObjectId, action: action, createdAt: new Date() } },
+          { upsert: true }
+      );
+
+      let isMatch = false;
+      if (action === "like") {
+          const reverseLike = await db.collection("swipes").findOne({
+              fromUserId: toObjectId,
+              toUserId: fromObjectId,
+              action: "like"
+          });
+          if (reverseLike) {
+              isMatch = true;
+              const existingMatch = await db.collection("matches").findOne({
+                  users: { $all: [fromObjectId, toObjectId] }
+              });
+              if (!existingMatch) {
+                  await db.collection("matches").insertOne({
+                      users: [fromObjectId, toObjectId],
+                      createdAt: new Date()
+                  });
+              }
+          }
+      }
+      res.json({ success: true, isMatch });
+  } catch (error) {
+      console.error("Fout in /swipe route:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 async function profile(req, res) {
     try {
         const user = await db.collection("users").findOne({
@@ -228,19 +277,34 @@ async function profile(req, res) {
     }
 }
 
+// eski matchesPage fonksiyonunu bununla değiştir
 async function matchesPage(req, res) {
-    try {
-        const user = await db.collection("users").findOne({
-            _id: new ObjectId (req.params.id),
-        });
+  try {
+      const currentUserId = new ObjectId(req.params.id);
+      const currentUser = await db.collection("users").findOne({ _id: currentUserId });
+      if (!currentUser) return res.redirect("/register");
 
-        if (!user) return res.redirect("/register");
+      const mySwipes = await db.collection("swipes").find({ fromUserId: currentUserId }).toArray();
 
-        res.render("matches", { user });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Matches page couldn't be loaded");
-    }
+      const swipedUserIds = mySwipes
+          .map((swipe) => {
+              if (!swipe.toUserId) return null;
+              if (swipe.toUserId instanceof ObjectId) return swipe.toUserId;
+              try { return new ObjectId(swipe.toUserId); } catch (error) { return null; }
+          })
+          .filter(Boolean);
+
+      swipedUserIds.push(currentUserId);
+
+      const animals = await db.collection("animals").find({
+          ownerId: { $nin: swipedUserIds }
+      }).toArray();
+
+      res.render("matchesPage", { user: currentUser, animals, dogBreeds, catBreeds });
+  } catch (error) {
+      console.error("matchesPage error:", error);
+      res.status(500).send("Matches page couldn't be loaded");
+  }
 }
 
 const dogBreeds = ['Labrador', 'Golden Retriever', 'Poodle', 'Border Collie', 'Beagle', 'French Bulldog'];

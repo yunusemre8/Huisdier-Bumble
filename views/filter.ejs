@@ -24,21 +24,19 @@
                 <button class="type-button" data-type="cat">Cat</button>
             </section>
 
-            <section>
+            <section id="breed-section">
                 <label>Breed</label>
-                <div class="chip-group">
-                    <% dogBreeds.forEach(breed => { %>
-                        <button class="multi-chip"><%= breed %></button>
-                    <% }) %>
+                <div class="chip-group" id="breed-chips">
+                    <!-- JS ile dolacak -->
                 </div>
             </section>
 
             <section>
-                <label>Size</label>
+                <label>Weight</label>
                 <div class="chip-group">
-                    <button class="single-chip">Small</button>
-                    <button class="single-chip">Medium</button>
-                    <button class="single-chip">Large</button>
+                    <button class="single-chip" data-size="small">0 – 10 kg</button>
+                    <button class="single-chip" data-size="medium">10 – 25 kg</button>
+                    <button class="single-chip" data-size="large">25+ kg</button>
                 </div>
             </section>
 
@@ -52,7 +50,6 @@
 
     </div>
 
-  <script src="/filter.js"></script>
-
+    <script src="/filter.js"></script>
 </body>
 </html>

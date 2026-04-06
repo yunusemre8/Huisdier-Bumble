@@ -1,30 +1,22 @@
-// document.getElementById('open-button').addEventListener('click', () => {
-//     document.getElementById('sidebar').classList.add('open');
-//   });
-  
-//   document.getElementById('close-button').addEventListener('click', () => {
-//     document.getElementById('sidebar').classList.remove('open');
-//   });
+const breeds = {
+    dog: ['Labrador Retriever', 'Labradoodle', 'Golden Retriever', 'Chihuahua', 'Pomeranian', 'French Bulldog', 'Mix/Other'],
+    cat: ['British Shorthair', 'European Shorthair', 'Ragdoll', 'Maine', 'Domestic', 'Persian', 'Mix/Other']
+}
 
-// document.querySelectorAll('.type-button').forEach(button => {
-//     button.addEventListener('click', () => {
-//         document.querySelectorAll('.type-button').forEach(btn => btn.classList.remove('active'));
-//         button.classList.add('active');
-//     });
-// });
+function updateBreedChips(type) {
+    const chipGroup = document.getElementById('breed-chips');
+    chipGroup.innerHTML = '';
 
-// document.querySelectorAll('.multi-chip').forEach(chip => {
-//     chip.addEventListener('click', () => {
-//         chip.classList.toggle('active'); 
-//     });
-// });
+    if (!type || !breeds[type]) return;
 
-// document.querySelectorAll('.single-chip').forEach(chip => {
-//     chip.addEventListener('click', () => {
-//         document.querySelectorAll('.single-chip').forEach(chip => chip.classList.remove('active'));
-//         chip.classList.add('active');
-//     });
-// });
+    breeds[type].forEach(breed => {
+        const btn = document.createElement('button');
+        btn.className = 'multi-chip';
+        btn.textContent = breed;
+        btn.addEventListener('click', () => btn.classList.toggle('active'));
+        chipGroup.appendChild(btn);
+    });
+}
 
 document.getElementById('open-button').addEventListener('click', () => {
     document.getElementById('sidebar').classList.add('open');
@@ -38,12 +30,7 @@ document.querySelectorAll('.type-button').forEach(button => {
     button.addEventListener('click', () => {
         document.querySelectorAll('.type-button').forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-    });
-});
-
-document.querySelectorAll('.multi-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-        chip.classList.toggle('active');
+        updateBreedChips(button.dataset.type);
     });
 });
 
@@ -54,8 +41,6 @@ document.querySelectorAll('.single-chip').forEach(chip => {
     });
 });
 
-// --- YENI EKLENENLER ---
-
 function getFilters() {
     const typeBtn = document.querySelector('.type-button.active');
     const sizeChip = document.querySelector('.single-chip.active');
@@ -64,7 +49,7 @@ function getFilters() {
 
     return {
         petType: typeBtn ? typeBtn.dataset.type : null,
-        size: sizeChip ? sizeChip.textContent.trim().toLowerCase() : null,
+        size: sizeChip ? sizeChip.dataset.size : null,
         breeds: activeBreeds
     };
 }
@@ -78,13 +63,29 @@ function renderResults(pets) {
     }
 
     results.innerHTML = pets.map(pet => `
-        <div class="card">
-            <img src="/upload/${pet.cover}" alt="${pet.petName}">
-            <h3>${pet.petName}</h3>
-            <p>${pet.petBreed}</p>
-            <p>${pet.petWeight} kg</p>
-        </div>
+        <article class="card" data-owner-id="${pet._id}">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img class="matchingimages" src="/upload/${pet.cover}" alt="${pet.petName || 'Animal'}">
+                    <button class="dislikebtn" type="button">
+                        <img src="/images/trashcan.png" alt="Delete button">
+                    </button>
+                    <button class="likebtn" type="button">
+                        <img src="/images/yellowheart.png" alt="Heart button">
+                    </button>
+                </div>
+                <div class="card-back">
+                    <h2>${pet.petName || 'Naam onbekend'}</h2>
+                    <p><strong>Soort:</strong> ${pet.petType || 'Onbekend'}</p>
+                    <p><strong>Ras:</strong> ${pet.petBreed || 'Onbekend'}</p>
+                    <p><strong>Gewicht:</strong> ${pet.petWeight || 'Onbekend'}</p>
+                </div>
+            </div>
+        </article>
     `).join('');
+
+    if (window.updateStack) window.updateStack();
+    if (window.activateTopCard) window.activateTopCard();
 }
 
 document.getElementById('apply-button').addEventListener('click', async () => {
@@ -101,8 +102,3 @@ document.getElementById('apply-button').addEventListener('click', async () => {
     renderResults(pets);
     document.getElementById('sidebar').classList.remove('open');
 });
-
-// Sayfa açılınca tüm hayvanları getir
-fetch('/api/pets')
-    .then(r => r.json())
-    .then(renderResults);
