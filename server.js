@@ -302,7 +302,7 @@ app.post("/resetPassword", async (req, res) => {
             return res.redirect('/resetPassword')
         }
         const animal = await db.collection('animals').findOne({
-            ownerId: user._id.toString()
+            ownerId: user._id
         })
         if (!animal) {
             req.session.message = {
