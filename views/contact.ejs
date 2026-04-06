@@ -15,7 +15,7 @@
         <article class="profile-card">
           <img
             src="<%= typeof currentUser !== 'undefined' && currentUser && currentUser.cover ? '/upload/' + currentUser.cover : '/images/default-profile.png' %>"
-            alt="<%= typeof currentUser !== 'undefined' && currentUser && currentUser.userNickname ? currentUser.userNickname : 'Jouw profiel' %>"
+            alt="<%= typeof currentUser !== 'undefined' && currentUser && currentUser.userNickname ? currentUser.userNickname : 'Your profile' %>"
           />
         </article>
 
@@ -30,10 +30,9 @@
       </div>
 
       <section class="contact-card">
-        <h2>Deel je contactgegevens</h2>
+        <h2>Share your contact information</h2>
         <p>
-          Jullie zijn gematcht! Deel eenvoudig je contactgegevens en praat verder
-          over het plannen van een leuke playdate.
+           You've been matched! Just share your contact info and keep chatting about planning a fun playdate.
         </p>
 
         <%
