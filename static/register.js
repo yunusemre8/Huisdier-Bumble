@@ -138,10 +138,9 @@ backButton2.addEventListener("click", () => showStep(2));
 backButton3.addEventListener("click", () => showStep(3));
 backButton4.addEventListener("click", () => showStep(4));
 
-// sayfa açılışı
 showStep(1);
 
-// breeds
+
 const breeds = {
   cat: [
     "British Shorthair",
@@ -238,3 +237,15 @@ function checkPasswords() {
 
 checkPass.addEventListener("input", checkPasswords);
 password.addEventListener("input", checkPasswords);
+
+// keyframe
+const btn = document.getElementById('createAccountBtn');
+
+btn.closest('form').addEventListener('submit', (e) => {
+    if (btn.classList.contains('loading')) {
+        e.preventDefault();
+        return;
+    }
+    btn.classList.add('loading');
+    btn.disabled = true;
+});

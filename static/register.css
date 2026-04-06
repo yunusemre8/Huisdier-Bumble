@@ -286,7 +286,6 @@ select {
     padding-right: 3rem;
 }
 
-/* decorative paws */
 fieldset::before,
 fieldset::after {
   content: "🐾";
@@ -339,6 +338,70 @@ fieldset::after {
     font-size: clamp(1rem, 4vw, 2rem);
     font-weight: 500;
     margin-left: 2rem;
+}
+
+/* keyframe */
+
+button.submit {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-label {
+  transition: opacity 0.2s ease;
+}
+
+.paw-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.paw {
+  font-size: 1.2rem;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+
+
+button.submit.loading {
+  background: var(--color-background-soft);
+  border: 0.1rem solid var(--color-button-accent);
+  color: var(--color-accent);
+  cursor: default;
+}
+
+button.submit.loading .btn-label {
+  opacity: 0;
+}
+
+button.submit.loading .paw-track {
+  opacity: 1;
+}
+
+button.submit.loading .paw:nth-child(1) {
+  animation: paw 1s 0s infinite;
+}
+button.submit.loading .paw:nth-child(2) {
+  animation: paw 1s 0.2s infinite;
+}
+button.submit.loading .paw:nth-child(3) {
+  animation: paw 1s 0.4s infinite;
+}
+button.submit.loading .paw:nth-child(4) {
+  animation: paw 1s 0.6s infinite;
+}
+
+@keyframes paw {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.5); }
 }
 
 @media (max-width: 30rem) {

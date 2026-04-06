@@ -18,11 +18,11 @@
     </div>
 
     <form action="/register" method="POST" enctype="multipart/form-data">
-        
+
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-        
+
         <fieldset class="firstQuestionsBox">
             <legend>First things first: what is your name?</legend>
 
@@ -41,17 +41,17 @@
 
         <fieldset class="secondQuestionsBox">
             <legend>About your furry friend</legend>
-            <label for="petName">Pet Name</label>
+            <label for="petName" required>Pet Name</label>
             <input type="text" name="petName">
 
             <label for="petType">Choose your animal and breed</label>
             <div class="typeFlex">
-                <select name="petType" id="petType">
+                <select name="petType" id="petType" required>
                     <option value="cat" selected>Cat</option>
                     <option value="dog">Dog</option>
                 </select>
                 <select name="isBreed" id="isBreed">
-                    <option value="Select a breed"></option>
+                    <option value="Select a breed" required></option>
                 </select>
             </div>
 
@@ -102,7 +102,7 @@
             <p>It's not just about pets -your experience matters too!</p>
 
             <label for="userCity">Which city do you live in?</label>
-            <input type="text" name="userCity" id="userCity">
+            <input type="text" name="userCity" id="userCity" required>
 
             <label for="isFrequency">How often would you like playdates?</label>
 
@@ -145,16 +145,24 @@
             </div>
 
             <label for="userEmail">Your email address</label>
-            <input type="email" name="userEmail" id="userEmail">
+            <input type="email" name="userEmail" id="userEmail" required>
 
             <label for="isPassword">Create your password</label>
-            <input type="password" id="isPassword" name="isPassword">
-            <input type="password" id="checkPassword" name="checkPassword">
+            <input type="password" id="isPassword" name="isPassword" required>
+            <input type="password" id="checkPassword" name="checkPassword" required>
             <p id="passwordMatch"></p>
 
             <div class="button-row">
                 <button type="button" id="button51">Back</button>
-                <input class="submit" type="submit" value="Submit">
+                <button class="submit" type="submit" id="createAccountBtn">
+                    <span class="btn-label">Create account</span>
+                    <span class="paw-track" aria-hidden="true">
+                        <span class="paw">🐾</span>
+                        <span class="paw">🐾</span>
+                        <span class="paw">🐾</span>
+                        <span class="paw">🐾</span>
+                    </span>
+                </button>                
             </div>
         </fieldset>
 
