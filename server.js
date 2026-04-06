@@ -80,17 +80,16 @@ function calculateAge(userBirthDate) {
 }
 
 function home(req, res) {
-    res.send("Welcome to the club!");
+    res.send("Welcome to the club!")
 }
 
 function register(req, res) {
-    res.render("register");
+    res.render("register")
 }
 
-function changePassword(req, res) {
-    res.render("changePassword");
+function resetPassword(req, res) {
+    res.render("resetPassword")
 }
-
 function login(req, res) {
     res.render("login", {
         error: null,
@@ -117,6 +116,7 @@ router.get("/profile/:id", userValidate, profile);
 router.get("/matches/:id", userValidate, matchesPage);
 router.get("/filter", userValidate, filterPage);
 router.get("/changePassword", userValidate, changePassword);
+router.get("/resetPassword", resetPassword);
 
 app.use("/", router);
 
@@ -232,11 +232,11 @@ app.post("/changePassword", async (req, res) => {
                 text: 'New passwords do not match.'
             }
             return res.redirect(`/changePassword`)
-            
+
         }
         const isMatch = await bcrypt.compare(currentPassword, user.passwordHash)
         if (!isMatch) {
-            req.session.message ={ 
+            req.session.message = {
                 type: 'error',
                 text: 'Current password is wrong'
             }
@@ -245,8 +245,8 @@ app.post("/changePassword", async (req, res) => {
 
         if (currentPassword === newPassword) {
             req.session.message = {
-             type: 'error',
-             text: 'New password must be different from current password.'
+                type: 'error',
+                text: 'New password must be different from current password.'
             }
             return res.redirect('/changePassword')
         }
@@ -266,6 +266,84 @@ app.post("/changePassword", async (req, res) => {
     } catch (error) {
         console.error(error)
         res.status(500).send('password could not updated')
+    }
+})
+
+app.post("/resetPassword", async (req, res) => {
+    try {
+        const {
+            resetUserEmail,
+            resetPetName,
+            resetPetWeight,
+            resetNewPassword,
+            confirmResetNewPassword
+        } = req.body
+        if (!resetUserEmail || !resetPetWeight || !resetNewPassword || !confirmResetNewPassword) {
+            req.session.message = {
+                type: 'error',
+                text: 'Please fill in all fields'
+            }
+            return res.redirect('/resetPassword')
+        }
+        if (resetNewPassword !== confirmResetNewPassword) {
+            req.session.message = {
+                type: 'error',
+                text: 'Passwords do not match'
+            }
+            return res.redirect('/resetPassword')
+        }
+        const user = await db.collection('users').findOne({ userEmail: resetUserEmail })
+
+        if (!user) {
+            req.session.message = {
+                type: 'error',
+                text: 'No user found'
+            }
+            return res.redirect('/resetPassword')
+        }
+        const animal = await db.collection('animals').findOne({
+            ownerId: user._id.toString()
+        })
+        if (!animal) {
+            req.session.message = {
+                type: 'error',
+                text: 'No pet found for this account.'
+            }
+            return res.redirect('/resetPassword')
+        }
+        if (animal.petName.trim().toLowerCase() !== resetPetName.trim().toLowerCase()) {
+            req.session.message = {
+                type: 'error',
+                text: 'Pet name is incorrect.'
+            }
+            return res.redirect('/resetPassword')
+        }
+
+        if (Number(animal.petWeight) !== Number(resetPetWeight)) {
+            req.session.message = {
+                type: 'error',
+                text: 'Pet weight is incorrect.'
+            }
+            return res.redirect('/resetPassword')
+        }
+
+        const newPasswordHash = await bcrypt.hash(resetNewPassword, 10)
+
+        await db.collection('users').updateOne(
+            { _id: user._id },
+            { $set: { passwordHash: newPasswordHash } }
+        )
+
+        req.session.message = {
+            type: 'success',
+            text: 'Password successfully updated. You can now log in.'
+        }
+
+        return res.redirect('/login')
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).send('Password reset failed')
     }
 })
 
@@ -312,26 +390,6 @@ app.post("/save-location", async (req, res) => {
     }
 });
 
-async function changePassword(req, res) {
-    try {
-        const user = await db.collection("users").findOne({
-            _id: new ObjectId(req.session.userId)
-        });
-
-        if (!user) {
-            return res.redirect("/login");
-        }
-
-        const animal = await db.collection("animals").findOne({
-            ownerId: user._id
-        });
-
-        res.render("changePassword", { user, animal });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Change password page could not be loaded");
-    }
-}
 
 app.get("/api/pets", async (req, res) => {
     try {
