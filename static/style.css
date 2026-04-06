@@ -426,13 +426,20 @@ input[type="submit"]:active {
     overflow: hidden;
     color: var(--color-text-button);
     text-wrap: nowrap;
+    transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
-.btn-label {
+#createAccountBtn > span.btn-label {
+    display: inline-block;
     transition: opacity 0.2s ease, transform 0.2s ease;
     color: var(--color-text-button);
+    font-weight: 500;
 }
 
+#createAccountBtn.loading > span.btn-label {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+}
 .paw-track {
     position: absolute;
     inset: 0;
@@ -452,13 +459,9 @@ input[type="submit"]:active {
 }
 
 #createAccountBtn.loading {
-    background: color-mix(in srgb, var(--color-button-accent) 80%, black);
+    background: var(--color-background-accent-soft);
+    border: thick double var(--color-button-accent);
     cursor: default;
-}
-
-#createAccountBtn.loading .btn-label {
-    opacity: 0;
-    transform: translateY(-0.5rem);
 }
 
 #createAccountBtn.loading .paw-track {
