@@ -315,24 +315,43 @@ router.get('/filter', filterPage);
 
 
 app.get('/api/pets', async (req, res) => {
-    try {
-        const { petType, breeds, size } = req.query;
+  try {
+      const { petType, breeds, size, frequency, place, city } = req.query;
 
-        const query = {};
-        if (petType) query.petType = petType;
-        if (breeds) query.petBreed = { $in: breeds.split(',') };
-        if (size) {
-            const ranges = { small: [0, 10], medium: [10, 25], large: [25, 999] };
-            const [min, max] = ranges[size];
-            query.petWeight = { $gte: min, $lt: max };
-        }
+      const matchAnimal = {};
+      const matchOwner = {};
 
-        const pets = await db.collection('animals').find(query).toArray();
-        res.json(pets);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
-    }
+      if (petType) matchAnimal.petType = petType;
+      if (breeds) matchAnimal.petBreed = { $in: breeds.split(',') };
+      if (size) {
+          const ranges = { small: [0, 10], medium: [10, 25], large: [25, 999] };
+          const [min, max] = ranges[size];
+          matchAnimal.petWeight = { $gte: min, $lt: max };
+      }
+
+      if (frequency) matchOwner['owner.isFrequency'] = frequency;
+      if (place) matchOwner['owner.preferPlace'] = place;
+      if (city) matchOwner['owner.userCity'] = { $regex: city, $options: 'i' };
+
+      const pets = await db.collection('animals').aggregate([
+          { $match: matchAnimal },
+          {
+              $lookup: {
+                  from: 'users',
+                  localField: 'ownerId',
+                  foreignField: '_id',
+                  as: 'owner'
+              }
+          },
+          { $unwind: '$owner' },
+          { $match: matchOwner }
+      ]).toArray();
+
+      res.json(pets);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+  }
 });
 
 function filterPage(req, res) {

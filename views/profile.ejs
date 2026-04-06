@@ -6,12 +6,8 @@
     <title>Profiel</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="/profile.css">
-    <link rel="stylesheet" href="/footer.css">
 </head>
 <body>
-    <div class="swipe-hint" id="swipeHint">
-        <img src="/images/match.png" alt="swipe">
-    </div>
     <div class="card">
         <div class="card-header">
             <h1>Profiel</h1>
@@ -21,6 +17,7 @@
         <div class="settings-menu" id="settingsMenu">
             <a href="/edit-profile/<%= user._id %>">✏️ Profiel bewerken</a>
             <a href="/add-pet/<%= user._id %>">🐾 Huisdier toevoegen</a>
+            <a href="/changePassword/<%= user._id %>">🔑 Wachtwoord wijzigen</a>
             <button id="deleteAccountBtn">🗑️ Account verwijderen</button>
         </div>
 

@@ -1,4 +1,11 @@
 const hint = document.getElementById('swipeHint');
+if (hint) {
+    hint.addEventListener('click', () => {
+        hint.style.transition = 'opacity 0.3s';
+        hint.style.opacity = '0';
+        hint.style.pointerEvents = 'none';
+    });
+}
 
 document.getElementById('locationBtn').addEventListener('click', () => {
     if (!navigator.geolocation) {
@@ -24,11 +31,7 @@ document.getElementById('locationBtn').addEventListener('click', () => {
     });
 });
 
-hint.addEventListener('click', () => {
-    hint.style.transition = 'opacity 0.3s';
-    hint.style.opacity = '0';
-    hint.style.pointerEvents = 'none';
-});
+
 
 document.getElementById('settingsBtn').addEventListener('click', () => {
     document.getElementById('settingsMenu').classList.toggle('open');
