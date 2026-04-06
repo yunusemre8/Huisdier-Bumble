@@ -1,7 +1,7 @@
 {
   "name": "huisdier-bumble",
   "version": "1.0.0",
-  "description": "Namen van functies en variabelen.  Taal: Engels",
+  "description": "Namen van functies en variabelen. Taal: Engels",
   "main": "server.js",
   "dependencies": {
     "accepts": "^2.0.0",
@@ -115,8 +115,14 @@
     "whatwg-url": "^14.2.0",
     "wrappy": "^1.0.2"
   },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.3",
+    "globals": "^17.4.0",
+    "nodemon": "^3.1.14"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
     "start": "node server.js"
   },
   "repository": {
