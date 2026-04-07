@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #FFC832;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px 60px;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: '🐾';
+  font-size: 48px;
+  opacity: 0.25;
+  position: fixed;
+  pointer-events: none;
+}
+
+body::before {
+  bottom: 180px;
+  left: 20px;
+}
+
+body::after {
+  top: 260px;
+  right: 10px;
+  font-size: 36px;
+}
+
+.match-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.match-screen {
+  width: 100%;
+  max-width: 430px;
+  min-height: 932px;
+  background: #FFF5D6;
+  border-radius: 28px;
+  position: relative;
+  padding: 2rem 1.5rem 7rem;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.match-title {
+  color: #A2263D;
+  font-size: 2.35rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 900;
+  line-height: 1.05;
+}
+.match-profiles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.profile-card {
+  width: 92px;
+  height: 92px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #FFF5D6;
+  border: 4px solid #dfe4f8;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.profile-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.heart-circle {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #ff854c;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.contact-card {
+  background: #FFF5D6;
+  border-radius: 20px;
+  padding: 1.25rem;
+  margin-bottom: 1.4rem;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.contact-card h2 {
+  color: #A2263D;
+  font-size: 1.7rem;
+  margin-bottom: 1rem;
+  font-weight: 900;
+  line-height: 1.08;
+  word-break: break-word;
+}
+
+.contact-card p {
+  color: #A2263D;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.contact-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.contact-button,
+.whatsapp-disabled,
+.gmail-disabled {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 18px;
+  padding: 0.95rem 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.contact-button.gmail {
+  background-color: #dfe4f8;
+  color: #251a79;
+}
+
+.contact-button.whatsapp {
+  background-color: #ff854c;
+  color: #fff;
+}
+
+.whatsapp-disabled,
+.gmail-disabled {
+  background-color: #cfcfcf;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.phone-message {
+  margin-top: 0.5rem;
+  color: #A2263D;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.park-button {
+  display: block;
+  width: fit-content;
+  margin: 1rem auto 0;
+  background-color: #A2263D;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 18px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-background-soft);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.875rem 2.5rem;
+  border-radius: 1.5rem 1.5rem 0 0;
+  box-shadow: 0 -0.25rem 1.25rem rgba(155, 90, 0, 0.15);
+  z-index: 100;
+}
+
+.footer-btn {
+  color: var(--color-button-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.footer-btn:hover {
+  transform: translateY(-0.1875rem);
+  background: rgba(155, 27, 48, 0.1);
+}
+
+.footer-btn img {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.footer-btn.active {
+  background: rgba(155, 27, 48, 0.12);
+}
+
+.contact-card p {
+  color: #A2263D;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.08);
+  }
+  40% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heart-circle {
+  animation: heartBeat 1.8s ease-in-out infinite;
+}

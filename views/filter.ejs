@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= isPageTitle %></title>
+    <link rel="stylesheet" href="/filter.css">
+</head>
+<body>
+    <header>
+        <h1><%= isPageTitle %></h1>
+        <p>Find the perfect play buddy for your pet based on your interests and preferences</p>
+    </header>
+
+    <div class="page">
+
+        <aside class="sidebar" id="sidebar">
+            <h2>Filters</h2>
+            <button id="close-button">X</button>
+
+            <section>
+                <label>Pet Type</label>
+                <button class="type-button" data-type="dog">Dog</button>
+                <button class="type-button" data-type="cat">Cat</button>
+            </section>
+
+            <section id="breed-section">
+                <label>Breed</label>
+                <div class="chip-group" id="breed-chips">
+                </div>
+            </section>
+
+            <section>
+                <label>Weight</label>
+                <div class="chip-group">
+                    <button class="single-chip" data-size="small">0 – 10 kg</button>
+                    <button class="single-chip" data-size="medium">10 – 25 kg</button>
+                    <button class="single-chip" data-size="large">25+ kg</button>
+                </div>
+            </section>
+
+            <button id="apply-button">Show Results</button>
+        </aside>
+
+        <main>
+            <button id="open-button">Filters</button>
+            <div id="results"></div>
+        </main>
+
+    </div>
+
+    <script src="/main.js"></script>
+</body>
+</html>

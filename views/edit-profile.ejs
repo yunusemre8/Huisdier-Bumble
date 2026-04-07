@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit your profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/profile.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Edit your profile</h1>
+
+        <form action="/edit-profile/<%= user._id %>" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="userName" value="<%= user.userName %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>City</label>
+                <input type="text" name="userCity" value="<%= user.userCity %>">
+            </div>
+
+            <div class="form-group">
+                <label>Phone number</label>
+                <input type="tel" name="userPhone" value="<%= user.userPhone || '' %>">
+            </div>
+
+            <div class="form-group">
+                <label>How often would you like playdates?</label>
+                <select name="isFrequency">
+                    <option value="weekly" <%= user.isFrequency === 'weekly' ? 'selected' : '' %>>Weekly</option>
+                    <option value="everyFewWeeks" <%= user.isFrequency === 'everyFewWeeks' ? 'selected' : '' %>>Every few weeks</option>
+                    <option value="occasionally" <%= user.isFrequency === 'occasionally' ? 'selected' : '' %>>Occasionally</option>
+                    <option value="flexibel" <%= user.isFrequency === 'flexibel' ? 'selected' : '' %>>Flexibel</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Where do you prefer meeting?</label>
+                <select name="preferPlace">
+                    <option value="isOutdoor" <%= user.preferPlace === 'isOutdoor' ? 'selected' : '' %>>Outdoor</option>
+                    <option value="isGarden" <%= user.preferPlace === 'isGarden' ? 'selected' : '' %>>Closed garden</option>
+                    <option value="isHome" <%= user.preferPlace === 'isHome' ? 'selected' : '' %>>At home</option>
+                    <option value="isCafe" <%= user.preferPlace === 'isCafe' ? 'selected' : '' %>>Pet friendly cafe</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label>Pet name</label>
+                <input type="text" name="petName" value="<%= animal ? animal.petName : '' %>">
+            </div>
+
+            <div class="form-group">
+                <label>Pet type</label>
+                <select name="petType">
+                    <option value="cat" <%= animal && animal.petType === 'cat' ? 'selected' : '' %>>Kat</option>
+                    <option value="dog" <%= animal && animal.petType === 'dog' ? 'selected' : '' %>>Hond</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Race</label>
+                <input type="text" name="isBreed" value="<%= animal ? animal.petBreed : '' %>">
+            </div>
+
+            <div class="form-group">
+                <label>Weight (kg)</label>
+                <input type="number" name="isKilo" step="0.1" value="<%= animal ? animal.petWeight : '' %>">
+            </div>
+
+            <div class="form-group">
+                <label>Photo of your pet</label>
+                <input type="file" name="cover" accept="image/*">
+            </div>
+
+            <div class="actions">
+                <button type="submit">Save</button>
+                <a href="/profile/<%= user._id %>">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>
