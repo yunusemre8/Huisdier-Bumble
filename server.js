@@ -91,7 +91,10 @@ function calculateAge(userBirthDate) {
 }
 
 function home(req, res) {
-  res.send("Welcome to the club!");
+  if (req.session.userId) {
+    return res.redirect(`/matchesPage/${req.session.userId}`);
+  }
+  res.render("home");
 }
 
 function register(req, res) {
@@ -366,8 +369,6 @@ async function deleteAccount(req, res) {
     res.status(500).send("Account could not be deleted");
   }
 }
-
-router.get("/", home);
 router.get("/login", login);
 router.get("/register", register);
 router.get("/resetPassword", resetPassword);
@@ -380,6 +381,8 @@ router.get("/edit-profile/:id", userValidate, editProfilePage);
 router.get("/add-pet/:id", userValidate, addPetPage);
 router.get("/yourmatches", userValidate, showYourMatches);
 router.get("/contact/:ownerId", userValidate, showContact);
+router.get("/", home);
+
 
 app.use("/", router);
 
@@ -792,6 +795,7 @@ app.get("/api/pets", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 router.post("/edit-profile/:id", upload.single("cover"), editProfilePost);
 router.post("/add-pet/:id", upload.single("cover"), addPetPost);
