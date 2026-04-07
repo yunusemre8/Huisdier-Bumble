@@ -126,8 +126,14 @@ function filterPage(req, res) {
 
 async function changePassword(req, res) {
   try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      return res.redirect("/login");
+    }
+
     const user = await db.collection("users").findOne({
-      _id: new ObjectId(req.session.userId),
+      _id: new ObjectId(userId),
     });
 
     if (!user) {
@@ -140,11 +146,10 @@ async function changePassword(req, res) {
 
     res.render("changePassword", { user, animal });
   } catch (error) {
-    console.error(error);
+    console.error("changePassword GET error:", error);
     res.status(500).send("Password change could not be loaded");
   }
 }
-
 async function profile(req, res) {
   try {
     const user = await db.collection("users").findOne({
@@ -476,9 +481,12 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Login error");
   }
 });
-
 app.post("/changePassword", async (req, res) => {
   try {
+    console.log("POST /changePassword çalıştı");
+    console.log("body:", req.body);
+    console.log("session userId:", req.session.userId);
+
     const userId = req.session.userId;
 
     if (!userId) {
@@ -488,6 +496,8 @@ app.post("/changePassword", async (req, res) => {
     const user = await db.collection("users").findOne({
       _id: new ObjectId(userId),
     });
+
+    console.log("found user:", user);
 
     if (!user) {
       return res.redirect("/login");
@@ -500,17 +510,18 @@ app.post("/changePassword", async (req, res) => {
         type: "error",
         text: "New passwords do not match.",
       };
-      return res.redirect("/changePassword");
+      return res.redirect(`/changePassword/${userId}`);
     }
 
     const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+    console.log("password match:", isMatch);
 
     if (!isMatch) {
       req.session.message = {
         type: "error",
         text: "Current password is wrong",
       };
-      return res.redirect("/changePassword");
+      return res.redirect(`/changePassword/${userId}`);
     }
 
     if (currentPassword === newPassword) {
@@ -518,7 +529,7 @@ app.post("/changePassword", async (req, res) => {
         type: "error",
         text: "New password must be different from current password.",
       };
-      return res.redirect("/changePassword");
+      return res.redirect(`/changePassword/${userId}`);
     }
 
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
@@ -533,9 +544,9 @@ app.post("/changePassword", async (req, res) => {
       text: "Password updated successfully!",
     };
 
-    return res.redirect("/changePassword");
+    return res.redirect(`/changePassword/${userId}`);
   } catch (error) {
-    console.error(error);
+    console.error("changePassword POST error:", error);
     res.status(500).send("password could not updated");
   }
 });

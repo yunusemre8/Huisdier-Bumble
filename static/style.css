@@ -76,6 +76,9 @@ body::after {
     bottom: 4%;
     right: 3%;
 }
+#page-change{
+    margin-bottom: 6rem;
+}
 
 #page-login {
     justify-content: center;
