@@ -483,7 +483,7 @@ app.post("/login", async (req, res) => {
 });
 app.post("/changePassword", async (req, res) => {
   try {
-    console.log("POST /changePassword çalıştı");
+    console.log("POST /changePassword");
     console.log("body:", req.body);
     console.log("session userId:", req.session.userId);
 

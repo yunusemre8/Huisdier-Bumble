@@ -86,12 +86,6 @@ const updateBreeds = type => {
   })
 }
 
-// arrow boven function updateBreeds (type){
-//   breedSelect.innerHTML = ""
-//   if(!type) return breeds [type].forEach(function(breed) {
-
-// })
-// }
 
 petTypeSelect.addEventListener("change", () => {
   updateBreeds(petTypeSelect.value)
@@ -99,7 +93,7 @@ petTypeSelect.addEventListener("change", () => {
 
 updateBreeds(petTypeSelect.value)
 
-//User age calculate
+//user age check - beter UX maar niet veilig
 const userBirthDate = document.getElementById("userAge")
 
 function calculateAge(userBirthDate) {
@@ -129,6 +123,3 @@ form.addEventListener("submit", function (event) {
   console.log("Calculated age:", age)
 
 })
-
-
-//pet age calculate
