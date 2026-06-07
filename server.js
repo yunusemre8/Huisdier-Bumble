@@ -17,12 +17,15 @@ app.set('view engine','ejs')
 
 async function connectMongo() {
   try {
-    const client = new MongoClient(process.env.MONGO_URI);
+    const client = new MongoClient(process.env.MONGO_URI)
+    await client.connect()
 
-    console.log("Database is connected");
+    db = client.db(process.env.DB_NAME)
+
+    console.log("Database is connected")
   } catch (error) {
-    console.error("DB couldn't be connected", error.message);
-    process.exit(1);
+    console.error("DB couldn't be connected", error.message)
+    process.exit(1)
   }
 }
 
@@ -112,6 +115,7 @@ function calculateAge(userBirthDate) {
   return age
 }
 
+//database
 async function startServer() {
   await connectMongo()
 
