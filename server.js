@@ -1,31 +1,55 @@
 const express = require('express')
+const multer = require('multer')
+const bcrypt = require('bcrypt')
+const { MongoClient, ObjectId } = require("mongodb");
+
+const upload = multer({ dest: 'static/upload/' })
 const app = express()
 const port = 3000
 
-const multer = require('multer')
-const upload = multer({ dest: 'static/upload/' })
-
-const passwordHash = await
-
 let db
-
-app.listen(port, () => {
-  console.log('Server running')
-})
+require('dotenv').config()
 
 app.use(express.static('static'))
 app.use(express.json())
-app.set('view engine', 'ejs')
-
 app.use(express.urlencoded({ extended: true }))
+app.set('view engine','ejs')
+
+async function connectMongo() {
+  try {
+    const client = new MongoClient(process.env.MONGO_URI);
+
+    console.log("Database is connected");
+  } catch (error) {
+    console.error("DB couldn't be connected", error.message);
+    process.exit(1);
+  }
+}
 
 app.get('/register', register)
 
-app.post("/register", upload.single("cover"), (req, res) => {
+app.post("/register", upload.single("cover"), async(req, res) => {
+  const existingUser = await db.collection('users').findOne({
+    userEmail: req.body.userEmail
+  })
+  if (existingUser) {
+    return res.send('Email already registered')
+  }
+
+  if (req.body.isPassword !== req.body.checkPassword) {
+    return res.status(400).send("Passwords do not match");
+  }
+
+  //age warning
   const userBirthDate = new Date(req.body.userAge)
   const age = calculateAge(userBirthDate)
 
-  const newUser={
+  if (age < 18) {
+    return res.status(400).send('Pet Playdates is for users aged 18+ only.');
+  }
+
+  const passwordHash = await createPasswordHash(req.body.isPassword)
+  const newUser = {
     userName: req.body.userName,
     userBirthDate: userBirthDate,
     userAge: age,
@@ -40,19 +64,25 @@ app.post("/register", upload.single("cover"), (req, res) => {
     location: null,
   }
 
-  const userResult=await db.collection('users').insertOne(newUser)
-  
+  const userResult = await db.collection('users').insertOne(newUser)
+  const userId = userResult.insertedId
 
-  const existingUser = await db.collection('users').findOne({
-    userEmail: req.body.userEmail
-  })
-  if(existingUser){
-    return res.send ('Email already registered')
+  const newAnimal = {
+    ownerId: userId,
+    petName: req.body.petName,
+    petType: req.body.petType,
+    petBreed: req.body.isBreed,
+    petWeight: Number(req.body.isKilo),
+    petBirthYear: Number(req.body.petBirthYear),
+    petBirthMonth: Number(req.body.petBirthMonth),
+    isVaccinated: req.body.isVaccinated,
+    isCastrated: req.body.isCastrated,
+    cover: req.file ? req.file.filename : null,
+    createdAt: new Date(),
   }
+  await db.collection('animals').insertOne(newAnimal)
 
-  if (req.body.isPassword !== req.body.checkPassword) {
-  return res.status(400).send("Passwords do not match");
-  }
+  res.redirect(`/profile/${userId}`)
 
 });
 
@@ -61,17 +91,15 @@ function register(req, res) {
   res.render("register");
 }
 
-async function createPasswordHash(password){
+// password hash
+async function createPasswordHash(password) {
   const salt = await bcrypt.genSalt(10)
   return await bcrypt.hash(password, salt)
 }
-
-
-//age-control
-
+//age control
 function calculateAge(userBirthDate) {
   const today = new Date()
-  let age = today.getFullYear - userBirthDate.getMonth()
+  let age = today.getFullYear - userBirthDate.getFullYear()
 
   const monthDifference = today.getDate() < userBirthDate.getDate()
 
@@ -83,7 +111,18 @@ function calculateAge(userBirthDate) {
   }
   return age
 }
-if (age < 18) {
-  return res.status(400).send('Pet Playdates is for users aged 18+ only.');
+
+async function startServer() {
+  await connectMongo()
+
+  app.listen(port, () => {
+    console.log('Server running')
+  })
 }
+
+startServer()
+
+
+
+
 
