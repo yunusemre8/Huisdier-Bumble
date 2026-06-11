@@ -7,31 +7,31 @@ const upload = multer({ dest: 'static/upload/' })
 const app = express()
 const port = 3000
 
+const session = require('express-session')
+const userValidate = require('./middleware/userValidate')
+
 let db
 require('dotenv').config()
 
 app.use(express.static('static'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.set('view engine','ejs')
-
-async function connectMongo() {
-  try {
-    const client = new MongoClient(process.env.MONGO_URI)
-    await client.connect()
-
-    db = client.db(process.env.DB_NAME)
-
-    console.log("Database is connected")
-  } catch (error) {
-    console.error("DB couldn't be connected", error.message)
-    process.exit(1)
-  }
-}
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production", 
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 2,
+    },
+  })
+);
+app.set('view engine', 'ejs')
 
 app.get('/register', register)
-
-app.post("/register", upload.single("cover"), async(req, res) => {
+app.post("/register", upload.single("cover"), async (req, res) => {
   const existingUser = await db.collection('users').findOne({
     userEmail: req.body.userEmail
   })
@@ -89,9 +89,63 @@ app.post("/register", upload.single("cover"), async(req, res) => {
 
 });
 
+app.get('/login', login)
+app.post("/login", async (req, res) => {
+  try {
+    const { userEmail, isPassword } = req.body;
+    const user = await db.collection("users").findOne({ userEmail });
+
+    if (!user) {
+      return res.render('login', {message: {
+        type: error,
+        text: 'User couldnt be found'
+      }, 
+    oldEmail: userEmail})
+    }
+
+    const isMatch = await bcrypt.compare(isPassword, user.passwordHash);
+
+    if (!isMatch) {
+      return res.render("login", {
+        message:{
+          type:'error',
+          text:'Email or password is incorrect'
+        },
+        oldEmail: userEmail,
+      });
+    }
+    req.session.userId = user._id.toString();
+    return res.redirect(`/matchesPage/${user._id}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Login error");
+  }
+
+})
+
+async function connectMongo() {
+  try {
+    const client = new MongoClient(process.env.MONGO_URI)
+    await client.connect()
+
+    db = client.db(process.env.DB_NAME)
+
+    console.log("Database is connected")
+  } catch (error) {
+    console.error("DB couldn't be connected", error.message)
+    process.exit(1)
+  }
+}
 
 function register(req, res) {
-  res.render("register");
+  res.render('register');
+}
+
+function login(req, res) {
+  res.render('login', {
+    message: null,
+    oldEmail: '',
+  })
 }
 
 // password hash
@@ -102,7 +156,7 @@ async function createPasswordHash(password) {
 //age control
 function calculateAge(userBirthDate) {
   const today = new Date()
-  let age = today.getFullYear - userBirthDate.getFullYear()
+  let age = today.getFullYear() - userBirthDate.getFullYear()
 
   const monthDifference = today.getDate() < userBirthDate.getDate()
 
