@@ -30,6 +30,9 @@ app.use(
 );
 app.set('view engine', 'ejs')
 
+
+app.get('/', home)
+
 app.get('/register', register)
 app.post("/register", upload.single("cover"), async (req, res) => {
   const existingUser = await db.collection('users').findOne({
@@ -88,7 +91,6 @@ app.post("/register", upload.single("cover"), async (req, res) => {
   res.redirect(`/profile/${userId}`)
 
 });
-
 app.get('/login', login)
 app.post("/login", async (req, res) => {
   try {
@@ -123,6 +125,15 @@ app.post("/login", async (req, res) => {
 
 })
 
+// POST of PUT app.get('/resetPassword', resetPassword)
+// app.post('/resetPassword', async(req,res) =>{
+
+// })
+
+function home(req,res){
+  res.render('home')
+}
+
 async function connectMongo() {
   try {
     const client = new MongoClient(process.env.MONGO_URI)
@@ -138,7 +149,7 @@ async function connectMongo() {
 }
 
 function register(req, res) {
-  res.render('register');
+  res.render('register')
 }
 
 function login(req, res) {
