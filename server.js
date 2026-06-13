@@ -253,6 +253,17 @@ catch(error){
 }
 })
 
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return res.status(500).send("An error occurred while logging out.");
+    }
+    res.redirect("/login?logout=true");
+  });
+});
+
+
 function home(req, res) {
   res.render('home')
 }
@@ -299,7 +310,6 @@ async function changePassword(req, res) {
     animal: animal})
 }
 
-
 // password hash
 async function createPasswordHash(password) {
   const salt = await bcrypt.genSalt(10)
@@ -320,6 +330,7 @@ function calculateAge(userBirthDate) {
   }
   return age
 }
+
 
 //database
 async function startServer() {
