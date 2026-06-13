@@ -295,7 +295,8 @@ async function changePassword(req, res) {
   const animal = await db.collection('animals').findOne({
     ownerId: user._id
   })
-  res.render('changePassword', user, animal)
+  res.render('changePassword', {user:user,
+    animal: animal})
 }
 
 
