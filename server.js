@@ -143,7 +143,7 @@ app.post('/resetPassword', async (req, res) => {
       !confirmResetNewPassword) {
       req.session.message = {
         type: 'error',
-        text: 'Please fill in all fields'
+        text: 'Please fill in all fields.'
       };
       return res.redirect('/resetPassword')
     }
@@ -234,9 +234,7 @@ function login(req, res) {
 }
 
 function resetPassword(req,res){
-  res.render('resetPassword',{
-    message: null,
-  })
+  res.render('resetPassword')
 }
 
 // password hash
