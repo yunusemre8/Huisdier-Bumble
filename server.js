@@ -22,7 +22,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production", 
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 2,
     },
@@ -98,20 +98,22 @@ app.post("/login", async (req, res) => {
     const user = await db.collection("users").findOne({ userEmail });
 
     if (!user) {
-      return res.render('login', {message: {
-        type: error,
-        text: 'User couldnt be found'
-      }, 
-    oldEmail: userEmail})
+      return res.render('login', {
+        message: {
+          type: error,
+          text: 'User couldnt be found'
+        },
+        oldEmail: userEmail
+      })
     }
 
     const isMatch = await bcrypt.compare(isPassword, user.passwordHash);
 
     if (!isMatch) {
       return res.render("login", {
-        message:{
-          type:'error',
-          text:'Email or password is incorrect'
+        message: {
+          type: 'error',
+          text: 'Email or password is incorrect'
         },
         oldEmail: userEmail,
       });
@@ -125,12 +127,75 @@ app.post("/login", async (req, res) => {
 
 })
 
-// POST of PUT app.get('/resetPassword', resetPassword)
-// app.post('/resetPassword', async(req,res) =>{
 
-// })
+app.get('/resetPassword', resetPassword)
+app.post('/resetPassword', async (req, res) => {
+  try {
+    const { resetUserEmail, resetPetName, resetPetWeight, resetNewPassword, confirmResetNewPassword } = req.body
+    const user = await db.collection("users").findOne({ userEmail: resetUserEmail })
+    const animal = await db.collection('animals').findOne({ ownerId: user._id })
+    const newPassswordHash = await bcrypt.hash(resetNewPassword, 10)
 
-function home(req,res){
+    if (!resetUserEmail ||
+      !resetPetName ||
+      !resetPetWeight ||
+      !resetNewPassword ||
+      !confirmResetNewPassword) {
+      req.session.message = {
+        type: 'error',
+        text: 'Please fill in all fields'
+      };
+      return res.redirect('/resetPassword')
+    }
+
+    if (!user) {
+      req.session.message = {
+        type: 'error',
+        text: 'User could not be found.'
+      }
+      return res.render('/resetPassword')
+    }
+
+    if (!animal) {
+      req.session.message = {
+        type: 'error',
+        text: 'No pet found for this account.'
+      }
+      return res.redirect('resetPaswoord')
+    }
+
+    if (animal.petName.trim().toLowerCase() !== resetPetName.trim().toLowerCase) {
+      req.session.message = {
+        type: 'error',
+        text: 'Values do not match.'
+      }
+      return res.redirect('/resetPassword')
+    }
+
+    if (Number(animal.petWeight) !== Number(resetPetWeight)) {
+      req.session.message = {
+        type: 'error',
+        text: 'Values do not match.'
+      }
+      return res.redirect('/resetPassword')
+    }
+
+    await db.collection('users').updateOne(
+      {_id: user._id},
+      {$set:{passwordHash: newPassswordHash}}
+    )
+    req.session.message={
+      type: 'success',
+      text: 'Password succesfully updated. You can now login.'
+    }
+    return res.redirect('/login')
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Password reset failed");
+  }
+})
+
+function home(req, res) {
   res.render('home')
 }
 
@@ -156,6 +221,12 @@ function login(req, res) {
   res.render('login', {
     message: null,
     oldEmail: '',
+  })
+}
+
+function resetPassword(req,res){
+  res.render('resetPassword',{
+    message: null,
   })
 }
 
