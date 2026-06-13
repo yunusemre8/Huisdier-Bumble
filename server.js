@@ -9,6 +9,7 @@ const port = 3000
 
 const session = require('express-session')
 const userValidate = require('./middleware/userValidate')
+const messageMiddleware = require('./middleware/message')
 
 let db
 require('dotenv').config()
@@ -27,7 +28,9 @@ app.use(
       maxAge: 1000 * 60 * 60 * 2,
     },
   })
-);
+)
+app.use(messageMiddleware)
+
 app.set('view engine', 'ejs')
 
 
@@ -132,10 +135,7 @@ app.get('/resetPassword', resetPassword)
 app.post('/resetPassword', async (req, res) => {
   try {
     const { resetUserEmail, resetPetName, resetPetWeight, resetNewPassword, confirmResetNewPassword } = req.body
-    const user = await db.collection("users").findOne({ userEmail: resetUserEmail })
-    const animal = await db.collection('animals').findOne({ ownerId: user._id })
-    const newPassswordHash = await bcrypt.hash(resetNewPassword, 10)
-
+    
     if (!resetUserEmail ||
       !resetPetName ||
       !resetPetWeight ||
@@ -148,14 +148,22 @@ app.post('/resetPassword', async (req, res) => {
       return res.redirect('/resetPassword')
     }
 
+    if(resetNewPassword !== confirmResetNewPassword){
+      req.session.message={
+        type: 'error',
+        text: 'Passwords do not match.'
+      }
+    }
+
+    const user = await db.collection("users").findOne({ userEmail: resetUserEmail })
     if (!user) {
       req.session.message = {
         type: 'error',
         text: 'User could not be found.'
       }
-      return res.render('/resetPassword')
+      return res.redirect('/resetPassword')
     }
-
+    const animal = await db.collection('animals').findOne({ ownerId: user._id })
     if (!animal) {
       req.session.message = {
         type: 'error',
@@ -164,7 +172,7 @@ app.post('/resetPassword', async (req, res) => {
       return res.redirect('resetPaswoord')
     }
 
-    if (animal.petName.trim().toLowerCase() !== resetPetName.trim().toLowerCase) {
+    if (animal.petName.trim().toLowerCase() !== resetPetName.trim().toLowerCase()) {
       req.session.message = {
         type: 'error',
         text: 'Values do not match.'
@@ -180,6 +188,7 @@ app.post('/resetPassword', async (req, res) => {
       return res.redirect('/resetPassword')
     }
 
+    const newPassswordHash = await bcrypt.hash(resetNewPassword, 10)
     await db.collection('users').updateOne(
       {_id: user._id},
       {$set:{passwordHash: newPassswordHash}}
