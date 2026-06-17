@@ -30,7 +30,7 @@ router.post('/resetPassword', async (req, res) => {
         type: 'error',
         text: 'Passwords do not match.'
       }
-      return res.redirect('/resetPassword')
+      return res.redirect()
     }
 
     const user = await db.collection("users").findOne({ userEmail: resetUserEmail })
