@@ -2,13 +2,13 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const upload = multer({ dest: 'static/upload/' })
+const bcrypt = require('bcrypt')
 
-
-const userValidate = require('../middleware/userValidate')
-const messageMiddleware = require('../middleware/message')
+const {getDb} = require('../database')
 
 router.get('/register', register)
 router.post("/register", upload.single("cover"), async (req, res) => {
+  const db = getDb()
   const existingUser = await db.collection('users').findOne({
     userEmail: req.body.userEmail
   })
@@ -69,6 +69,7 @@ router.post("/register", upload.single("cover"), async (req, res) => {
 
 router.get('/login', login)
 router.post("/login", async (req, res) => {
+  const db = getDb()
   try {
     const { userEmail, isPassword } = req.body;
     const user = await db.collection("users").findOne({ userEmail });

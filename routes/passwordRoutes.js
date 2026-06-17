@@ -1,11 +1,15 @@
 const express = require('express')
 const router = express.Router()
 
+const {getDb} = require('../database')
+const {ObjectId} = require('mongodb')
+const bcrypt = require('bcrypt')
+
 const userValidate = require('../middleware/userValidate')
-const messageMiddleware = require('../middleware/message')
 
 router.get('/resetPassword', resetPassword)
 router.post('/resetPassword', async (req, res) => {
+  const db = getDb()
   try {
     const { resetUserEmail, resetPetName, resetPetWeight, resetNewPassword, confirmResetNewPassword } = req.body
 
@@ -79,6 +83,7 @@ router.post('/resetPassword', async (req, res) => {
 
 router.get('/changePassword', userValidate, changePassword)
 router.post('/changePassword', async (req, res) => {
+  const db = getDb()
   try {
     const userId = req.session.userId
     const user = await db.collection('users').findOne({ _id: new ObjectId(userId) })
@@ -133,6 +138,7 @@ function resetPassword(req, res) {
 }
 
 async function changePassword(req, res) {
+  const db = getDb()
   const userId = req.session.userId
   const user = await db.collection('users').findOne({
     _id: new ObjectId(userId)
