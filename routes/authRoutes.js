@@ -13,7 +13,12 @@ router.post("/register", upload.single("cover"), async (req, res) => {
     userEmail: req.body.userEmail
   })
   if (existingUser) {
-    return res.send('Email already registered')
+    req.session.message={
+      type:'error',
+      text: 'Email already registered. Please log in.'
+    }
+
+    return res.redirect('/login')
   }
 
   if (req.body.isPassword !== req.body.checkPassword) {
@@ -120,7 +125,6 @@ function register(req, res) {
 
 function login(req, res) {
   res.render('login', {
-    message: null,
     oldEmail: '',
   })
 }
@@ -141,5 +145,11 @@ function calculateAge(userBirthDate) {
   return age
 }
 
+
+// password hash
+async function createPasswordHash(password) {
+  const salt = await bcrypt.genSalt(10)
+  return await bcrypt.hash(password, salt)
+}
 
 module.exports = router

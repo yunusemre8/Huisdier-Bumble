@@ -42,8 +42,6 @@ function home(req, res) {
   res.render('home')
 }
 
-
-//database
 async function startServer() {
   await connectMongo()
 
