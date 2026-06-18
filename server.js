@@ -8,6 +8,7 @@ const userValidate = require('./middleware/userValidate')
 const messageMiddleware = require('./middleware/message')
 const authRoutes = require('./routes/authRoutes')
 const passwordRoutes = require('./routes/passwordRoutes')
+const homeRoutes = require('./routes/homeRoutes')
 
 
 require('dotenv').config()
@@ -29,15 +30,11 @@ app.use(
     },
   })
 )
-app.use(messageMiddleware)
+app.use('/', homeRoutes)
 
+app.use(messageMiddleware)
 app.set('view engine', 'ejs')
 
-app.get('/', home)
-
-function home(req, res) {
-  res.render('home')
-}
 
 async function connectMongo() {
   try {
