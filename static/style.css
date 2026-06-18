@@ -547,8 +547,9 @@ fieldset::after {
 
 #page-login .error {
     color: var(--color-button-accent);
-    background-color: transparent;
-    padding-inline: 0;
+    background-color: var(--color-secondary-light);
+    padding: .5rem;
+
 }
 
 .success {

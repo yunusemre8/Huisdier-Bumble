@@ -67,7 +67,7 @@ router.post("/register", upload.single("cover"), async (req, res) => {
   }
   await db.collection('animals').insertOne(newAnimal)
 
-  res.redirect(`/profile/${userId}`)
+  res.redirect('/login')
 });
 
 

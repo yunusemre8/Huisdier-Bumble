@@ -37,7 +37,6 @@ app.set('view engine', 'ejs')
 
 app.get('/', home)
 
-
 function home(req, res) {
   res.render('home')
 }

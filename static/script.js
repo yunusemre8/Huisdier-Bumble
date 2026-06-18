@@ -6,7 +6,6 @@ const secondQuestionsBox = document.querySelector(".secondQuestionsBox");
 const thirdQuestionsBox = document.querySelector(".thirdQuestionsBox");
 const fourthQuestionsBox = document.querySelector(".fourthQuestionsBox");
 const fifthQuestionsBox = document.querySelector(".fifthQuestionsBox");
-const submitButton = document.querySelector('input[type="submit"]');
 
 const backButton1 = document.getElementById("button21");
 const backButton2 = document.getElementById("button31");
@@ -55,7 +54,7 @@ function showStep(step) {
   updateProgress(step);
 }
 
-// User age calculate
+
 function calculateAge(userBirthDate) {
   const today = new Date();
   let age = today.getFullYear() - userBirthDate.getFullYear();
@@ -76,7 +75,9 @@ button1.addEventListener("click", () => {
   const ageError = document.getElementById("ageError");
 
   if (!userBirthDate.value) {
-    ageWarning.classList.remove("error-active");
+    if (ageWarning) {
+      ageWarning.classList.remove("error-active");
+    }
     if (ageError) {
       ageError.textContent = "Please choose your birthday.";
     }
@@ -124,9 +125,6 @@ form.addEventListener("submit", function (event) {
     }
     showStep(1);
   }
-
-  console.log("Birth Date:", userBirthDate.value);
-  console.log("Calculated age:", age);
 });
 
 button2.addEventListener("click", () => showStep(3));
@@ -191,7 +189,7 @@ petTypeSelect.addEventListener("change", () => {
 
 updateBreeds(petTypeSelect.value);
 
-// phone number display & required
+
 const selectedWhatsapp = document.getElementById("isWhatsapp");
 const selectedEmail = document.getElementById("preferEmail");
 const isPhone = document.getElementById("isPhone");
@@ -201,7 +199,6 @@ isPhone.style.display = "none";
 phoneInput.required = false;
 
 function togglePhoneField() {
-  console.log("see that?");
   if (selectedWhatsapp.checked) {
     isPhone.style.display = "block";
     phoneInput.required = true;
@@ -215,7 +212,7 @@ function togglePhoneField() {
 selectedWhatsapp.addEventListener("change", togglePhoneField);
 selectedEmail.addEventListener("change", togglePhoneField);
 
-// passwords match
+
 const password = document.getElementById("isPassword");
 const checkPass = document.getElementById("checkPassword");
 const matchText = document.getElementById("passwordMatch");
@@ -238,14 +235,14 @@ function checkPasswords() {
 checkPass.addEventListener("input", checkPasswords);
 password.addEventListener("input", checkPasswords);
 
-// keyframe
+
 const btn = document.getElementById('createAccountBtn');
 
 btn.closest('form').addEventListener('submit', (e) => {
-    if (btn.classList.contains('loading')) {
-        e.preventDefault();
-        return;
-    }
-    btn.classList.add('loading');
-    btn.disabled = true;
+  if (btn.classList.contains('loading')) {
+    e.preventDefault();
+    return;
+  }
+  btn.classList.add('loading');
+  btn.disabled = true;
 });
