@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Pet to Edit</title>
+    <link rel="stylesheet" href="/profile.css">
+    <style>
+        .pet-choice-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .pet-choice-btn:hover { border-color: #c95c65; background: #fff4f5; }
+        .pet-choice-btn img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Edit Profile</h1>
+        <p>Which pet's profile would you like to edit?</p>
+        
+        <br>
+        
+        <% if (animals && animals.length > 0) { %>
+            <% animals.forEach(animal => { %>
+                <a href="/edit-profile/<%= user._id %>/<%= animal._id %>" class="pet-choice-btn">
+                    <% if (animal.cover) { %>
+                        <img src="/upload/<%= animal.cover %>" alt="<%= animal.petName %>">
+                    <% } %>
+                    <div>
+                        <h3><%= animal.petName %></h3>
+                        <p><%= animal.petType %> - <%= animal.petBreed %></p>
+                    </div>
+                </a>
+            <% }) %>
+        <% } %>
+
+        <div class="actions" style="margin-top: 20px;">
+            <a href="/profile/<%= user._id %>">Cancel</a>
+        </div>
+    </div>
+</body>
+</html>
