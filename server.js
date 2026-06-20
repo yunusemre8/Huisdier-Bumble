@@ -1,9 +1,8 @@
 const express = require("express");
 const session = require("express-session");
 const dotenv = require("dotenv");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb")
 
-// Middleware ve Routes
 const userValidate = require('./middleware/userValidate');
 const messageMiddleware = require('./middleware/message');
 const authRoutes = require('./routes/authRoutes');
@@ -15,14 +14,12 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Temel Ayarlar
 app.set("view engine", "ejs");
 app.set("views", "views");
 app.use(express.static("static"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session Ayarları
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "default_secret_key",
@@ -36,21 +33,82 @@ app.use(
   })
 );
 
-// Veritabanı ve Middleware
 let db;
 app.use((req, res, next) => {
   req.db = db;
   next();
 });
 
-// Route'lar
 app.use('/', homeRoutes);
 app.use('/', authRoutes);
 app.use('/', passwordRoutes);
 app.use('/', profileRoutes);
 app.use(messageMiddleware);
 
-// Server ve DB Bağlantısı
+function isValidId(id) {
+  return ObjectId.isValid(id)
+}
+
+app.get("/contact/:ownerId", async (req, res) => {
+  try {
+    const ownerId = req.params.ownerId
+
+    if (!isValidId(ownerId)) {
+      return res.status(400).send("Invalid user id.")
+    }
+
+    const matchUser = await req.db.collection("users").findOne({
+      _id: new ObjectId(ownerId)
+    })
+
+    if (!matchUser) {
+      return res.status(404).send("Match user not found.")
+    }
+
+    let currentUser = null
+
+    if (req.session.userId && isValidId(req.session.userId)) {
+      currentUser = await req.db.collection("users").findOne({
+        _id: new ObjectId(req.session.userId)
+      })
+    }
+
+    if (!currentUser) {
+      currentUser = matchUser
+    }
+
+    res.render("contact", {
+      matchUser,
+      currentUser
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Contact page could not be loaded.")
+  }
+})
+
+app.get("/yourmatches", async (req, res) => {
+  try {
+    const currentUserId = req.session.userId
+
+    let matches = await req.db.collection("users").find().toArray()
+
+    if (currentUserId && isValidId(currentUserId)) {
+      matches = matches.filter(
+        user => user._id.toString() !== currentUserId.toString()
+      )
+    }
+
+    res.render("yourmatches", {
+      matches
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Matches page could not be loaded.")
+  }
+})
+
+
 async function startServer() {
   try {
     const client = new MongoClient(process.env.MONGO_URI || "mongodb://localhost:27017/huisdier-bumble");

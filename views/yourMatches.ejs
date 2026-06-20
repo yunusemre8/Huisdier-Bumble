@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your matches</title>
+  <link rel="stylesheet" href="/yourmatches.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+<body>
+  <main class="matches-page">
+    <section class="phone-screen">
+      <p class="small-title">your matches</p>
+
+      <section class="matches-card">
+        <h1>Your matches</h1>
+
+        <% if (matches.length === 0) { %>
+          <p>Je hebt nog geen matches.</p>
+        <% } else { %>
+          <% matches.forEach((match) => { %>
+            <article class="match-item">
+              <button type="button" class="remove-btn">X</button>
+
+              <div class="match-left">
+                <img
+                  class="match-image"
+                  src="<%= match.cover ? '/upload/' + match.cover : '/images/sophie 2.png' %>"
+                  alt="<%= match.userNickname || match.userName %>"
+                />
+
+                <div class="match-info">
+                  <h2><%= match.userNickname || match.userName %></h2>
+                  <p><%= match.petName %></p>
+                </div>
+              </div>
+
+              <a href="/contact/<%= match._id %>" class="heart-button">♥</a>
+            </article>
+          <% }) %>
+        <% } %>
+      </section>
+
+      <nav class="bottom-nav">
+        <a href="/" class="nav-icon">☝</a>
+        <a href="/yourmatches" class="nav-icon">💬</a>
+        <a href="/profile/test" class="nav-icon">◯</a>
+      </nav>
+    </section>
+  </main>
+</body>
+</html>
