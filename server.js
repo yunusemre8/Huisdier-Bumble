@@ -88,7 +88,7 @@ app.get("/contact/:ownerId", async (req, res) => {
   }
 })
 
-app.get("/yourmatches", async (req, res) => {
+app.get("/yourMatches", async (req, res) => {
   try {
     const currentUserId = req.session.userId
 
@@ -100,7 +100,7 @@ app.get("/yourmatches", async (req, res) => {
       )
     }
 
-    res.render("yourmatches", {
+    res.render("yourMatches", {
       matches
     })
   } catch (error) {
