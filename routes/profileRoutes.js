@@ -63,6 +63,10 @@ router.get("/api/pets", async (req, res) => {
   }
 });
 
+router.get('/profile', userValidate, (req, res) => {
+  res.redirect(`/profile/${req.session.userId}`);
+});
+
 router.get("/profile/:id", userValidate, async (req, res) => {
   try {
     const userId = new ObjectId(req.params.id);
