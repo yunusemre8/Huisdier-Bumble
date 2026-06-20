@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 
-/* ==== 1. VARIABLES & VARIABLES CONFIG (CSS VARIABLES) ==== */
 
 :root {
     --font-title: 'Fredoka', sans-serif;
@@ -31,7 +30,6 @@
     --whitespace-4: 3.5rem;
 }
 
-/* ==== 2. CSS RESET & GLOBAL STYLES ==== */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -48,7 +46,6 @@ body {
     padding: 3rem 1.5rem;
 }
 
-/* ==== 3. CARD ISOLATION COMPONENT ==== */
 
 .card {
     background: var(--color-background-soft);
@@ -74,7 +71,6 @@ hr {
     border-top: 0.125rem solid var(--color-input-shadow);
 }
 
-/* ==== 4. LAYOUT SUB-COMPONENTS (HEADER & USER & PET) ==== */
 
 .card-header {
     display: flex;
@@ -126,7 +122,6 @@ hr {
     margin-top: 0.125rem;
 }
 
-/* ==== 5. INTERACTIVE BUTTONS & ACTIONS LAYOUT ==== */
 .settings-btn {
     background: none;
     border: none;
@@ -220,7 +215,6 @@ hr {
     transform: translateY(-0.125rem);
 }
 
-/* ==== 6. FORMS CONTROL DECORATORS ==== */
 
 form {
     display: flex;
@@ -257,7 +251,6 @@ form {
     border-color: var(--color-button-accent);
 }
 
-/* ==== 7. ICON SYSTEM COMPONENT ==== */
 .icon-placeholder {
     display: inline-flex;
     align-items: center;
@@ -272,7 +265,6 @@ form {
     object-fit: contain;
 }
 
-/* ==== 8. MAIN NAVIGATION APPARATUS (FOOTER BAR) ==== */
 footer {
     position: fixed;
     bottom: 0;

@@ -9,14 +9,11 @@ const upload = multer({ dest: "static/upload/" });
 const dogBreeds = ["Labrador", "Golden Retriever", "Poodle", "Border Collie", "Beagle", "French Bulldog"];
 const catBreeds = ["Persian", "Maine Coon", "Siamese", "Ragdoll", "Bengal", "Scottish Fold"];
 
-// Auth check middleware (Left blank for now so it doesn't block local testing, connect a middleware if needed)
 const userValidate = (req, res, next) => {
-  // If session doesn't exist, simulate a dummy user for testing purposes
   if (!req.session) req.session = {};
   next();
 };
 
-// --- MATCHES & FILTER PAGE (matchesPage.ejs) ---
 router.get("/matchesPage/:id", userValidate, async (req, res) => {
   try {
     const user = await req.db.collection("users").findOne({ _id: new ObjectId(req.params.id) });
@@ -32,7 +29,6 @@ router.get("/matchesPage/:id", userValidate, async (req, res) => {
   }
 });
 
-// --- API: PETS FILTERING ---
 router.get("/api/pets", async (req, res) => {
   try {
     const { petType, breeds, size, frequency, place, city } = req.query;
@@ -45,13 +41,11 @@ router.get("/api/pets", async (req, res) => {
       query.petBreed = { $in: breedArray };
     }
 
-    // FIXED: City is stored in 'users' collection, so we find owners first
     if (city) {
       const usersInCity = await req.db.collection("users")
         .find({ userCity: { $regex: city, $options: "i" } })
         .toArray();
       
-      // Support both ObjectId and String formats for ownerId cross-matching
       const userIds = [];
       usersInCity.forEach(user => {
         userIds.push(user._id);
@@ -69,25 +63,21 @@ router.get("/api/pets", async (req, res) => {
   }
 });
 
-// --- 1. PROFILE PAGE ---
 router.get("/profile/:id", userValidate, async (req, res) => {
   try {
     const userId = new ObjectId(req.params.id);
     const user = await req.db.collection("users").findOne({ _id: userId });
     
-    // Kullanıcının hayvanlarını da çekiyoruz
     const animals = await req.db.collection("animals").find({ ownerId: userId }).toArray();
     
-    // İŞTE EKSİK OLAN VE SAYFAYI SONSUZA KADAR DONDURAN KOMUT BUYDU!
     res.render("profile", { user: user, animals: animals });
 
   } catch (error) {
-    console.error("Profil yükleme hatası:", error);
-    res.status(500).send("Profil yüklenirken bir hata oluştu.");
+    console.error("Profile loading error:", error);
+    res.status(500).send("An error occurred while loading the profile.");
   }
 });
 
-// --- ANIMAL SELECTING ---
 router.get("/select-pet-edit/:id", userValidate, async (req, res) => {
   try {
     const userId = new ObjectId(req.params.id);
@@ -101,7 +91,6 @@ router.get("/select-pet-edit/:id", userValidate, async (req, res) => {
   }
 });
 
-// --- 2. EDIT PROFILE PAGE ---
 router.get("/edit-profile/:userId/:petId", userValidate, async (req, res) => {
   try {
     const user = await req.db.collection("users").findOne({ _id: new ObjectId(req.params.userId) });
@@ -114,7 +103,6 @@ router.get("/edit-profile/:userId/:petId", userValidate, async (req, res) => {
   }
 });
 
-// --- 3. EDIT PROFILE POST ---
 router.post("/edit-profile/:userId/:petId", upload.single("cover"), async (req, res) => {
   try {
     const userId = new ObjectId(req.params.userId);
@@ -144,7 +132,6 @@ router.post("/edit-profile/:userId/:petId", upload.single("cover"), async (req, 
   }
 });
 
-// --- ADD PET PAGE (GET & POST) ---
 router.get("/add-pet/:id", userValidate, (req, res) => {
   res.render("add-pet", { userId: req.params.id });
 });
@@ -170,7 +157,6 @@ router.post("/add-pet/:id", upload.single("cover"), async (req, res) => {
   }
 });
 
-// --- 4. DELETE PET ---
 router.post("/delete-pet/:userId/:petId", async (req, res) => {
   try {
     const userId = new ObjectId(req.params.userId);
@@ -188,7 +174,6 @@ router.post("/delete-pet/:userId/:petId", async (req, res) => {
   }
 });
 
-// --- SAVE LOCATION ---
 router.post("/save-location", async (req, res) => {
   try {
     const { id, lat, lng } = req.body;

@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
-/* ==== 1. CORE DESIGN VARIABLES ==== */
 :root {
     --font-title: 'Fredoka', sans-serif;
     --font-body: 'Nunito', sans-serif;
@@ -25,7 +24,6 @@
     --whitespace-4: 3.5rem;
 }
 
-/* ==== 2. GLOBAL RESET & LAYOUT CONTEXT ==== */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -62,7 +60,6 @@ h1 {
     margin-bottom: var(--whitespace-2);
 }
 
-/* ==== 3. FILTER SIDEBAR LAYOUT ==== */
 .sidebar {
     position: fixed;
     top: 0; left: 0;
@@ -166,7 +163,6 @@ section label {
 }
 #reset-button:hover { background: var(--color-input); }
 
-/* ==== 4. NAVIGATION TRIGGERS ==== */
 .titlematchpage { max-width: 60%; text-align: center; }
 
 .filterbtn, .locationbtn {
@@ -185,7 +181,6 @@ section label {
 .locationbtn { left: 2em; }
 .filterbtn { right: 2em; }
 
-/* ==== 5. MATCHING CARD STACK VIEW LAYER ==== */
 .cards {
     position: relative;
     width: 15.625rem;
@@ -272,7 +267,6 @@ section label {
 .swipe-right { transform: translateX(31.25rem) rotate(20deg); opacity: 0; }
 .swipe-left { transform: translateX(-31.25rem) rotate(-20deg); opacity: 0; }
 
-/* ==== 6. GLOBAL APPLICATION APP-BAR NAVIGATION ==== */
 footer {
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -303,7 +297,6 @@ footer {
 .footer-btn img { width: 1.75rem; height: 1.75rem; }
 .footer-btn.active { background: rgba(155, 27, 48, 0.12); }
 
-/* ==== 7. TUTORIAL ANIMATIONS LAYER ==== */
 .swipe-hint {
     position: fixed;
     inset: 0;
