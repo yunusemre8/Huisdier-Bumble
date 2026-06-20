@@ -72,17 +72,18 @@ router.get("/api/pets", async (req, res) => {
 // --- 1. PROFILE PAGE ---
 router.get("/profile/:id", userValidate, async (req, res) => {
   try {
-    // 1. ADIM: ID geçerli mi kontrol et
-    if (!ObjectId.isValid(req.params.id)) {
-      return res.status(400).send("Geçersiz ID formatı.");
-    }
-
     const userId = new ObjectId(req.params.id);
     const user = await req.db.collection("users").findOne({ _id: userId });
     
-    // ... geri kalan kodun
+    // Kullanıcının hayvanlarını da çekiyoruz
+    const animals = await req.db.collection("animals").find({ ownerId: userId }).toArray();
+    
+    // İŞTE EKSİK OLAN VE SAYFAYI SONSUZA KADAR DONDURAN KOMUT BUYDU!
+    res.render("profile", { user: user, animals: animals });
+
   } catch (error) {
-    // ...
+    console.error("Profil yükleme hatası:", error);
+    res.status(500).send("Profil yüklenirken bir hata oluştu.");
   }
 });
 

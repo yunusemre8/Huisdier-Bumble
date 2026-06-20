@@ -21,12 +21,12 @@ const progressFill = document.getElementById("progressFill");
 const userBirthDate = document.getElementById("userAge");
 
 function hideAll() {
-  welcomeBox.classList.add("hidden");
-  firstQuestionsBox.classList.add("hidden");
-  secondQuestionsBox.classList.add("hidden");
-  thirdQuestionsBox.classList.add("hidden");
-  fourthQuestionsBox.classList.add("hidden");
-  fifthQuestionsBox.classList.add("hidden");
+  if (welcomeBox) welcomeBox.classList.add("hidden");
+  if (firstQuestionsBox) firstQuestionsBox.classList.add("hidden");
+  if (secondQuestionsBox) secondQuestionsBox.classList.add("hidden");
+  if (thirdQuestionsBox) thirdQuestionsBox.classList.add("hidden");
+  if (fourthQuestionsBox) fourthQuestionsBox.classList.add("hidden");
+  if (fifthQuestionsBox) fifthQuestionsBox.classList.add("hidden");
 }
 
 function updateProgress(step) {
@@ -69,74 +69,95 @@ function calculateAge(userBirthDate) {
   }
   return age;
 }
+if (button1) {
+  button1.addEventListener("click", () => {
+    const ageWarning = document.getElementById("ageWarning");
+    const ageError = document.getElementById("ageError");
 
-button1.addEventListener("click", () => {
-  const ageWarning = document.getElementById("ageWarning");
-  const ageError = document.getElementById("ageError");
-
-  if (!userBirthDate.value) {
-    if (ageWarning) {
-      ageWarning.classList.remove("error-active");
+    if (!userBirthDate.value) {
+      if (ageWarning) {
+        ageWarning.classList.remove("error-active");
+      }
+      if (ageError) {
+        ageError.textContent = "Please choose your birthday.";
+      }
+      return;
     }
+
+    const selectedDate = new Date(userBirthDate.value);
+    const age = calculateAge(selectedDate);
+
+    if (age < 18) {
+      if (ageWarning) {
+        ageWarning.classList.add("error-active");
+      }
+      if (ageError) {
+        ageError.textContent = "Pet Playdates is for users aged 18+ only.";
+      }
+      return;
+    }
+
+    if (ageWarning) { ageWarning.classList.remove("error-active"); }
     if (ageError) {
-      ageError.textContent = "Please choose your birthday.";
+      ageError.textContent = "";
     }
-    return;
-  }
 
-  const selectedDate = new Date(userBirthDate.value);
-  const age = calculateAge(selectedDate);
+    showStep(2);
+  });
+}
 
-  if (age < 18) {
-    ageWarning.classList.add("error-active");
-    if (ageError) {
-      ageError.textContent = "Pet Playdates is for users aged 18+ only.";
+if (form) {
+  form.addEventListener("submit", function (event) {
+    const ageError = document.getElementById("ageError");
+
+    if (!userBirthDate.value) {
+      event.preventDefault();
+      if (ageError) {
+        ageError.textContent = "Please choose your birthday.";
+      }
+      showStep(1);
+      return;
     }
-    return;
-  }
 
-  ageWarning.classList.remove("error-active");
-  if (ageError) {
-    ageError.textContent = "";
-  }
+    const selectedDate = new Date(userBirthDate.value);
+    const age = calculateAge(selectedDate);
 
-  showStep(2);
-});
-
-form.addEventListener("submit", function (event) {
-  const ageError = document.getElementById("ageError");
-
-  if (!userBirthDate.value) {
-    event.preventDefault();
-    if (ageError) {
-      ageError.textContent = "Please choose your birthday.";
+    if (age < 18) {
+      event.preventDefault();
+      if (ageError) {
+        ageError.textContent = "Pet Playdates is for users aged 18+ only.";
+      }
+      showStep(1);
     }
-    showStep(1);
-    return;
-  }
+  });
+}
 
-  const selectedDate = new Date(userBirthDate.value);
-  const age = calculateAge(selectedDate);
+if (button2) {
+  button2.addEventListener("click", () => showStep(3));
+}
+if (button3) {
+  button3.addEventListener("click", () => showStep(4));
+}
+if (button4) {
+  button4.addEventListener("click", () => showStep(5));
+}
+if (backButton1) {
+  backButton1.addEventListener("click", () => showStep(1));
+}
+if (backButton2) {
+  backButton2.addEventListener("click", () => showStep(2));
+}
+if (backButton3) {
+  backButton3.addEventListener("click", () => showStep(3));
 
-  if (age < 18) {
-    event.preventDefault();
-    if (ageError) {
-      ageError.textContent = "Pet Playdates is for users aged 18+ only.";
-    }
-    showStep(1);
-  }
-});
+}
+if (backButton4) {
+  backButton4.addEventListener("click", () => showStep(4));
+}
 
-button2.addEventListener("click", () => showStep(3));
-button3.addEventListener("click", () => showStep(4));
-button4.addEventListener("click", () => showStep(5));
-
-backButton1.addEventListener("click", () => showStep(1));
-backButton2.addEventListener("click", () => showStep(2));
-backButton3.addEventListener("click", () => showStep(3));
-backButton4.addEventListener("click", () => showStep(4));
-
-showStep(1);
+if (welcomeBox && firstQuestionsBox && progressFill) {
+  showStep(1);
+}
 
 
 const breeds = {
@@ -164,6 +185,8 @@ const petTypeSelect = document.getElementById("petType");
 const breedSelect = document.getElementById("isBreed");
 
 const updateBreeds = (type) => {
+  if (!breedSelect) return;
+
   breedSelect.innerHTML = "";
 
   if (!type || !breeds[type]) return;
@@ -183,11 +206,13 @@ const updateBreeds = (type) => {
   });
 };
 
-petTypeSelect.addEventListener("change", () => {
-  updateBreeds(petTypeSelect.value);
-});
+if (petTypeSelect) {
+  petTypeSelect.addEventListener("change", () => {
+    updateBreeds(petTypeSelect.value);
+  });
 
-updateBreeds(petTypeSelect.value);
+  updateBreeds(petTypeSelect.value);
+}
 
 
 const selectedWhatsapp = document.getElementById("isWhatsapp");
@@ -195,10 +220,14 @@ const selectedEmail = document.getElementById("preferEmail");
 const isPhone = document.getElementById("isPhone");
 const phoneInput = document.getElementById("userPhone");
 
-isPhone.style.display = "none";
-phoneInput.required = false;
+if (isPhone && phoneInput) {
+  isPhone.style.display = "none";
+  phoneInput.required = false;
+}
 
 function togglePhoneField() {
+  if (!selectedWhatsapp || !isPhone || !phoneInput) return;
+
   if (selectedWhatsapp.checked) {
     isPhone.style.display = "block";
     phoneInput.required = true;
@@ -209,40 +238,36 @@ function togglePhoneField() {
   }
 }
 
-selectedWhatsapp.addEventListener("change", togglePhoneField);
-selectedEmail.addEventListener("change", togglePhoneField);
-
+if (selectedWhatsapp) {
+  selectedWhatsapp.addEventListener("change", togglePhoneField);
+}
+if (selectedEmail) {
+  selectedEmail.addEventListener("change", togglePhoneField);
+}
 
 const password = document.getElementById("isPassword");
 const checkPass = document.getElementById("checkPassword");
 const matchText = document.getElementById("passwordMatch");
 
 function checkPasswords() {
-  if (checkPass.value === "") {
-    matchText.textContent = "";
-    return;
-  }
+  if (!password || !checkPass || !matchText) return;
 
-  if (password.value === checkPass.value) {
-    matchText.textContent = "Passwords match";
-    matchText.style.color = "green";
-  } else {
-    matchText.textContent = "Passwords do not match";
-    matchText.style.color = "red";
+  if (checkPass) {
+    checkPass.addEventListener("input", checkPasswords);
+  }
+  if (password) {
+    password.addEventListener("input", checkPasswords);
   }
 }
-
-checkPass.addEventListener("input", checkPasswords);
-password.addEventListener("input", checkPasswords);
-
-
 const btn = document.getElementById('createAccountBtn');
 
-btn.closest('form').addEventListener('submit', (e) => {
-  if (btn.classList.contains('loading')) {
-    e.preventDefault();
-    return;
-  }
-  btn.classList.add('loading');
-  btn.disabled = true;
-});
+if (btn) {
+  btn.closest('form').addEventListener('submit', (e) => {
+    if (btn.classList.contains('loading')) {
+      e.preventDefault();
+      return;
+    }
+    btn.classList.add('loading');
+    btn.disabled = true;
+  });
+}
