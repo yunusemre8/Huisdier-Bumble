@@ -111,7 +111,7 @@ router.post('/logout', (req, res) => {
       console.error("Error destroying session:", err);
       return res.status(500).send("An error occurred while logging out.");
     }
-    res.redirect("/login?logout=true");
+    res.redirect("/login");
   });
 });
 
@@ -134,7 +134,7 @@ function calculateAge(userBirthDate) {
   const today = new Date()
   let age = today.getFullYear() - userBirthDate.getFullYear()
 
-  const monthDifference = today.getDate() < userBirthDate.getDate()
+  const monthDifference = today.getMonth() < userBirthDate.getMonth()
 
   if (
     monthDifference < 0 ||

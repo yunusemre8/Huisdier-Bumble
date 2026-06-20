@@ -57,9 +57,6 @@ async function connectMongo() {
   }
 }
 
-function getDb() {
-  return db
-}
 
 async function startServer() {
   await connectMongo()
