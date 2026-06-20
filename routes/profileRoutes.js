@@ -72,15 +72,17 @@ router.get("/api/pets", async (req, res) => {
 // --- 1. PROFILE PAGE ---
 router.get("/profile/:id", userValidate, async (req, res) => {
   try {
+    // 1. ADIM: ID geçerli mi kontrol et
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).send("Geçersiz ID formatı.");
+    }
+
     const userId = new ObjectId(req.params.id);
     const user = await req.db.collection("users").findOne({ _id: userId });
     
-    const animals = await req.db.collection("animals").find({ ownerId: userId }).toArray();
-    
-    res.render("profile", { user, animals });
+    // ... geri kalan kodun
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Profile couldn't load.");
+    // ...
   }
 });
 
