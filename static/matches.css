@@ -1,0 +1,331 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+/* ==== 1. CORE DESIGN VARIABLES ==== */
+:root {
+    --font-title: 'Fredoka', sans-serif;
+    --font-body: 'Nunito', sans-serif;
+
+    --color-background: hsl(42, 95%, 62%);
+    --color-background-soft: hsl(42, 100%, 85%);
+    --color-text: hsl(220, 15%, 15%);
+    --color-text-light: hsl(220, 10%, 40%);
+
+    --color-card: white;
+
+    --color-button-accent: hsl(349, 62%, 39.2%);
+    --color-text-button: hsl(360, 0%, 98.9%);
+    --color-button-accent-soft: hsl(349, 62%, 70%);
+
+    --color-input: hsl(42, 52%, 80%);
+    --color-input-shadow: hsl(42, 32%, 72%);
+
+    --whitespace-1: 0.5rem;
+    --whitespace-2: 1rem;
+    --whitespace-3: 1.5rem;
+    --whitespace-4: 3.5rem;
+}
+
+/* ==== 2. GLOBAL RESET & LAYOUT CONTEXT ==== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.5rem 1.5rem 3.75rem;
+    position: relative;
+    min-height: 100vh;
+}
+
+body::before,
+body::after {
+    content: '🐾';
+    font-size: 3rem;
+    opacity: 0.25;
+    position: fixed;
+    pointer-events: none;
+}
+body::before { bottom: 11.25rem; left: 1.25rem; }
+body::after { top: 16.25rem; right: 0.625rem; font-size: 2.25rem; }
+
+h1 {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-button-accent);
+    margin-bottom: var(--whitespace-2);
+}
+
+/* ==== 3. FILTER SIDEBAR LAYOUT ==== */
+.sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%;
+    width: 18.75rem;
+    background: var(--color-card);
+    padding: var(--whitespace-3) var(--whitespace-2);
+    padding-bottom: 6rem; 
+    border-right: 0.0625rem solid var(--color-input-shadow);
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    z-index: 100;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--whitespace-3);
+}
+
+.sidebar.open { transform: translateX(0); }
+
+.sidebar h2 {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    color: var(--color-button-accent);
+}
+
+#close-button {
+    position: absolute;
+    top: var(--whitespace-2); right: var(--whitespace-2);
+    background: none;
+    border: 0.0625rem solid var(--color-input-shadow);
+    border-radius: 0.375rem;
+    width: 2rem; height: 2rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+}
+
+section { display: flex; flex-direction: column; gap: 0.625rem; }
+
+section label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-button-accent);
+}
+
+.chip-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.single-chip, .multi-chip, .frequency-chip, .place-chip, .type-button {
+    padding: 0.5rem 1rem;
+    border-radius: 1.25rem;
+    border: 0.09375rem solid var(--color-button-accent);
+    background: var(--color-card);
+    color: var(--color-button-accent);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.type-button { padding: 0.625rem; border-radius: 0.5rem; }
+
+.single-chip.active, .multi-chip.active, .frequency-chip.active, .place-chip.active, .type-button.active {
+    background: var(--color-button-accent);
+    color: var(--color-text-button);
+}
+
+#city-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid var(--color-input-shadow);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text);
+    outline: none;
+}
+#city-input:focus { border-color: var(--color-button-accent); }
+
+#apply-button {
+    padding: 0.75rem;
+    background: var(--color-button-accent);
+    color: var(--color-text-button);
+    border: none;
+    border-radius: 0.625rem;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+#reset-button {
+    padding: 0.5rem;
+    background: none;
+    border: 0.0625rem solid var(--color-input-shadow);
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    cursor: pointer;
+    margin-top: auto;
+}
+#reset-button:hover { background: var(--color-input); }
+
+/* ==== 4. NAVIGATION TRIGGERS ==== */
+.titlematchpage { max-width: 60%; text-align: center; }
+
+.filterbtn, .locationbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 3.75rem; height: 3.75rem;
+    border-radius: 50%;
+    top: 1.5em;
+    background-color: var(--color-button-accent);
+    border: none;
+    cursor: pointer;
+}
+.filterbtn img, .locationbtn img { width: 1.875rem; height: 1.875rem; }
+.locationbtn { left: 2em; }
+.filterbtn { right: 2em; }
+
+/* ==== 5. MATCHING CARD STACK VIEW LAYER ==== */
+.cards {
+    position: relative;
+    width: 15.625rem;
+    height: 25rem;
+    margin: 1.5em auto 0;
+    flex-shrink: 0;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.cards .card {
+    position: absolute;
+    top: 0; left: 0;
+    width: 15.625rem; height: 25rem;
+    cursor: grab;
+    perspective: 62.5rem;
+    transform-origin: center center;
+    background: none;
+    border: none;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+.cards .card.flipped .card-inner { transform: rotateY(180deg); }
+
+.card-front, .card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.card-front { background-color: var(--color-card); }
+
+.card-back {
+    background-color: var(--color-background-soft);
+    border: 0.3125rem solid var(--color-button-accent);
+    color: var(--color-button-accent);
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+}
+.card-back h2 { font-size: 1.6rem; font-weight: 800; }
+.card-back p { font-size: 1rem; font-weight: 600; color: var(--color-text); }
+
+.matchingimages {
+    width: 15.625rem; height: 25rem;
+    object-fit: cover;
+    border: 0.3125rem solid var(--color-button-accent);
+    border-radius: 1.25rem;
+    display: block;
+    pointer-events: none;
+}
+
+.likebtn, .dislikebtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 3.75rem; height: 3.75rem;
+    border-radius: 50%;
+    bottom: 0.9375rem;
+    z-index: 3;
+    background-color: var(--color-button-accent);
+    border: none;
+    cursor: pointer;
+}
+.likebtn img, .dislikebtn img { width: 1.875rem; height: 1.875rem; }
+.dislikebtn { left: 0.9375rem; }
+.likebtn { right: 0.9375rem; }
+
+.swipe-right { transform: translateX(31.25rem) rotate(20deg); opacity: 0; }
+.swipe-left { transform: translateX(-31.25rem) rotate(-20deg); opacity: 0; }
+
+/* ==== 6. GLOBAL APPLICATION APP-BAR NAVIGATION ==== */
+footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--color-background-soft);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.875rem 2.5rem;
+    border-radius: 1.5rem 1.5rem 0 0;
+    box-shadow: 0 -0.25rem 1.25rem rgba(155, 90, 0, 0.15);
+    z-index: 100;
+}
+
+.footer-btn {
+    color: var(--color-button-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: transform 0.15s, background 0.15s;
+}
+.footer-btn:hover {
+    transform: translateY(-0.1875rem);
+    background: rgba(155, 27, 48, 0.1);
+}
+.footer-btn img { width: 1.75rem; height: 1.75rem; }
+.footer-btn.active { background: rgba(155, 27, 48, 0.12); }
+
+/* ==== 7. TUTORIAL ANIMATIONS LAYER ==== */
+.swipe-hint {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    animation: fadeOut 0.4s ease 2.5s forwards;
+}
+
+.swipe-hint img {
+    width: 7.5rem;
+    animation: swipe 1.5s ease-in-out infinite;
+}
+
+@keyframes swipe {
+    0%   { transform: translateX(1.875rem) rotate(30deg); opacity: 0.4; }
+    50%  { transform: translateX(-1.875rem) rotate(-30deg); opacity: 1; }
+    100% { transform: translateX(1.875rem) rotate(30deg); opacity: 0.4; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; pointer-events: none; }
+}
