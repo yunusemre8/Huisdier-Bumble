@@ -10,7 +10,6 @@ const authRoutes = require('./routes/authRoutes')
 const passwordRoutes = require('./routes/passwordRoutes')
 const homeRoutes = require('./routes/homeRoutes')
 
-
 require('dotenv').config()
 
 let db
@@ -30,7 +29,15 @@ app.use(
     },
   })
 )
+
+app.use((req, res, next) => {
+    req.db = db
+    next()
+}) 
+
 app.use('/', homeRoutes)
+app.use('/', authRoutes)
+app.use('/', passwordRoutes)
 
 app.use(messageMiddleware)
 app.set('view engine', 'ejs')
@@ -56,9 +63,6 @@ function getDb() {
 
 async function startServer() {
   await connectMongo()
-
-  app.use('/', authRoutes(db))
-  app.use('/', passwordRoutes(db))
 
   app.listen(port, () => {
     console.log('Server running')
