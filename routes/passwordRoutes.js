@@ -110,7 +110,7 @@ router.get('/changePassword/:id', userValidate, async (req, res) => {
     message
   })
 })
-router.post('/changePassword', async (req, res) => {
+router.post('/changePassword/:id', async (req, res) => {
   try {
     const userId = req.session.userId
     const user = await req.db.collection('users').findOne({ _id: new ObjectId(userId) })
@@ -121,7 +121,7 @@ router.post('/changePassword', async (req, res) => {
         type: 'error',
         text: 'Passwords do not match.'
       }
-      return res.redirect('/changePassword')
+      return res.redirect('/changePassword/:id')
     }
 
     const passwordMatch = await bcrypt.compare(currentPassword, user.passwordHash)
@@ -131,7 +131,7 @@ router.post('/changePassword', async (req, res) => {
         type: 'error',
         text: 'Current password does not match.'
       }
-      return res.redirect('/changePassword')
+      return res.redirect('/changePassword/:id')
     }
 
     if (currentPassword === newPassword) {
@@ -139,7 +139,7 @@ router.post('/changePassword', async (req, res) => {
         type: 'error',
         text: 'New password must be different from current password.'
       }
-      return res.redirect('/changePassword')
+      return res.redirect('/changePassword/:id')
     }
 
     const newPassswordHash = await bcrypt.hash(newPassword, 10)
@@ -152,13 +152,13 @@ router.post('/changePassword', async (req, res) => {
       type: 'success',
       text: 'Password updated succesfully'
     }
-    return res.redirect('/edit-profile')
+    return res.redirect(`/profile/${userId}`)
   }
   catch (error) {
     res.status(500).send('Profile could not be loaded.')
   }
 })
- 
+
 
 async function createPasswordHash(password) {
   const salt = await bcrypt.genSalt(10)
