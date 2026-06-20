@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="/profile.css">
 </head>
+
 <body>
     <div class="card">
         <div class="card-header">
             <h1>Profile</h1>
             <button class="settings-btn" id="settingsBtn">⚙️</button>
         </div>
-        
+
         <div class="settings-menu" id="settingsMenu">
             <a href="/select-pet-edit/<%= user._id %>">
                 <span class="icon-placeholder"><img src="/images/editProfile.png" alt=""></span> Edit your profile
@@ -30,39 +33,48 @@
         </div>
 
         <div class="user-info">
-            <p class="name"><%= user.userName %></p>
-            <p class="city">📍 <%= user.userCity %></p>
+            <p class="name">
+                <%= user.userName %>
+            </p>
+            <p class="city">📍 <%= user.userCity %>
+            </p>
         </div>
-        <% if (animals && animals.length > 0) { %>
-            <% animals.forEach(animal => { %>
+        <% if (animals && animals.length> 0) { %>
+            <% animals.forEach(animal=> { %>
                 <div class="pet-info" style="margin-bottom: 15px;">
                     <% if (animal.cover) { %>
-                        <img src="/upload/<%= animal.cover %>" alt="<%= animal.petName %>" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
-                    <% } else { %>
-                         <div style="width: 50px; height: 50px; border-radius: 50%; background-color: #ddd;"></div>
-                    <% } %>
-                    <div class="pet-details">
-                        <p class="pet-name"><%= animal.petName %></p>
-                        <p><%= animal.petType %> · <%= animal.petBreed %></p>
-                    </div>
+                        <img src="/upload/<%= animal.cover %>" alt="<%= animal.petName %>"
+                            style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                        <% } else { %>
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background-color: #ddd;"></div>
+                            <% } %>
+                                <div class="pet-details">
+                                    <p class="pet-name">
+                                        <%= animal.petName %>
+                                    </p>
+                                    <p>
+                                        <%= animal.petType %> · <%= animal.petBreed %>
+                                    </p>
+                                </div>
                 </div>
-            <% }) %>
-        <% } else { %>
-            <div class="pet-info">
-                <p>You haven't added a pet yet.</p>
-            </div>
-        <% } %>
+                <% }) %>
+                    <% } else { %>
+                        <div class="pet-info">
+                            <p>You haven't added a pet yet.</p>
+                        </div>
+                        <% } %>
 
-        <div class="actions">
-            <button id="locationBtn">
-                <span class="icon-placeholder"></span> Share your location
-            </button>
-            <a href="/logout" class="logout-btn">
-                <span class="icon-placeholder"></span> Logout
-            </a>
-        </div>
+                            <div class="actions">
+                                <button id="locationBtn">
+                                    <span class="icon-placeholder"></span> Share your location
+                                </button>
+                                <form action="/logout" method="POST" id="logout">
+                                    <button type="submit">Logout</button>
+                                </form>
+                            </div>
     </div>
     <%- include('partials/footer', { user: user }) %>
-    <script src="/main.js"></script>
+        <script src="/main.js"></script>
 </body>
+
 </html>
