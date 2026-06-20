@@ -169,3 +169,117 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ===== SWIPE =====
+    const cardsContainer = document.querySelector(".cards")
+  
+    async function saveSwipe(toUserId, action) {
+      const fromUserId = document.body.dataset.userId
+      if (!fromUserId || !toUserId) return
+  
+      try {
+        const response = await fetch("/swipe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fromUserId, toUserId, action })
+        })
+        const data = await response.json()
+        if (data.isMatch) alert("It's a match!")
+      } catch (error) {
+        console.error("Fout bij swipe opslaan:", error)
+      }
+    }
+  
+    window.updateStack = function() {
+      const activeCards = document.querySelectorAll(".card:not(.swiped)")
+      activeCards.forEach((card, index) => {
+        const scale = Math.max(0.9, 1 - index * 0.03)
+        const offset = Math.min(index * 8, 24)
+        card.style.zIndex = activeCards.length - index
+        if (!card.classList.contains("dragging")) {
+          card.style.transform = `scale(${scale}) translateY(${offset}px)`
+        }
+        card.style.opacity = "1"
+      })
+    }
+  
+    window.activateTopCard = function() {
+      const topCard = document.querySelector(".card:not(.swiped)")
+      if (!topCard) return
+  
+      function swipeCard(card, direction) {
+        if (!card || card.classList.contains("swiped")) return
+        const toUserId = card.dataset.ownerId
+        const action = direction === "right" ? "like" : "dislike"
+        saveSwipe(toUserId, action)
+        card.classList.add("swiped")
+        card.style.transition = "transform 0.3s ease, opacity 0.3s ease"
+        card.style.transform = direction === "right"
+          ? "translateX(150vw) rotate(25deg)"
+          : "translateX(-150vw) rotate(-25deg)"
+        card.style.opacity = "0"
+        setTimeout(() => {
+          card.remove()
+          updateStack()
+          activateTopCard()
+        }, 300)
+      }
+  
+      let startX = 0
+      let isDragging = false
+  
+      topCard.onmousedown = (e) => {
+        if (e.target.closest(".likebtn") || e.target.closest(".dislikebtn")) return
+        isDragging = true
+        startX = e.clientX
+        topCard.style.transition = "none"
+        topCard.classList.add("dragging")
+      }
+  
+      document.onmousemove = (e) => {
+        if (!isDragging) return
+        const moveX = e.clientX - startX
+        topCard.style.transform = `translateX(${moveX}px) rotate(${moveX * 0.1}deg)`
+      }
+  
+      document.onmouseup = (e) => {
+        if (!isDragging) return
+        isDragging = false
+        topCard.classList.remove("dragging")
+        const moveX = e.clientX - startX
+        topCard.style.transition = "transform 0.3s ease, opacity 0.3s ease"
+        if (moveX > 100) swipeCard(topCard, "right")
+        else if (moveX < -100) swipeCard(topCard, "left")
+        else updateStack()
+      }
+  
+      const likeBtn = topCard.querySelector(".likebtn")
+      const dislikeBtn = topCard.querySelector(".dislikebtn")
+      if (likeBtn) likeBtn.onclick = (e) => { e.stopPropagation(); swipeCard(topCard, "right") }
+      if (dislikeBtn) dislikeBtn.onclick = (e) => { e.stopPropagation(); swipeCard(topCard, "left") }
+  
+      topCard.ondblclick = (e) => {
+        if (e.target.closest(".likebtn") || e.target.closest(".dislikebtn")) return
+        topCard.classList.toggle("flipped")
+      }
+    }
+  
+    if (cardsContainer) {
+      updateStack()
+      activateTopCard()
+    }
+  
+    // ===== SWIPE HINT =====
+    const hint = document.getElementById("swipeHint")
+    if (hint) {
+      hint.addEventListener("click", () => {
+        hint.style.transition = "opacity 0.3s"
+        hint.style.opacity = "0"
+        hint.style.pointerEvents = "none"
+      })
+    }
+})
+  
