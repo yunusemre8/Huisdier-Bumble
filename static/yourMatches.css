@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: #251a79;
+  background-color: #FFC832;
   font-family: 'Nunito', sans-serif;
   display: flex;
   justify-content: center;
@@ -47,7 +47,7 @@ body::after {
   width: 100%;
   max-width: 430px;
   min-height: 932px;
-  background: #FFC832;
+  background: #FFF5D6;
   border-radius: 28px;
   position: relative;
   padding: 2rem 1.5rem 7rem;
@@ -149,7 +149,7 @@ body::after {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #FFF5D6;
+  background: #ffd865;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   display: flex;
@@ -164,4 +164,44 @@ body::after {
   font-size: 2rem;
   color: #A2263D;
   font-weight: bold;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-background-soft);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.875rem 2.5rem;
+    border-radius: 1.5rem 1.5rem 0 0;
+    box-shadow: 0 -0.25rem 1.25rem rgba(155, 90, 0, 0.15);
+    z-index: 100;
+}
+
+.footer-btn {
+    color: var(--color-button-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: transform 0.15s, background 0.15s;
+}
+
+.footer-btn:hover {
+    transform: translateY(-0.1875rem);
+    background: rgba(155, 27, 48, 0.1);
+}
+
+.footer-btn img {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.footer-btn.active {
+    background: rgba(155, 27, 48, 0.12);
 }
