@@ -161,24 +161,8 @@ if (welcomeBox && firstQuestionsBox && progressFill) {
 
 
 const breeds = {
-  cat: [
-    "British Shorthair",
-    "European Shorthair",
-    "Ragdoll",
-    "Maine",
-    "Domestic",
-    "Persian",
-    "Mix/ Other"
-  ],
-  dog: [
-    "Labrador Retriever",
-    "Labradoodle",
-    "Golden Retriever",
-    "Chihuahua",
-    "Pomeranian",
-    "French Bulldog",
-    "Mix/Other"
-  ]
+  dog: ["Labrador Retriever", "Labradoodle", "Golden Retriever", "Chihuahua", "Pomeranian", "French Bulldog", "Mix/Other"],
+  cat: ["British Shorthair", "European Shorthair", "Ragdoll", "Maine", "Domestic", "Persian", "Mix/Other"]
 };
 
 const petTypeSelect = document.getElementById("petType");

@@ -6,8 +6,8 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const upload = multer({ dest: "static/upload/" });
 
-const dogBreeds = ["Labrador", "Golden Retriever", "Poodle", "Border Collie", "Beagle", "French Bulldog"];
-const catBreeds = ["Persian", "Maine Coon", "Siamese", "Ragdoll", "Bengal", "Scottish Fold"];
+const dogBreeds = ["Labrador Retriever", "Labradoodle", "Golden Retriever", "Chihuahua", "Pomeranian", "French Bulldog", "Mix/Other"];
+const catBreeds = ["British Shorthair", "European Shorthair", "Ragdoll", "Maine", "Domestic", "Persian", "Mix/Other"];
 
 const userValidate = (req, res, next) => {
   if (!req.session) req.session = {};
@@ -32,31 +32,58 @@ router.get("/matchesPage/:id", userValidate, async (req, res) => {
 router.get("/api/pets", async (req, res) => {
   try {
     const { petType, breeds, size, frequency, place, city } = req.query;
-    let query = {};
+    
+    let userQuery = {};
 
-    if (petType) query.petType = petType;
+    if (city) {
+      userQuery.userCity = { $regex: city, $options: "i" };
+    }
+
+    if (frequency) {
+      userQuery.isFrequency = frequency;
+    }
+
+    if (place) {
+      userQuery.preferPlace = place;
+    }
+
+    let allowedOwnerIds = null;
+    if (city || frequency || place) {
+      const matchingUsers = await req.db.collection("users").find(userQuery).toArray();
+      
+      allowedOwnerIds = matchingUsers.map(user => user._id);
+    }
+
+    let animalQuery = {};
+
+    if (allowedOwnerIds !== null) {
+      animalQuery.ownerId = { $in: allowedOwnerIds };
+    }
+
+    if (petType) {
+      animalQuery.petType = petType;
+    }
     
     if (breeds) {
       const breedArray = breeds.split(",");
-      query.petBreed = { $in: breedArray };
+      animalQuery.petBreed = { $in: breedArray };
     }
 
-    if (city) {
-      const usersInCity = await req.db.collection("users")
-        .find({ userCity: { $regex: city, $options: "i" } })
-        .toArray();
-      
-      const userIds = [];
-      usersInCity.forEach(user => {
-        userIds.push(user._id);
-        userIds.push(user._id.toString());
-      });
-      
-      query.ownerId = { $in: userIds };
+    if (size) {
+      if (size === "small") {
+        animalQuery.petWeight = { $gte: 0, $lte: 10 };
+      } else if (size === "medium") {
+        animalQuery.petWeight = { $gte: 10, $lte: 25 };
+      } else if (size === "large") {
+        animalQuery.petWeight = { $gt: 25 };
+      }
     }
 
-    const pets = await req.db.collection("animals").find(query).toArray();
+    console.log("MongoDB Executed Query:", animalQuery);
+
+    const pets = await req.db.collection("animals").find(animalQuery).toArray();
     res.json(pets);
+
   } catch (error) {
     console.error("Filter error:", error);
     res.status(500).json({ error: "An error occurred while filtering." });

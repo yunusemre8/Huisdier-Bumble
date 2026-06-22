@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.getElementById("sidebar");
   const results = document.getElementById("results");
 
-  /* ==== 1. SWIPE HINT MECHANICAL FLOW ==== */
   const hint = document.getElementById("swipeHint");
   if (hint) {
     hint.addEventListener("click", () => {
@@ -12,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ==== 2. GEOLOCATION MANAGEMENT SYSTEM ==== */
   const locationBtn = document.getElementById("locationBtn");
   if (locationBtn) {
     locationBtn.addEventListener("click", () => {
@@ -35,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ==== 3. PROFILE SETTINGS CONTEXT OVERLAY ==== */
   const settingsBtn = document.getElementById("settingsBtn");
   const settingsMenu = document.getElementById("settingsMenu");
   if (settingsBtn && settingsMenu) {
@@ -44,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ==== 4. ACCOUNT DESTRUCTION ROUTINE ==== */
   const deleteAccountBtn = document.getElementById("deleteAccountBtn");
   if (deleteAccountBtn) {
     deleteAccountBtn.addEventListener("click", async () => {
@@ -60,13 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ==== 5. FILTER SIDEBAR VISIBILITY TRIGGERS ==== */
   const openBtn = document.getElementById("open-button");
   const closeBtn = document.getElementById("close-button");
   if (openBtn && sidebar) openBtn.addEventListener("click", () => sidebar.classList.add("open"));
   if (closeBtn && sidebar) closeBtn.addEventListener("click", () => sidebar.classList.remove("open"));
 
-  /* ==== 6. DYNAMIC ANIMAL BREEDS REGISTRY ==== */
   const breeds = {
     dog: ["Labrador Retriever", "Labradoodle", "Golden Retriever", "Chihuahua", "Pomeranian", "French Bulldog", "Mix/Other"],
     cat: ["British Shorthair", "European Shorthair", "Ragdoll", "Maine", "Domestic", "Persian", "Mix/Other"]
@@ -91,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* ==== 7. STRUCTURAL CONTROL CHIPS TOGGLE ==== */
   document.querySelectorAll(".single-chip, .frequency-chip, .place-chip").forEach(chip => {
     chip.addEventListener("click", () => {
       const isAlreadyActive = chip.classList.contains("active");
@@ -101,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* ==== 8. FILTER APPLICATION & CARD ASYNCHRONOUS RENDER ==== */
   const applyBtn = document.getElementById("apply-button");
   if (applyBtn) {
     applyBtn.addEventListener("click", async () => {
@@ -152,12 +144,16 @@ document.addEventListener("DOMContentLoaded", () => {
           </article>
         `).join("");
 
+        if (typeof activateTopCard === "function") {
+          updateStack();
+          activateTopCard(); 
+        } 
+
         if (sidebar) sidebar.classList.remove("open");
       } catch (error) { console.error("Filter error:", error); }
     });
   }
 
-  /* ==== 9. CONTROL STATE TERMINATION REGISTRY ==== */
   const resetBtn = document.getElementById("reset-button");
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
