@@ -160,9 +160,4 @@ router.post('/changePassword/:id', async (req, res) => {
 })
 
 
-async function createPasswordHash(password) {
-  const salt = await bcrypt.genSalt(10)
-  return await bcrypt.hash(password, salt)
-}
-
 module.exports = router
